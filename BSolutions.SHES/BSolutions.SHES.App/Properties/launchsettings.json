@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "BSolutions.SHES.App (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "BSolutions.SHES.App (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
