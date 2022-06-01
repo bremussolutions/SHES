@@ -1,0 +1,183 @@
+﻿<UserControl
+    x:Class="BSolutions.SHES.App.Components.ProjectListComponent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:observables="using:BSolutions.SHES.Models.Observables"
+    xmlns:components="using:BSolutions.SHES.App.Components"
+    xmlns:converters="using:BSolutions.SHES.App.Converters"
+    xmlns:controls="using:BSolutions.SHES.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="{x:Bind ViewModel.OnLoaded}">
+
+    <UserControl.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <SplitButton Command="{x:Bind ViewModel.AddProjectDialogCommand}"
+                         CommandParameter="{Binding ElementName=NewProjectDialog}"
+                         MinWidth="80"
+                         Margin="0 10 10 10">
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE710;" Margin="0 0 5 0" FontSize="13" />
+                    <TextBlock>Neu</TextBlock>
+                </StackPanel>
+                <SplitButton.Flyout>
+                    <Flyout Placement="Bottom">
+                        <StackPanel>
+                            <MenuFlyoutItem Text="KNX Projekt importieren"
+                                        Command="{x:Bind ViewModel.ImportKnxProjectDialogCommand}"
+                                        CommandParameter="{x:Bind ImportKnxProjectDialog}" />
+                            <MenuFlyoutItem Text="openHAB Projekt importieren" />
+                        </StackPanel>
+                    </Flyout>
+                </SplitButton.Flyout>
+            </SplitButton>
+            <Button Content="Öffnen"
+                    Command="{x:Bind ViewModel.OpenProjectCommand}"
+                    MinWidth="80"
+                    Margin="0 10 10 10" />
+            <Button Content="Löschen"
+                    Command="{x:Bind ViewModel.DeleteProjectDialogCommand}"
+                    CommandParameter="{Binding ElementName=DeleteProjectDialog}"
+                    MinWidth="80"
+                    Margin="0 10 0 10" />
+        </StackPanel>
+
+        <ListView x:Name="ProjectList"
+                  ItemsSource="{x:Bind ViewModel.ProjectList}"
+                  SelectedItem="{x:Bind ViewModel.SelectedProject, Mode=TwoWay}"
+                  SelectionMode="Single">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Projektname" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        <TextBlock Grid.Column="1" Text="Projektnummer" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        <TextBlock Grid.Column="2" Text="Status" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="observables:ObservableProject">
+                    <Grid Height="48" AutomationProperties.Name="{x:Bind Name}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="{x:Bind Name}" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind Number}"/>
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind State}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- DIALOG: New Project -->
+        <ContentDialog x:Name="NewProjectDialog"
+                       Title="Neues Projekt anlegen"
+                       PrimaryButtonText="Anlegen"
+                       CloseButtonText="Abbrechen"
+                       PrimaryButtonCommand="{x:Bind ViewModel.AddProjectCommand}"
+                       IsPrimaryButtonEnabled="{x:Bind ViewModel.NewProject.HasErrors, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
+                       DefaultButton="Primary">
+            <StackPanel>
+                <TextBlock Text="Projekt"
+                   Style="{StaticResource SubtitleTextBlockStyle}"
+                   Margin="0 0 0 10" />
+                <TextBox HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                         Header="Bezeichnung"
+                         Text="{x:Bind ViewModel.NewProject.Name, Mode=TwoWay}" />
+                <TextBox HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                         Header="Nummer"
+                 Margin="0 10 0 0"
+                 Text="{x:Bind ViewModel.NewProject.Number, Mode=TwoWay}" />
+
+                <TextBlock Text="Bauherr"
+                   Style="{StaticResource SubtitleTextBlockStyle}"
+                   Margin="0 20 0 10"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Header="Vorname"
+                     Text="{x:Bind ViewModel.NewProject.ClientFirstName, Mode=TwoWay}"
+                     Width="170"
+                     Margin="0 0 10 0" />
+                    <TextBox Header="Nachname"
+                     Text="{x:Bind ViewModel.NewProject.ClientSurname, Mode=TwoWay}"
+                     Width="170" />
+                </StackPanel>
+                <TextBox Header="Telefon"
+                 Text="{x:Bind ViewModel.NewProject.ClientPhone, Mode=TwoWay}"
+                 Margin="0 10 0 0" />
+                <TextBox Header="E-Mail-Adresse"
+                 Text="{x:Bind ViewModel.NewProject.ClientEmail, Mode=TwoWay}"
+                 Margin="0 10 0 0" />
+
+                <TextBlock Text="Baustelle"
+                   Style="{StaticResource SubtitleTextBlockStyle}"
+                   Margin="0 20 0 10"/>
+                <TextBox Header="Straße"
+                 Text="{x:Bind ViewModel.NewProject.ConstructionStreet, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal"
+                    Margin="0 10 0 0">
+                    <TextBox Header="PLZ"
+                     Text="{x:Bind ViewModel.NewProject.ConstructionPostalCode, Mode=TwoWay}"
+                     Width="100"
+                     Margin="0 0 10 0" />
+                    <TextBox Header="Ort"
+                     Text="{x:Bind ViewModel.NewProject.ConstructionCity, Mode=TwoWay}"
+                     Width="240" />
+                </StackPanel>
+
+                <controls:ValidationMessage Errors="{x:Bind ViewModel.NewProject.Errors, Mode=OneWay}" />
+            </StackPanel>
+        </ContentDialog>
+
+        <!-- DIALOG: KNX Project Import -->
+        <ContentDialog x:Name="ImportKnxProjectDialog"
+                       Title="KNX Projekt importieren"
+                       PrimaryButtonText="Import"
+                       CloseButtonText="Abbrechen"
+                       PrimaryButtonCommand="{x:Bind ViewModel.ImportKnxProjectCommand}"
+                       DefaultButton="Primary">
+            <StackPanel>
+
+                <!-- PASSWORD PROTECTION-->
+                <StackPanel Visibility="{x:Bind ViewModel.IsImportProjectProtected, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <TextBlock>
+                        Das Projekt ist passwortgeschützt. Bitte geben Sie das Passwort ein,<LineBreak />
+                        welches in der ETS vergeben wurde.
+                    </TextBlock>
+                    <PasswordBox Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay}" />
+                </StackPanel>
+
+                <!-- IMPORT DATA -->
+                <StackPanel>
+                    <TextBlock>
+                Welche Daten sollen importiert werden:
+                    </TextBlock>
+                    <CheckBox Content="Stammdaten des Projekts" />
+                    <CheckBox Content="Gebäudestruktur" />
+                </StackPanel>
+            </StackPanel>
+        </ContentDialog>
+
+        <!-- DIALOG: Delete Project -->
+        <ContentDialog x:Name="DeleteProjectDialog"
+                       Title="Projekt löschen"
+                       PrimaryButtonText="Löschen"
+                       CloseButtonText="Abbrechen"
+                       PrimaryButtonCommand="{x:Bind ViewModel.DeleteProjectCommand}"
+                       DefaultButton="Primary">
+
+            <TextBlock Text="Möchten Sie das Projekt wirklich löschen?" TextWrapping="Wrap" />
+        </ContentDialog>
+    </StackPanel>
+</UserControl>

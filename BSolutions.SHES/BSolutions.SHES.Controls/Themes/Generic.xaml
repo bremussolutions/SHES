@@ -1,0 +1,30 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSolutions.SHES.Controls">
+
+    <Style TargetType="local:ValidationMessage" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ValidationMessage">
+                    <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                                Visibility="{Binding IsVisible, RelativeSource={RelativeSource TemplatedParent}}"
+                            Margin="0 10 0 0">
+                        <PathIcon Data="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+                            HorizontalAlignment="Right"
+                            Foreground="DarkRed">
+                        </PathIcon>
+                        <TextBlock Text="Das Formular ist unvollständig."
+                                   Foreground="DarkRed"
+                                   Margin="5 1 0 0" />
+                        <ToolTipService.ToolTip>
+                            <TextBlock Text="{TemplateBinding Errors}"
+                                       Foreground="DarkRed" />
+                        </ToolTipService.ToolTip>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

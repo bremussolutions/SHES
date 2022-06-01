@@ -1,4 +1,5 @@
 ﻿using BSolutions.SHES.App.Activation;
+using BSolutions.SHES.App.ComponentModels;
 using BSolutions.SHES.App.Contracts.Services;
 using BSolutions.SHES.App.Core.Contracts.Services;
 using BSolutions.SHES.App.Core.Services;
@@ -7,10 +8,17 @@ using BSolutions.SHES.App.Models;
 using BSolutions.SHES.App.Services;
 using BSolutions.SHES.App.ViewModels;
 using BSolutions.SHES.App.Views;
-
+using BSolutions.SHES.Data;
+using BSolutions.SHES.Data.Repositories.ProjectItems;
+using BSolutions.SHES.Data.Repositories.Projects;
+using BSolutions.SHES.Services.Knx;
+using BSolutions.SHES.Services.ProjectItems;
+using BSolutions.SHES.Services.Projects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using System.IO;
 
 // To learn more about WinUI3, see: https://docs.microsoft.com/windows/apps/winui/winui3/.
 namespace BSolutions.SHES.App
@@ -29,9 +37,26 @@ namespace BSolutions.SHES.App
                 // Default Activation Handler
                 services.AddTransient<ActivationHandler<LaunchActivatedEventArgs>, DefaultActivationHandler>();
 
-                // Other Activation Handlers
+                // Database
+                services.AddDbContext<ShesDbContext>(options =>
+                {
+                    // Create database directory
+                    string userDocumentPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+                    string shesDatabasePath = Path.Combine(userDocumentPath, "SHES");
+                    Directory.CreateDirectory(shesDatabasePath);
+
+                    options.UseSqlite($"Data Source={Path.Combine(shesDatabasePath, "shes.db")};");
+                });
+
+                // Repositories
+                services.AddSingleton<IProjectRepository, ProjectRepository>();
+                services.AddSingleton<IProjectItemRepository, ProjectItemRepository>();
 
                 // Services
+                services.AddSingleton<IProjectService, ProjectService>();
+                services.AddSingleton<IProjectItemService, ProjectItemService>();
+                services.AddSingleton<IKnxImportService, KnxImportService>();
+
                 services.AddSingleton<ILocalSettingsService, LocalSettingsServicePackaged>();
                 services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
                 services.AddTransient<INavigationViewService, NavigationViewService>();
@@ -45,6 +70,8 @@ namespace BSolutions.SHES.App
                 services.AddSingleton<IFileService, FileService>();
 
                 // Views and ViewModels
+                services.AddTransient<ProjectListComponentModel>();
+
                 services.AddTransient<SettingsViewModel>();
                 services.AddTransient<SettingsPage>();
                 services.AddTransient<ContentGridDetailViewModel>();

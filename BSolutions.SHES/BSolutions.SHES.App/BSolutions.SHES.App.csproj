@@ -11,6 +11,10 @@
     <UseWinUI>true</UseWinUI>
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Components\ProjectListComponent.xaml" />
+    <None Remove="Styles\DataTemplates.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
@@ -24,18 +28,34 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BSolutions.SHES.App.Core\BSolutions.SHES.App.Core.csproj" />
+    <ProjectReference Include="..\BSolutions.SHES.Controls\BSolutions.SHES.Controls.csproj" />
+    <ProjectReference Include="..\BSolutions.SHES.Models\BSolutions.SHES.Models.csproj" />
+    <ProjectReference Include="..\BSolutions.SHES.Services\BSolutions.SHES.Services.csproj" />
+    <ProjectReference Include="..\BSolutions.SHES.Shared\BSolutions.SHES.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Styles\DataTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Components\ProjectListComponent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Converters\" />
+    <Folder Include="Messages\" />
   </ItemGroup>
 </Project>
