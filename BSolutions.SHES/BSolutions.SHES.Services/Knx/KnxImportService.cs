@@ -47,19 +47,17 @@ namespace BSolutions.SHES.Services.Knx
         {
             return await Task.Run(() =>
             {
-                using (var file = File.OpenRead(path))
-                using (var zip = new ZipFile(file))
+                using var file = File.OpenRead(path);
+                using var zip = new ZipFile(file);
+                foreach (ZipEntry zipEntry in zip)
                 {
-                    foreach (ZipEntry zipEntry in zip)
+                    if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$"))
                     {
-                        if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$"))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
-
-                    return false;
                 }
+
+                return false;
             });
         }
 
@@ -107,35 +105,31 @@ namespace BSolutions.SHES.Services.Knx
 
         private async Task UnzipAsync(Stream file, string password)
         {
-            using (var ms = new MemoryStream())
+            using var ms = new MemoryStream();
+            await file.CopyToAsync(ms);
+            ms.Position = 0;
+
+            using var zip = new ZipFile(ms);
+            zip.Password = password;
+
+            foreach (ZipEntry zipEntry in zip)
             {
-                await file.CopyToAsync(ms);
-                ms.Position = 0;
-
-                using (var zip = new ZipFile(ms))
+                // Password protected project
+                if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$") && zipEntry.IsFile)
                 {
-                    zip.Password = password;
+                    await this.UnzipAsync(zip.GetInputStream(zipEntry), password);
+                }
 
-                    foreach (ZipEntry zipEntry in zip)
-                    {
-                        // Password protected project
-                        if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$") && zipEntry.IsFile)
-                        {
-                            await this.UnzipAsync(zip.GetInputStream(zipEntry), password);
-                        }
+                // Project XML
+                if ((Regex.IsMatch(zipEntry.Name, @"^project.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/project.xml$")) && zipEntry.IsFile)
+                {
+                    await this.ReadProjectFile(zipEntry, zip);
+                }
 
-                        // Project XML
-                        if ((Regex.IsMatch(zipEntry.Name, @"^project.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/project.xml$")) && zipEntry.IsFile)
-                        {
-                            await this.ReadProjectFile(zipEntry, zip);
-                        }
-
-                        // Structure XML
-                        if ((Regex.IsMatch(zipEntry.Name, @"^0.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/0.xml$")) && zipEntry.IsFile)
-                        {
-                            await this.ReadStructureFile(zipEntry, zip);
-                        }
-                    }
+                // Structure XML
+                if ((Regex.IsMatch(zipEntry.Name, @"^0.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/0.xml$")) && zipEntry.IsFile)
+                {
+                    await this.ReadStructureFile(zipEntry, zip);
                 }
             }
         }
@@ -143,28 +137,29 @@ namespace BSolutions.SHES.Services.Knx
         private async Task ReadProjectFile(ZipEntry zipEntry, ZipFile zip)
         {
             var stream = zip.GetInputStream(zipEntry);
-            StreamReader reader = new StreamReader(stream);
+            StreamReader reader = new(stream);
 
             this._result.Data.ProjectXml = XDocument.Parse(await reader.ReadToEndAsync());
 
-            this._project = new Project();
-
-            this._project.Number = this._result.Data.ProjectXml
+            this._project = new Project
+            {
+                Number = this._result.Data.ProjectXml
                 .Element(XName.Get("KNX", "http://knx.org/xml/project/20"))
                 .Element(XName.Get("Project", "http://knx.org/xml/project/20"))
-                .Attribute(XName.Get("Id")).Value;
+                .Attribute(XName.Get("Id")).Value,
 
-            this._project.Name = this._result.Data.ProjectXml
+                Name = this._result.Data.ProjectXml
                 .Element(XName.Get("KNX", "http://knx.org/xml/project/20"))
                 .Element(XName.Get("Project", "http://knx.org/xml/project/20"))
                 .Element(XName.Get("ProjectInformation", "http://knx.org/xml/project/20"))
-                .Attribute(XName.Get("Name")).Value;
+                .Attribute(XName.Get("Name")).Value
+            };
         }
 
         private async Task ReadStructureFile(ZipEntry zipEntry, ZipFile zip)
         {
             var stream = zip.GetInputStream(zipEntry);
-            StreamReader reader = new StreamReader(stream);
+            StreamReader reader = new(stream);
 
             var xml = XDocument.Parse(await reader.ReadToEndAsync());
 
@@ -189,7 +184,7 @@ namespace BSolutions.SHES.Services.Knx
 
         private List<ProjectItem> LoadProjectItems(IEnumerable<XElement> spaces)
         {
-            List<ProjectItem> result = new List<ProjectItem>();
+            List<ProjectItem> result = new();
 
             foreach(XElement space in spaces)
             {
@@ -218,28 +213,24 @@ namespace BSolutions.SHES.Services.Knx
 
         private List<Device> LoadDevices(IEnumerable<XElement> deviceInstanceReferences)
         {
-            List<Device> devices = new List<Device>();
+            List<Device> devices = new();
 
-            try
+            foreach (XElement deviceInstanceReference in deviceInstanceReferences)
             {
-                foreach (XElement deviceInstanceReference in deviceInstanceReferences)
-                {
-                    string refId = deviceInstanceReference.Attribute("RefId").Value;
-                    var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", "http://knx.org/xml/project/20"));
-                    var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
-                    string deviceName = deviceInstance.Attribute("Name").Value;
-                    string deviceComment = deviceInstance.Attribute("Comment")?.Value;
-                    string deviceDescription = deviceInstance.Attribute("Description")?.Value;
+                string refId = deviceInstanceReference.Attribute("RefId").Value;
+                var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", "http://knx.org/xml/project/20"));
+                var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
+                string deviceName = deviceInstance.Attribute("Name").Value;
+                string deviceComment = deviceInstance.Attribute("Comment")?.Value;
+                string deviceDescription = deviceInstance.Attribute("Description")?.Value;
 
-                    devices.Add(new Device { Name = deviceName, Comment = deviceComment, Description = deviceDescription });
-                }
+                devices.Add(new Device { Name = deviceName, Comment = deviceComment, Description = deviceDescription });
             }
-            catch (Exception ex) { }
 
             return devices;
         }
 
-        private static Dictionary<string, string> projectTypeMapping = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> projectTypeMapping = new()
         {
             { "Building", "Building" },
             { "", "BuildingPart" },
