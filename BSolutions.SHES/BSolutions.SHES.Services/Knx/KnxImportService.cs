@@ -181,15 +181,15 @@ namespace BSolutions.SHES.Services.Knx
             if (this._options.ImportStructure)
             {
                 var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", "http://knx.org/xml/project/20"));
-                this._projectItems = this.LoadLocations(spaces);
+                this._projectItems = this.LoadProjectItems(spaces);
 
                 this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
             }
         }
 
-        private List<ProjectItem> LoadLocations(IEnumerable<XElement> spaces)
+        private List<ProjectItem> LoadProjectItems(IEnumerable<XElement> spaces)
         {
-            List<ProjectItem> locations = new List<ProjectItem>();
+            List<ProjectItem> result = new List<ProjectItem>();
 
             foreach(XElement space in spaces)
             {
@@ -198,13 +198,45 @@ namespace BSolutions.SHES.Services.Knx
                 ProjectItem entity = (ProjectItem)Activator.CreateInstance(type);
                 PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-                propertyInfos.First(p => p.Name == "Name").SetValue(entity, space.Attribute("Name").Value);
-                propertyInfos.First(p => p.Name == "Children").SetValue(entity, LoadLocations(space.Elements(XName.Get("Space", "http://knx.org/xml/project/20"))));
+                // Locations
+                var projectItems = LoadProjectItems(space.Elements(XName.Get("Space", "http://knx.org/xml/project/20")));
 
-                locations.Add(entity);
+                // Devices
+                if (this._options.ImportDevices)
+                {
+                    projectItems.AddRange(this.LoadDevices(space.Elements(XName.Get("DeviceInstanceRef", "http://knx.org/xml/project/20"))));
+                }
+
+                propertyInfos.First(p => p.Name == "Name").SetValue(entity, space.Attribute("Name").Value);
+                propertyInfos.First(p => p.Name == "Children").SetValue(entity, projectItems);
+
+                result.Add(entity);
             }
 
-            return locations;
+            return result;
+        }
+
+        private List<Device> LoadDevices(IEnumerable<XElement> deviceInstanceReferences)
+        {
+            List<Device> devices = new List<Device>();
+
+            try
+            {
+                foreach (XElement deviceInstanceReference in deviceInstanceReferences)
+                {
+                    string refId = deviceInstanceReference.Attribute("RefId").Value;
+                    var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", "http://knx.org/xml/project/20"));
+                    var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
+                    string deviceName = deviceInstance.Attribute("Name").Value;
+                    string deviceComment = deviceInstance.Attribute("Comment")?.Value;
+                    string deviceDescription = deviceInstance.Attribute("Description")?.Value;
+
+                    devices.Add(new Device { Name = deviceName, Comment = deviceComment, Description = deviceDescription });
+                }
+            }
+            catch (Exception ex) { }
+
+            return devices;
         }
 
         private static Dictionary<string, string> projectTypeMapping = new Dictionary<string, string>()
