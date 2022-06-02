@@ -184,6 +184,7 @@ namespace BSolutions.SHES.App.ComponentModels
         {
             await this._projectService.DeleteAsync(this.selectedProject);
             this.ProjectList.Remove(this.selectedProject);
+            WeakReferenceMessenger.Default.Send(new CurrentProjectChangedMessage(null));
         }
 
         #endregion
