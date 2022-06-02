@@ -19,17 +19,12 @@ namespace BSolutions.SHES.Services.Knx
 {
     public class KnxImportService : ServiceBase, IKnxImportService
     {
+        private KnxImportOptions _options;
         private KnxImportResult _result;
         private Project _project;
         private List<ProjectItem> _projectItems;
 
         private readonly IProjectRepository _projectRepository;
-
-        #region --- Properties ---
-
-        public KnxImportOptions Options { get; set; }
-
-        #endregion
 
         #region --- Constructor ---
 
@@ -70,12 +65,14 @@ namespace BSolutions.SHES.Services.Knx
 
         /// <summary>Imports the project asynchronous.</summary>
         /// <param name="path">The path.</param>
+        /// <param name="options">Options for the project import.</param>
         /// <param name="password">The password.</param>
         /// <returns>
         ///   Returns a result with project data.
         /// </returns>
-        public async Task<KnxImportResult> ImportProjectAsync(string path,  string password = "")
+        public async Task<KnxImportResult> ImportProjectAsync(string path, KnxImportOptions options, string password = "")
         {
+            this._options = options;
             this._result = new KnxImportResult();
 
             try
@@ -181,10 +178,13 @@ namespace BSolutions.SHES.Services.Knx
             this._result.Data.TradesXml = xml.Descendants(XName.Get("Trades", "http://knx.org/xml/project/20")).FirstOrDefault();
 
             // Project Items
-            var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", "http://knx.org/xml/project/20"));
-            this._projectItems = this.LoadLocations(spaces);
+            if (this._options.ImportStructure)
+            {
+                var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", "http://knx.org/xml/project/20"));
+                this._projectItems = this.LoadLocations(spaces);
 
-            this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
+                this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
+            }
         }
 
         private List<ProjectItem> LoadLocations(IEnumerable<XElement> spaces)

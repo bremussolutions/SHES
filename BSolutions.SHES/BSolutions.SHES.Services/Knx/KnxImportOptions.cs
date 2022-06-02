@@ -2,6 +2,8 @@
 {
     public class KnxImportOptions
     {
-        public bool ImportBuildingStructure { get; set; }
+        public bool ImportStructure { get; set; }
+
+        public bool ImportDevices { get; set; }
     }
 }

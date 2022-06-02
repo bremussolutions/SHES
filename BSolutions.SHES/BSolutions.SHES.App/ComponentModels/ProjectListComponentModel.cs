@@ -75,6 +75,20 @@ namespace BSolutions.SHES.App.ComponentModels
             set => SetProperty(ref _importProjectPassword, value);
         }
 
+        private bool _importProjectStructure = true;
+        public bool ImportProjectStructure
+        {
+            get => _importProjectStructure;
+            set => SetProperty(ref _importProjectStructure, value);
+        }
+
+        private bool _importProjectDevices = true;
+        public bool ImportProjectDevices
+        {
+            get => _importProjectDevices;
+            set => SetProperty(ref _importProjectDevices, value);
+        }
+
         public IAsyncRelayCommand AddProjectDialogCommand { get; }
         public IAsyncRelayCommand AddProjectCommand { get; }
         public IAsyncRelayCommand ImportKnxProjectDialogCommand { get; }
@@ -160,7 +174,13 @@ namespace BSolutions.SHES.App.ComponentModels
 
         private async Task ImportKnxProject()
         {
-            var result = await this._knxImportService.ImportProjectAsync(this.ImportProjectFile.Path, this.ImportProjectPassword);
+            var options = new KnxImportOptions
+            {
+                ImportStructure = this.ImportProjectStructure,
+                ImportDevices = this.ImportProjectDevices
+            };
+
+            var result = await this._knxImportService.ImportProjectAsync(this.ImportProjectFile.Path, options, this.ImportProjectPassword);
             this.ProjectList.Add(result.Data.Project);
         }
 
