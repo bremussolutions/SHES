@@ -1,0 +1,47 @@
+﻿<Page
+    x:Class="BSolutions.SHES.App.Views.BuildingStructurePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:components="using:BSolutions.SHES.App.Components"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d"
+    Style="{StaticResource PageStyle}">
+
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <Grid
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+
+                <components:ProjectItemTreeComponent />
+
+                <controls:DataGrid Grid.Column="1">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn Header="Name" />
+                        <controls:DataGridTextColumn Header="Kategorie" />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+
+                <Pivot Grid.Column="2" IsHeaderItemsCarouselEnabled="False">
+                    <Pivot.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="13" />
+                        </DataTemplate>
+                    </Pivot.HeaderTemplate>
+                    <PivotItem Header="Eigenschaften">
+                        <TextBlock Text="Eigenschaften werden hier verändert." />
+                    </PivotItem>
+                    <PivotItem Header="Information">
+                        <TextBlock Text="Informationen werden hier präsentiert." />
+                    </PivotItem>
+                </Pivot>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

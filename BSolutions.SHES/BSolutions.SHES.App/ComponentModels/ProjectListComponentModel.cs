@@ -5,9 +5,9 @@ using BSolutions.SHES.Services.Knx;
 using BSolutions.SHES.Services.ProjectItems;
 using BSolutions.SHES.Services.Projects;
 using BSolutions.SHES.Shared.Extensions;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-using Microsoft.Toolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -167,7 +167,7 @@ namespace BSolutions.SHES.App.ComponentModels
         private void OpenProject()
         {
             // Set current project
-            Messenger.Send(new CurrentProjectChangedMessage(this.SelectedProject));
+            WeakReferenceMessenger.Default.Send(new CurrentProjectChangedMessage(this.SelectedProject));
         }
 
         private bool CanOpenProject()

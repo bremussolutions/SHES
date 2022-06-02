@@ -117,17 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppDisplayName" xml:space="preserve">
-    <value>BSolutions.SHES.App</value>
-  </data>
   <data name="AppDescription" xml:space="preserve">
     <value>BSolutions.SHES.App</value>
   </data>
-  <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Projects</value>
-  </data>
-  <data name="Shell_DataGrid.Content" xml:space="preserve">
-    <value>DataGrid</value>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>BSolutions.SHES.App</value>
   </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>
@@ -135,26 +129,11 @@
   <data name="ListDetails_NoSelection.Text" xml:space="preserve">
     <value>Select an item from the list.</value>
   </data>
-  <data name="Shell_ListDetails.Content" xml:space="preserve">
-    <value>ListDetails</value>
+  <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
+    <value>Privacy Statement</value>
   </data>
-  <data name="Shell_ContentGrid.Content" xml:space="preserve">
-    <value>ContentGrid</value>
-  </data>
-  <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Personalization</value>
-  </data>
-  <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Theme</value>
-  </data>
-  <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Light</value>
-  </data>
-  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Dark</value>
-  </data>
-  <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>Default</value>
+  <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
+    <value>https://YourPrivacyUrlGoesHere/</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
     <value>About this application</value>
@@ -162,13 +141,34 @@
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
     <value>Settings page placeholder text.  Your app description goes here.</value>
   </data>
-  <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Privacy Statement</value>
+  <data name="Settings_Personalization.Text" xml:space="preserve">
+    <value>Personalization</value>
   </data>
-  <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://YourPrivacyUrlGoesHere/</value>
+  <data name="Settings_Theme.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Settings_Theme_Default.Content" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings_Theme_Light.Content" xml:space="preserve">
+    <value>Light</value>
   </data>
   <data name="Shell_BuildingStructure.Content" xml:space="preserve">
-    <value>Building Structure</value>
+    <value>Gebäudestruktur</value>
+  </data>
+  <data name="Shell_ContentGrid.Content" xml:space="preserve">
+    <value>ContentGrid</value>
+  </data>
+  <data name="Shell_DataGrid.Content" xml:space="preserve">
+    <value>DataGrid</value>
+  </data>
+  <data name="Shell_ListDetails.Content" xml:space="preserve">
+    <value>ListDetails</value>
+  </data>
+  <data name="Shell_Main.Content" xml:space="preserve">
+    <value>Main</value>
   </data>
 </root>

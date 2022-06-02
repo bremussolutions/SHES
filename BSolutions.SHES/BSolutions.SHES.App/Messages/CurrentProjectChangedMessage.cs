@@ -1,5 +1,5 @@
 ﻿using BSolutions.SHES.Models.Observables;
-using Microsoft.Toolkit.Mvvm.Messaging.Messages;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace BSolutions.SHES.App.Messages
 {
@@ -8,7 +8,6 @@ namespace BSolutions.SHES.App.Messages
         public CurrentProjectChangedMessage(ObservableProject project)
             : base(project)
         {
-
         }
     }
 }

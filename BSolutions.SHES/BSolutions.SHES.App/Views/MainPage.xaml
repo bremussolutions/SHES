@@ -9,30 +9,27 @@
     Style="{StaticResource PageStyle}">
 
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
-        <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <Grid Margin="{StaticResource MediumTopBottomMargin}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                <TextBlock Text="Meine Projekte" />
 
-                    <TextBlock Text="Meine Projekte" />
-
-                    <components:ProjectListComponent Grid.Row="1" />
-                </Grid>
-
-                <TextBlock Grid.Column="1">Nachrichtenbereich</TextBlock>
+                <components:ProjectListComponent Grid.Row="1" />
             </Grid>
+
+            <TextBlock Grid.Column="1">Nachrichtenbereich</TextBlock>
         </Grid>
     </Grid>
 </Page>

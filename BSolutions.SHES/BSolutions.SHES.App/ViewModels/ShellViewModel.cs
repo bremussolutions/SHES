@@ -1,11 +1,14 @@
 ﻿using System;
 
 using BSolutions.SHES.App.Contracts.Services;
+using BSolutions.SHES.App.Messages;
 using BSolutions.SHES.App.Views;
-
+using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using Microsoft.UI.Xaml.Navigation;
+using BSolutions.SHES.Models.Observables;
+using Microsoft.UI.Xaml;
 
 namespace BSolutions.SHES.App.ViewModels
 {
@@ -13,6 +16,7 @@ namespace BSolutions.SHES.App.ViewModels
     {
         private bool _isBackEnabled;
         private object _selected;
+        private ObservableProject _currentProject;
 
         public INavigationService NavigationService { get; }
 
@@ -30,11 +34,29 @@ namespace BSolutions.SHES.App.ViewModels
             set { SetProperty(ref _selected, value); }
         }
 
+        
+        public ObservableProject CurrentProject
+        {
+            get => _currentProject;
+            private set
+            {
+                SetProperty(ref _currentProject, value);
+                OnPropertyChanged(nameof(this.ProjectNavigationVisibility));
+            }
+        }
+
+        public Visibility ProjectNavigationVisibility
+        {
+            get => _currentProject != null ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         public ShellViewModel(INavigationService navigationService, INavigationViewService navigationViewService)
         {
             NavigationService = navigationService;
             NavigationService.Navigated += OnNavigated;
             NavigationViewService = navigationViewService;
+
+            WeakReferenceMessenger.Default.Register<ShellViewModel, CurrentProjectChangedMessage>(this, (r, m) => r.CurrentProject = m.Value);
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)
@@ -49,6 +71,7 @@ namespace BSolutions.SHES.App.ViewModels
             var selectedItem = NavigationViewService.GetSelectedItem(e.SourcePageType);
             if (selectedItem != null)
             {
+                WeakReferenceMessenger.Default.Send(new CurrentProjectChangedMessage(this.CurrentProject));
                 Selected = selectedItem;
             }
         }

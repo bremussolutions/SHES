@@ -12,7 +12,10 @@ namespace BSolutions.SHES.Shared.Extensions
         /// <param name="items">The items.</param>
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
         {
-            items.ToList().ForEach(collection.Add);
+            if (collection != null)
+            {
+                items.ToList().ForEach(collection.Add);
+            }
         }
 
         /// <summary>Adds a range of items to an observable collection.</summary>
@@ -21,7 +24,10 @@ namespace BSolutions.SHES.Shared.Extensions
         /// <param name="items">The items.</param>
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            items.ToList().ForEach(collection.Add);
+            if (collection != null)
+            {
+                items.ToList().ForEach(collection.Add);
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ namespace BSolutions.SHES.App.Services
         public PageService()
         {
             Configure<MainViewModel, MainPage>();
+            Configure<BuildingStructureViewModel, BuildingStructurePage>();
             Configure<DataGridViewModel, DataGridPage>();
             Configure<ListDetailsViewModel, ListDetailsPage>();
             Configure<ContentGridViewModel, ContentGridPage>();

@@ -26,10 +26,13 @@
             Or to use an IconElement instead of a Symbol see https://github.com/microsoft/TemplateStudio/blob/main/docs/UWP/projectTypes/navigationpane.md
             Edit String/en-US/Resources.resw: Add a menu item title for each page
             -->
-            <NavigationViewItem x:Uid="Shell_Main" Icon="Document" helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.MainViewModel" />
-            <NavigationViewItem x:Uid="Shell_DataGrid" Icon="Document" helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.DataGridViewModel" />
-            <NavigationViewItem x:Uid="Shell_ListDetails" Icon="Document" helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.ListDetailsViewModel" />
-            <NavigationViewItem x:Uid="Shell_ContentGrid" Icon="Document" helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.ContentGridViewModel" />
+            <NavigationViewItem x:Uid="Shell_Main"
+                                Icon="Document"
+                                helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.MainViewModel" />
+            <NavigationViewItem x:Uid="Shell_BuildingStructure"
+                                Icon="Document"
+                                helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.BuildingStructureViewModel"
+                                Visibility="{x:Bind ViewModel.ProjectNavigationVisibility, Mode=OneWay}"/>
         </NavigationView.MenuItems>
         <NavigationView.HeaderTemplate>
             <DataTemplate>
@@ -37,7 +40,7 @@
                     <TextBlock
                         Text="{Binding}"
                         Style="{ThemeResource TitleTextBlockStyle}"
-                        Margin="{StaticResource SmallLeftRightMargin}" />
+                        Margin="0 0 0 30" />
                 </Grid>
             </DataTemplate>
         </NavigationView.HeaderTemplate>
@@ -50,7 +53,7 @@
                             <TextBlock
                                 Text="{Binding}"
                                 Style="{ThemeResource TitleTextBlockStyle}"
-                                Margin="{StaticResource SmallLeftRightMargin}" />
+                                Margin="0 0 0 30" />
                         </Grid>
                     </DataTemplate>
                 </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>

@@ -89,55 +89,63 @@
                        PrimaryButtonCommand="{x:Bind ViewModel.AddProjectCommand}"
                        IsPrimaryButtonEnabled="{x:Bind ViewModel.NewProject.HasErrors, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                        DefaultButton="Primary">
-            <StackPanel>
-                <TextBlock Text="Projekt"
-                   Style="{StaticResource SubtitleTextBlockStyle}"
-                   Margin="0 0 0 10" />
-                <TextBox HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
-                         Header="Bezeichnung"
-                         Text="{x:Bind ViewModel.NewProject.Name, Mode=TwoWay}" />
-                <TextBox HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
-                         Header="Nummer"
-                 Margin="0 10 0 0"
-                 Text="{x:Bind ViewModel.NewProject.Number, Mode=TwoWay}" />
 
-                <TextBlock Text="Bauherr"
-                   Style="{StaticResource SubtitleTextBlockStyle}"
-                   Margin="0 20 0 10"/>
-                <StackPanel Orientation="Horizontal">
-                    <TextBox Header="Vorname"
-                     Text="{x:Bind ViewModel.NewProject.ClientFirstName, Mode=TwoWay}"
-                     Width="170"
-                     Margin="0 0 10 0" />
-                    <TextBox Header="Nachname"
-                     Text="{x:Bind ViewModel.NewProject.ClientSurname, Mode=TwoWay}"
-                     Width="170" />
+            <ScrollViewer Height="350"
+                          IsTabStop="True"
+                          IsVerticalScrollChainingEnabled="True"
+                          VerticalScrollMode="Enabled"
+                          VerticalScrollBarVisibility="Visible">
+                <StackPanel Margin="0 0 20 0">
+                    <TextBlock Text="Projekt"
+                               Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <TextBox HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                             Header="Bezeichnung"
+                             Text="{x:Bind ViewModel.NewProject.Name, Mode=TwoWay}"
+                             Margin="0 10 0 0" />
+                    <TextBox HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                             Header="Nummer"
+                             Text="{x:Bind ViewModel.NewProject.Number, Mode=TwoWay}"
+                             Margin="0 10 0 0" />
+
+                    <!-- BAUHERRSCHAFT -->
+                    <TextBlock Text="Bauherrschaft"
+                               Style="{StaticResource SubtitleTextBlockStyle}"
+                               Margin="0 20 0 10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Header="Vorname"
+                                 Text="{x:Bind ViewModel.NewProject.ClientFirstName, Mode=TwoWay}"
+                                 Width="170" Margin="0 0 10 0" />
+                        <TextBox Header="Nachname"
+                                 Text="{x:Bind ViewModel.NewProject.ClientSurname, Mode=TwoWay}"
+                                 Width="170" />
+                    </StackPanel>
+                    <TextBox Header="Telefon"
+                             Text="{x:Bind ViewModel.NewProject.ClientPhone, Mode=TwoWay}"
+                             Margin="0 10 0 0" />
+                    <TextBox Header="E-Mail-Adresse"
+                             Text="{x:Bind ViewModel.NewProject.ClientEmail, Mode=TwoWay}"
+                             Margin="0 10 0 0" />
+
+                    <TextBlock Text="Baustelle"
+                               Style="{StaticResource SubtitleTextBlockStyle}"
+                               Margin="0 20 0 10" />
+                    <TextBox Header="Straße"
+                             Text="{x:Bind ViewModel.NewProject.ConstructionStreet, Mode=TwoWay}" />
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 10 0 0">
+                        <TextBox Header="PLZ"
+                                 Text="{x:Bind ViewModel.NewProject.ConstructionPostalCode, Mode=TwoWay}"
+                                 Width="100" Margin="0 0 10 0" />
+                        <TextBox Header="Ort"
+                                 Text="{x:Bind ViewModel.NewProject.ConstructionCity, Mode=TwoWay}"
+                                 Width="240" />
+                    </StackPanel>
+
+                    <controls:ValidationMessage Errors="{x:Bind ViewModel.NewProject.Errors, Mode=OneWay}" />
                 </StackPanel>
-                <TextBox Header="Telefon"
-                 Text="{x:Bind ViewModel.NewProject.ClientPhone, Mode=TwoWay}"
-                 Margin="0 10 0 0" />
-                <TextBox Header="E-Mail-Adresse"
-                 Text="{x:Bind ViewModel.NewProject.ClientEmail, Mode=TwoWay}"
-                 Margin="0 10 0 0" />
+            </ScrollViewer>
 
-                <TextBlock Text="Baustelle"
-                   Style="{StaticResource SubtitleTextBlockStyle}"
-                   Margin="0 20 0 10"/>
-                <TextBox Header="Straße"
-                 Text="{x:Bind ViewModel.NewProject.ConstructionStreet, Mode=TwoWay}" />
-                <StackPanel Orientation="Horizontal"
-                    Margin="0 10 0 0">
-                    <TextBox Header="PLZ"
-                     Text="{x:Bind ViewModel.NewProject.ConstructionPostalCode, Mode=TwoWay}"
-                     Width="100"
-                     Margin="0 0 10 0" />
-                    <TextBox Header="Ort"
-                     Text="{x:Bind ViewModel.NewProject.ConstructionCity, Mode=TwoWay}"
-                     Width="240" />
-                </StackPanel>
-
-                <controls:ValidationMessage Errors="{x:Bind ViewModel.NewProject.Errors, Mode=OneWay}" />
-            </StackPanel>
+            
         </ContentDialog>
 
         <!-- DIALOG: KNX Project Import -->
@@ -147,7 +155,7 @@
                        CloseButtonText="Abbrechen"
                        PrimaryButtonCommand="{x:Bind ViewModel.ImportKnxProjectCommand}"
                        DefaultButton="Primary">
-            <StackPanel>
+            <StackPanel Margin="0 0 20 0">
 
                 <!-- PASSWORD PROTECTION-->
                 <StackPanel Visibility="{x:Bind ViewModel.IsImportProjectProtected, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
@@ -155,16 +163,18 @@
                         Das Projekt ist passwortgeschützt. Bitte geben Sie das Passwort ein,<LineBreak />
                         welches in der ETS vergeben wurde.
                     </TextBlock>
-                    <PasswordBox Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay}" />
+                    <PasswordBox Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay}"
+                                 Margin="0 10 0 0" />
                 </StackPanel>
 
                 <!-- IMPORT DATA -->
-                <StackPanel>
+                <StackPanel Margin="0 20 0 0">
                     <TextBlock>
-                Welche Daten sollen importiert werden:
+                        Welche Daten sollen importiert werden:
                     </TextBlock>
-                    <CheckBox Content="Stammdaten des Projekts" />
+                    <CheckBox Content="Stammdaten des Projekts" Margin="0 10 0 0" IsChecked="True" IsEnabled="False" />
                     <CheckBox Content="Gebäudestruktur" />
+                    <CheckBox Content="Geräte" />
                 </StackPanel>
             </StackPanel>
         </ContentDialog>

@@ -11,6 +11,7 @@ using BSolutions.SHES.App.Views;
 using BSolutions.SHES.Data;
 using BSolutions.SHES.Data.Repositories.ProjectItems;
 using BSolutions.SHES.Data.Repositories.Projects;
+using BSolutions.SHES.Models.Observables;
 using BSolutions.SHES.Services.Knx;
 using BSolutions.SHES.Services.ProjectItems;
 using BSolutions.SHES.Services.Projects;
@@ -18,7 +19,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 
 // To learn more about WinUI3, see: https://docs.microsoft.com/windows/apps/winui/winui3/.
 namespace BSolutions.SHES.App
@@ -70,7 +73,17 @@ namespace BSolutions.SHES.App
                 services.AddSingleton<IFileService, FileService>();
 
                 // Views and ViewModels
+                services.AddTransient<ShellPage>();
+                services.AddTransient<ShellViewModel>();
+
+                services.AddTransient<MainPage>();
+                services.AddTransient<MainViewModel>();
+
+                services.AddTransient<BuildingStructurePage>();
+                services.AddTransient<BuildingStructureViewModel>();
+
                 services.AddTransient<ProjectListComponentModel>();
+                services.AddTransient<ProjectItemTreeComponentModel>();
 
                 services.AddTransient<SettingsViewModel>();
                 services.AddTransient<SettingsPage>();
@@ -82,10 +95,8 @@ namespace BSolutions.SHES.App
                 services.AddTransient<ListDetailsPage>();
                 services.AddTransient<DataGridViewModel>();
                 services.AddTransient<DataGridPage>();
-                services.AddTransient<MainViewModel>();
-                services.AddTransient<MainPage>();
-                services.AddTransient<ShellPage>();
-                services.AddTransient<ShellViewModel>();
+                
+                
 
                 // Configuration
                 services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));

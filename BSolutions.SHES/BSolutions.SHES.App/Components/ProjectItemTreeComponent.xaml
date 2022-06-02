@@ -1,0 +1,61 @@
+﻿<UserControl
+    x:Class="BSolutions.SHES.App.Components.ProjectItemTreeComponent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSolutions.SHES.App.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:observables="using:BSolutions.SHES.Models.Observables"
+    mc:Ignorable="d" Loaded="{x:Bind ViewModel.OnLoaded}">
+
+    <StackPanel>
+        <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
+            <AppBarButton Icon="Add" Label="Hinzufügen"
+                          Command="{x:Bind ViewModel.AddProjectItemDialogCommand}"
+                          CommandParameter="{Binding ElementName=AddProjectItemDialog}" />
+            <AppBarButton Icon="Delete" Label="Löschen">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="Möchten Sie das markierte Element wirklich löschen?" Margin="0,0,0,12" />
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Löschen" Style="{StaticResource AccentButtonStyle}" Margin="0 0 5 0" />
+                                <Button Content="Abbrechen" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </CommandBar>
+
+        <TreeView Name="ProjectElementTree" ItemsSource="{x:Bind ViewModel.ProjectItems}" Tapped="ProjectElementTree_Tapped">
+            <TreeView.ItemTemplate>
+                <DataTemplate x:DataType="observables:ObservableProjectItem">
+                    <TreeViewItem ItemsSource="{x:Bind Children}">
+                        <TextBlock Text="{x:Bind Name}" />
+                    </TreeViewItem>
+                </DataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <!-- DIALOG: New Project -->
+        <ContentDialog x:Name="AddProjectItemDialog"
+                       Title="Neues Element hinzufügen"
+                       PrimaryButtonText="Hinzufügen"
+                       CloseButtonText="Abbrechen"
+                       DefaultButton="Primary"
+                       PrimaryButtonCommand="{x:Bind ViewModel.AddProjectItemCommand}">
+            <StackPanel>
+                <ComboBox Header="Typ"
+                          PlaceholderText="Wählen Sie einen Typ"
+                          ItemsSource="{x:Bind ViewModel.RestrictedProjectItemInfos}"
+                          SelectedItem="{x:Bind ViewModel.NewProjectItemType, Mode=TwoWay}"
+                          DisplayMemberPath="DisplayName"
+                          Width="300"
+                          Margin="0 0 0 10" />
+
+                <TextBox Header="Bezeichnung" Text="{x:Bind ViewModel.NewProjectItemName, Mode=TwoWay}" Width="300" />
+            </StackPanel>
+        </ContentDialog>
+    </StackPanel>
+</UserControl>

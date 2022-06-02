@@ -10,10 +10,16 @@
     <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+    <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Remove="Strings\de-de\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Components\ProjectItemTreeComponent.xaml" />
     <None Remove="Components\ProjectListComponent.xaml" />
     <None Remove="Styles\DataTemplates.xaml" />
+    <None Remove="Views\BuildingStructurePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +48,12 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Components\ProjectItemTreeComponent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\BuildingStructurePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Styles\DataTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -57,5 +69,11 @@
   <ItemGroup>
     <Folder Include="Converters\" />
     <Folder Include="Messages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PRIResource Include="Strings\de-de\Resources.resx">
+      <Generator></Generator>
+    </PRIResource>
   </ItemGroup>
 </Project>
