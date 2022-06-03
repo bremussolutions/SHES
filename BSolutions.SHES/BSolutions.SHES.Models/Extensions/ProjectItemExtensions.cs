@@ -37,7 +37,8 @@ namespace BSolutions.SHES.Models.Extensions
                         {
                             Name = type.Name,
                             DisplayName = attribute.DisplayName,
-                            FullName = type.FullName
+                            FullName = type.FullName,
+                            Icon = attribute.Icon
                         });
                     }
                 }

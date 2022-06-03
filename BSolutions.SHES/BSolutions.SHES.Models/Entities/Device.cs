@@ -2,7 +2,7 @@
 
 namespace BSolutions.SHES.Models.Entities
 {
-    [ProjectItemInfo("Gerät", "Domain")]
+    [ProjectItemInfo("Gerät", "\U000F0C9D")]
     public class Device : ProjectItem
     {
     }

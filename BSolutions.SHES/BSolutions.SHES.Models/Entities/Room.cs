@@ -2,7 +2,7 @@
 
 namespace BSolutions.SHES.Models.Entities
 {
-    [ProjectItemInfo("Raum", "Door")]
+    [ProjectItemInfo("Raum", "\U000F081A")]
     [RestrictChildren(typeof(Cabinet), typeof(Device))]
     public class Room : ProjectItem
     {

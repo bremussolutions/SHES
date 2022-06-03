@@ -8,6 +8,8 @@
 
         public string FullName { get; set; }
 
+        public string Icon { get; set; }
+
         public override string ToString()
         {
             return $"{FullName}: {DisplayName}";

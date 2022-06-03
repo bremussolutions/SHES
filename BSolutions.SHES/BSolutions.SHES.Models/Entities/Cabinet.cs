@@ -2,7 +2,7 @@
 
 namespace BSolutions.SHES.Models.Entities
 {
-    [ProjectItemInfo("Unterverteilung", "Domain")]
+    [ProjectItemInfo("Unterverteilung", "\U000F0F91")]
     public class Cabinet : ProjectItem
     {
     }

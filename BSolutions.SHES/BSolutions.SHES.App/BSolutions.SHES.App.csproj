@@ -16,6 +16,7 @@
     <EmbeddedResource Remove="Strings\de-de\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\materialdesignicons-webfont.ttf" />
     <None Remove="Components\ProjectItemTreeComponent.xaml" />
     <None Remove="Components\ProjectListComponent.xaml" />
     <None Remove="Styles\DataTemplates.xaml" />
@@ -75,5 +76,11 @@
     <PRIResource Include="Strings\de-de\Resources.resx">
       <Generator></Generator>
     </PRIResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\materialdesignicons-webfont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

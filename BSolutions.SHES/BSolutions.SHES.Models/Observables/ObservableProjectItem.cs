@@ -1,5 +1,7 @@
-﻿using BSolutions.SHES.Models.Entities;
+﻿using BSolutions.SHES.Models.Attributes;
+using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Shared.Extensions;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -13,6 +15,12 @@ namespace BSolutions.SHES.Models.Observables
         {
             get => entity.Name;
             set => SetProperty(entity.Name, value, entity, (u, n) => u.Name = n);
+        }
+
+        private string _icon;
+        public string Icon
+        {
+            get => _icon;
         }
 
         public string Description
@@ -46,6 +54,13 @@ namespace BSolutions.SHES.Models.Observables
         public ObservableProjectItem(ProjectItem projectItem)
             : base(projectItem)
         {
+            var attribute = projectItem.GetType().GetCustomAttributes(typeof(ProjectItemInfoAttribute), false).FirstOrDefault() as ProjectItemInfoAttribute;
+            
+            if(attribute != null)
+            {
+                this._icon = attribute.Icon;
+            }
+
             this.Children.AddRange(projectItem.Children.Select(pi => new ObservableProjectItem(pi)));
         }
 

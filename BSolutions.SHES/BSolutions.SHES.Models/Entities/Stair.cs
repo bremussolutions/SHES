@@ -2,7 +2,7 @@
 
 namespace BSolutions.SHES.Models.Entities
 {
-    [ProjectItemInfo("Treppe", "Stairs")]
+    [ProjectItemInfo("Treppe", "\U000F04CD")]
     [RestrictChildren(typeof(Cabinet), typeof(Device))]
     public class Stair : ProjectItem
     {
