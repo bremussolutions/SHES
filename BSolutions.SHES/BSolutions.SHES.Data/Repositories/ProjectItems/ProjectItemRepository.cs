@@ -15,17 +15,17 @@ namespace BSolutions.SHES.Data.Repositories.ProjectItems
         {
         }
 
-        public async Task<List<ProjectItem>> GetProjectItemTreeAsync(Guid projectId)
+        public async Task<List<ProjectItem>> GetProjectItemTreeAsync(Guid projectId, bool includeDevices)
         {
             return await Task.Run(() =>
             {
-                return this.LoadProjectItemChildren(projectId).ToList();
+                return this.LoadProjectItemChildren(projectId, includeDevices).ToList();
             });
         }
 
         #region --- Helper ---
 
-        private IEnumerable<ProjectItem> LoadProjectItemChildren(Guid projectId)
+        private IEnumerable<ProjectItem> LoadProjectItemChildren(Guid projectId, bool includeDevices)
         {
             IQueryable<ProjectItem> projectItems = this._dbContext.Buildings
                 .Include(b => b.Children)
@@ -34,21 +34,29 @@ namespace BSolutions.SHES.Data.Repositories.ProjectItems
             foreach (ProjectItem entity in projectItems)
             {
                 if (entity.Children != null && entity.Children.Any())
-                    entity.Children = LoadProjectItemGrandchildren(entity).ToList();
+                    entity.Children = LoadProjectItemGrandchildren(entity, includeDevices).ToList();
 
                 yield return entity;
             }
         }
 
-        private IEnumerable<ProjectItem> LoadProjectItemGrandchildren(ProjectItem parent)
+        private IEnumerable<ProjectItem> LoadProjectItemGrandchildren(ProjectItem parent, bool includeDevices)
         {
             IQueryable<ProjectItem> children = this._dbContext.ProjectItems
-            .Include(x => x.Parent)
-            .Where(w => w.Parent != null && w.Parent.Id == parent.Id);
+            .Include(pi => pi.Parent);
+
+            if(includeDevices)
+            {
+                children = children.Where(pi => pi.Parent != null && pi.Parent.Id == parent.Id);
+            }
+            else
+            {
+                children = children.Where(pi => pi.Parent != null && pi.Parent.Id == parent.Id && pi.Discriminator != nameof(Device));
+            }
 
             foreach (ProjectItem entity in children)
             {
-                entity.Children = LoadProjectItemGrandchildren(entity).ToList();
+                entity.Children = LoadProjectItemGrandchildren(entity, includeDevices).ToList();
                 yield return entity;
             }
         }

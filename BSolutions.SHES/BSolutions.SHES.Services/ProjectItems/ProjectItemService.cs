@@ -63,11 +63,11 @@ namespace BSolutions.SHES.Services.ProjectItems
             }
         }
 
-        public async Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject)
+        public async Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject, bool includeDevices = false)
         {
             try
             {
-                var projectItemTree = await this._projectItemRepository.GetProjectItemTreeAsync(observableProject.Id);
+                var projectItemTree = await this._projectItemRepository.GetProjectItemTreeAsync(observableProject.Id, includeDevices);
                 return new ObservableCollection<ObservableProjectItem>(projectItemTree.Select(pi => new ObservableProjectItem(pi)));
             }
             catch

@@ -7,6 +7,6 @@ namespace BSolutions.SHES.Data.Repositories.ProjectItems
 {
     public interface IProjectItemRepository : IRepository<ProjectItem>
     {
-        Task<List<ProjectItem>> GetProjectItemTreeAsync(Guid projectId);
+        Task<List<ProjectItem>> GetProjectItemTreeAsync(Guid projectId, bool includeDevices);
     }
 }

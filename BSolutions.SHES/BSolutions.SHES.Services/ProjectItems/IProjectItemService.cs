@@ -8,7 +8,7 @@ namespace BSolutions.SHES.Services.ProjectItems
     {
         Task<ObservableProjectItem> AddAsync(ObservableProjectItem observableProjectItem);
         Task AddRangeAsync(ObservableCollection<ObservableProjectItem> observableProjectItems);
-        Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject);
+        Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject, bool includeDevices = false);
         Task<ObservableProjectItem> UpdateAsync(ObservableProjectItem observableProjectItem);
     }
 }
