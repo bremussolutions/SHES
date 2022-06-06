@@ -1,4 +1,5 @@
 ﻿using BSolutions.SHES.Data.Repositories.ProjectItems;
+using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using Microsoft.Extensions.Logging;
 using System;

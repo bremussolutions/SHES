@@ -21,10 +21,12 @@
 
                 <components:ProjectItemTreeComponent />
 
-                <controls:DataGrid Grid.Column="1">
+                <controls:DataGrid Grid.Column="1"
+                                   AutoGenerateColumns="False"
+                                   GridLinesVisibility="Horizontal"
+                                   ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}">
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTextColumn Header="Name" />
-                        <controls:DataGridTextColumn Header="Kategorie" />
+                        <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" />
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
 

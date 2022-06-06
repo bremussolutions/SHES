@@ -1,22 +1,19 @@
 ﻿using BSolutions.SHES.App.Messages;
 using BSolutions.SHES.Models;
 using BSolutions.SHES.Models.Entities;
+using BSolutions.SHES.Models.Extensions;
+using BSolutions.SHES.Models.Helpers;
 using BSolutions.SHES.Models.Observables;
 using BSolutions.SHES.Services.ProjectItems;
 using BSolutions.SHES.Shared.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.ComponentModel;
-using BSolutions.SHES.Models.Helpers;
-using BSolutions.SHES.Models.Extensions;
 
 namespace BSolutions.SHES.App.ComponentModels
 {
@@ -50,6 +47,9 @@ namespace BSolutions.SHES.App.ComponentModels
             {
                 SetProperty(ref _selectedProjectItem, value);
                 this.UpdateProjectItemTypes();
+
+                // Set current project item
+                WeakReferenceMessenger.Default.Send(new CurrentProjectItemChangedMessage(this.SelectedProjectItem));
             }
         }
 
