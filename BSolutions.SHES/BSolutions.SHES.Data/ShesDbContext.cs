@@ -60,6 +60,22 @@ namespace BSolutions.SHES.Data
                 .HasForeignKey(i => i.ParentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Building>().ToTable("Buildings");
+
+            modelBuilder.Entity<BuildingPart>().ToTable("BuildingParts");
+
+            modelBuilder.Entity<Cabinet>().ToTable("Cabinets");
+
+            modelBuilder.Entity<Corridor>().ToTable("Corridors");
+
+            modelBuilder.Entity<Device>().ToTable("Devices");
+
+            modelBuilder.Entity<Floor>().ToTable("Floors");
+
+            modelBuilder.Entity<Room>().ToTable("Rooms");
+
+            modelBuilder.Entity<Stair>().ToTable("Stairs");
+
             base.OnModelCreating(modelBuilder);
         }
     }

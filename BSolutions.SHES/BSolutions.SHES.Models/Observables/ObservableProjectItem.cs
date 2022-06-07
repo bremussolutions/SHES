@@ -19,7 +19,7 @@ namespace BSolutions.SHES.Models.Observables
 
         public string Discriminator
         {
-            get => entity.Discriminator;
+            get => entity.GetType().Name;
         }
 
         private string _icon;

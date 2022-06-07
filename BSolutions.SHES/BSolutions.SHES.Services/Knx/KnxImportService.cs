@@ -1,5 +1,6 @@
 ﻿using BSolutions.SHES.Data.Repositories.Projects;
 using BSolutions.SHES.Models.Entities;
+using BSolutions.SHES.Models.Enumerations;
 using BSolutions.SHES.Models.Observables;
 using BSolutions.SHES.Services.Projects;
 using BSolutions.SHES.Shared.Extensions;
@@ -224,7 +225,7 @@ namespace BSolutions.SHES.Services.Knx
                 string deviceComment = deviceInstance.Attribute("Comment")?.Value;
                 string deviceDescription = deviceInstance.Attribute("Description")?.Value;
 
-                devices.Add(new Device { Name = deviceName, Comment = deviceComment, Description = deviceDescription });
+                devices.Add(new Device { Name = deviceName, Comment = deviceComment, Description = deviceDescription, BusType = BusType.Knx });
             }
 
             return devices;

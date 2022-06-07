@@ -81,10 +81,6 @@ namespace BSolutions.SHES.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("TEXT");
 
@@ -100,8 +96,6 @@ namespace BSolutions.SHES.Data.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("ProjectItems", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ProjectItem");
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Building", b =>
@@ -113,56 +107,62 @@ namespace BSolutions.SHES.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasDiscriminator().HasValue("Building");
+                    b.ToTable("Buildings", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.BuildingPart", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("BuildingPart");
+                    b.ToTable("BuildingParts", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Cabinet", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("Cabinet");
+                    b.ToTable("Cabinets", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Corridor", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("Corridor");
+                    b.ToTable("Corridors", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Device", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("Device");
+                    b.Property<int>("BusType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("Devices", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Floor", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("Floor");
+                    b.ToTable("Floors", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Room", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("Room");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Stair", b =>
                 {
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
-                    b.HasDiscriminator().HasValue("Stair");
+                    b.ToTable("Stairs", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.ProjectItem", b =>
@@ -177,12 +177,81 @@ namespace BSolutions.SHES.Data.Migrations
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Building", b =>
                 {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Building", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BSolutions.SHES.Models.Entities.Project", "Project")
                         .WithMany("Buildings")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BuildingPart", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.BuildingPart", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.Cabinet", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Cabinet", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.Corridor", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Corridor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.Device", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Device", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.Floor", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Floor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.Room", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Room", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.Stair", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.Stair", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Project", b =>

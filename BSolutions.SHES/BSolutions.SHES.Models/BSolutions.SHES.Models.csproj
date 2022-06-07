@@ -16,7 +16,6 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Attributes\" />
-    <Folder Include="Enumerations\" />
     <Folder Include="Observables\" />
   </ItemGroup>
 

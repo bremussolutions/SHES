@@ -42,16 +42,14 @@ namespace BSolutions.SHES.Data.Repositories.ProjectItems
 
         private IEnumerable<ProjectItem> LoadProjectItemGrandchildren(ProjectItem parent, bool includeDevices)
         {
-            IQueryable<ProjectItem> children = this._dbContext.ProjectItems
-            .Include(pi => pi.Parent);
+            List<ProjectItem> children = this._dbContext.ProjectItems
+                .Where(pi => pi.Parent != null && pi.Parent.Id == parent.Id)
+                .Include(pi => pi.Parent)
+                .ToList();
 
-            if(includeDevices)
+            if (!includeDevices)
             {
-                children = children.Where(pi => pi.Parent != null && pi.Parent.Id == parent.Id);
-            }
-            else
-            {
-                children = children.Where(pi => pi.Parent != null && pi.Parent.Id == parent.Id && pi.Discriminator != nameof(Device));
+                children = children.Where(c => c.GetType() != typeof(Device)).ToList();
             }
 
             foreach (ProjectItem entity in children)
