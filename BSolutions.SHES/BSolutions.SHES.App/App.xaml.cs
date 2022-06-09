@@ -9,9 +9,11 @@ using BSolutions.SHES.App.Services;
 using BSolutions.SHES.App.ViewModels;
 using BSolutions.SHES.App.Views;
 using BSolutions.SHES.Data;
+using BSolutions.SHES.Data.Repositories.Devices;
 using BSolutions.SHES.Data.Repositories.ProjectItems;
 using BSolutions.SHES.Data.Repositories.Projects;
 using BSolutions.SHES.Models.Observables;
+using BSolutions.SHES.Services.Devices;
 using BSolutions.SHES.Services.Knx;
 using BSolutions.SHES.Services.ProjectItems;
 using BSolutions.SHES.Services.Projects;
@@ -54,10 +56,12 @@ namespace BSolutions.SHES.App
                 // Repositories
                 services.AddSingleton<IProjectRepository, ProjectRepository>();
                 services.AddSingleton<IProjectItemRepository, ProjectItemRepository>();
+                services.AddSingleton<IDeviceRepository, DeviceRepository>();
 
                 // Services
                 services.AddSingleton<IProjectService, ProjectService>();
                 services.AddSingleton<IProjectItemService, ProjectItemService>();
+                services.AddSingleton<IDeviceService, DeviceService>();
                 services.AddSingleton<IKnxImportService, KnxImportService>();
 
                 services.AddSingleton<ILocalSettingsService, LocalSettingsServicePackaged>();

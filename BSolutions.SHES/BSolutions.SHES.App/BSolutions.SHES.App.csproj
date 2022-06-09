@@ -68,17 +68,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PRIResource Include="Strings\de-de\Resources.resx">
       <Generator></Generator>
     </PRIResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Assets\materialdesignicons-webfont.ttf">
+    <Content Update="Assets\Fonts\materialdesignicons-webfont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Fonts\smarthome-webfont.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -97,7 +97,7 @@ namespace BSolutions.SHES.App.ComponentModels
 
         public async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var projectItems = await this._projectItemService.GetProjectItemsAsync(this.CurrentProject);
+            var projectItems = await this._projectItemService.GetProjectItemsAsync(this.CurrentProject, true);
             this.ProjectItems.AddRange(projectItems);
         }
 

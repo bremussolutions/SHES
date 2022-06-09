@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BSolutions.SHES.Data.Migrations
 {
     [DbContext(typeof(ShesDbContext))]
-    [Migration("20220607111756_Initial")]
+    [Migration("20220607200250_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

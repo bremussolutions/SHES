@@ -17,11 +17,6 @@ namespace BSolutions.SHES.Models.Observables
             set => SetProperty(entity.Name, value, entity, (u, n) => u.Name = n);
         }
 
-        public string Discriminator
-        {
-            get => entity.GetType().Name;
-        }
-
         private string _icon;
         public string Icon
         {

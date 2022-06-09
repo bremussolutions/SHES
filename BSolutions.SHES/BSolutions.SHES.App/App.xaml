@@ -15,7 +15,8 @@
 
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
-                    <FontFamily x:Key="MaterialDesignIcons">/Assets/materialdesignicons-webfont.ttf#Material Design Icons</FontFamily>
+                    <FontFamily x:Key="MaterialDesignIcons">/Assets/Fonts/materialdesignicons-webfont.ttf#Material Design Icons</FontFamily>
+                    <FontFamily x:Key="SmarthomeIcons">/Assets/Fonts/smarthome-webfont.ttf#smarthome-webfont</FontFamily>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

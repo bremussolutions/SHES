@@ -27,18 +27,25 @@
             </AppBarButton>
         </CommandBar>
 
-        <TreeView Name="ProjectElementTree" ItemsSource="{x:Bind ViewModel.ProjectItems}" Tapped="ProjectElementTree_Tapped">
-            <TreeView.ItemTemplate>
-                <DataTemplate x:DataType="observables:ObservableProjectItem">
-                    <TreeViewItem ItemsSource="{x:Bind Children}">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon FontFamily="Material Design Icons" Glyph="{Binding Icon}" Margin="0 0 5 0" />
-                            <TextBlock Text="{x:Bind Name}" />
-                        </StackPanel>
-                    </TreeViewItem>
-                </DataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <ScrollViewer MaxHeight="500"
+                      HorizontalScrollMode="Enabled"
+                      VerticalScrollMode="Enabled"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto">
+                <TreeView Name="ProjectElementTree" ItemsSource="{x:Bind ViewModel.ProjectItems}" Tapped="ProjectElementTree_Tapped"
+                          Margin="0 0 10 10">
+                    <TreeView.ItemTemplate>
+                        <DataTemplate x:DataType="observables:ObservableProjectItem">
+                            <TreeViewItem ItemsSource="{x:Bind Children}">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon FontFamily="{StaticResource MaterialDesignIcons}" Glyph="{Binding Icon}" Margin="0 0 5 0" />
+                                    <TextBlock Text="{x:Bind Name}" />
+                                </StackPanel>
+                            </TreeViewItem>
+                        </DataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+        </ScrollViewer>
 
         <!-- DIALOG: New Project -->
         <ContentDialog x:Name="AddProjectItemDialog"

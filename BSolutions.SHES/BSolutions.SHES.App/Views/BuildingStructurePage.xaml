@@ -6,8 +6,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:components="using:BSolutions.SHES.App.Components"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:converters="using:BSolutions.SHES.App.Converters"
     mc:Ignorable="d"
     Style="{StaticResource PageStyle}">
+
+    <Page.Resources>
+        <converters:EnumDisplayConverter x:Key="enumConverter" />
+    </Page.Resources>
 
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
         <Grid
@@ -23,10 +28,30 @@
 
                 <controls:DataGrid Grid.Column="1"
                                    AutoGenerateColumns="False"
-                                   GridLinesVisibility="Horizontal"
+                                   GridLinesVisibility="Horizontal" CanUserSortColumns="True"
                                    ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}">
                     <controls:DataGrid.Columns>
+                        <controls:DataGridTemplateColumn>
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon}" />
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
                         <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                        <controls:DataGridTemplateColumn>
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox SelectedItem="{Binding Type}" ItemsSource="{Binding DeviceTypes}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource enumConverter}}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
 

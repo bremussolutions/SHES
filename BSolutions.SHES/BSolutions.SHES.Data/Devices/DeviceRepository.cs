@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace BSolutions.SHES.Data.Repositories.Projects
+namespace BSolutions.SHES.Data.Repositories.Devices
 {
     public class DeviceRepository : Repository<Device>, IDeviceRepository
     {
