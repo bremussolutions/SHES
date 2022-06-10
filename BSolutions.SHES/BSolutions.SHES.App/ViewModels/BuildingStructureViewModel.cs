@@ -30,7 +30,7 @@ namespace BSolutions.SHES.App.ViewModels
                 if (value != null)
                 {
                     SetProperty(ref _currentProjectItem, value);
-                    this.LoadDevicesForProjectItemAsync().Wait();
+                    this.LoadDevicesForProjectItemAsync();
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace BSolutions.SHES.App.ViewModels
 
         #endregion
 
-        private async Task LoadDevicesForProjectItemAsync()
+        private async void LoadDevicesForProjectItemAsync()
         {
             var devices = await this._deviceService.GetDevicesForLocationAsync(this.CurrentProjectItem);
 

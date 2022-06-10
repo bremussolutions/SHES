@@ -5,34 +5,34 @@ namespace BSolutions.SHES.Models.Enumerations
 {
     public enum DeviceType
     {
-        [Display(Name = "Unbekannt")]
+        [Description("Unbekannt")]
         Unknown = 0,
 
-        [Display(Name = "Analogaktor")]
+        [Description("Analogaktor")]
         AnalogActuator = 1,
 
-        [Display(Name = "Binäreingang")]
+        [Description("Analogaktor")]
         BinaryInput = 2,
 
-        [Display(Name = "Dimmaktor")]
+        [Description("Analogaktor")]
         DimmingActuator = 3,
 
-        [Display(Name = "Heizungsaktor")]
+        [Description("Analogaktor")]
         HeatingActuator = 4,
 
-        [Display(Name = "Präsenz- / Bewegungsmelder")]
+        [Description("Analogaktor")]
         MotionDetector = 5,
 
-        [Display(Name = "Rollladenaktor")]
+        [Description("Analogaktor")]
         ShutterActuator = 6,
 
-        [Display(Name = "Taster")]
+        [Description("Analogaktor")]
         Switch = 7,
 
-        [Display(Name = "Schaltaktor")]
+        [Description("Analogaktor")]
         SwitchingActuator = 8,
 
-        [Display(Name = "Visualisierung")]
+        [Description("Analogaktor")]
         Visualization = 9
     }
 }
