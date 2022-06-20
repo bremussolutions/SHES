@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BSolutions.SHES.Models\BSolutions.SHES.Models.csproj" />
   </ItemGroup>
 </Project>

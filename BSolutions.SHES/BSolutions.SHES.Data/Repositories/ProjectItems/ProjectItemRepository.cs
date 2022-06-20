@@ -10,11 +10,24 @@ namespace BSolutions.SHES.Data.Repositories.ProjectItems
 {
     public class ProjectItemRepository : Repository<ProjectItem>, IProjectItemRepository
     {
+        #region --- Constructor ---
+
+        /// <summary>Initializes a new instance of the <see cref="ProjectItemRepository" /> class.</summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="dbContext">The database context.</param>
         public ProjectItemRepository(ILogger<ProjectItemRepository> logger, ShesDbContext dbContext)
             : base(logger, dbContext)
         {
         }
 
+        #endregion
+
+        #region --- IProjectItemRepository ---
+
+        /// <summary>Gets the project items tree for a project asynchronous.</summary>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="includeDevices">if set to <c>true</c> [include devices].</param>
+        /// <returns>Returns the project items tree.</returns>
         public async Task<List<ProjectItem>> GetProjectItemTreeAsync(Guid projectId, bool includeDevices)
         {
             return await Task.Run(() =>
@@ -22,6 +35,8 @@ namespace BSolutions.SHES.Data.Repositories.ProjectItems
                 return this.LoadProjectItemChildren(projectId, includeDevices).ToList();
             });
         }
+
+        #endregion
 
         #region --- Helper ---
 

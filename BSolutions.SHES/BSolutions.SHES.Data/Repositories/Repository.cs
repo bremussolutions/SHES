@@ -20,6 +20,9 @@ namespace BSolutions.SHES.Data.Repositories
 
         #region --- Constructor ---
 
+        /// <summary>Initializes a new instance of the <see cref="Repository{TEntity}" /> class.</summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="dbContext">The database context.</param>
         public Repository(ILogger logger, ShesDbContext dbContext)
         {
             this._logger = logger;
@@ -28,6 +31,10 @@ namespace BSolutions.SHES.Data.Repositories
 
         #endregion
 
+        #region --- IRepository ---
+
+        /// <summary>Gets all entities asynchronous.</summary>
+        /// <returns>Returns a list of all entities.</returns>
         public async Task<List<TEntity>> GetAllAsync()
         {
             try
@@ -41,6 +48,9 @@ namespace BSolutions.SHES.Data.Repositories
             }
         }
 
+        /// <summary>Gets an entity by identifier asynchronous.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Returns an entity.</returns>
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             try
@@ -54,6 +64,10 @@ namespace BSolutions.SHES.Data.Repositories
             }
         }
 
+        /// <summary>Gets an entity by expression asynchronous.</summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="includeProperties">The include properties.</param>
+        /// <returns>Returns an entity.</returns>
         public async Task<List<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, string includeProperties = "")
         {
             try
@@ -79,6 +93,9 @@ namespace BSolutions.SHES.Data.Repositories
             }
         }
 
+        /// <summary>Adds an entity asynchronous.</summary>
+        /// <param name="entity">The entity.</param>
+        /// <exception cref="System.ArgumentNullException">entity - Entity must not be null.</exception>
         public async Task AddAsync(TEntity entity)
         {
             if (entity == null)
@@ -98,6 +115,9 @@ namespace BSolutions.SHES.Data.Repositories
             }
         }
 
+        /// <summary>Updates an entity asynchronous.</summary>
+        /// <param name="entity">The entity.</param>
+        /// <exception cref="System.ArgumentNullException">entity - Entity must not be null.</exception>
         public async Task UpdateAsync(TEntity entity)
         {
             if (entity == null)
@@ -121,6 +141,8 @@ namespace BSolutions.SHES.Data.Repositories
             }
         }
 
+        /// <summary>Deletes an entity asynchronous.</summary>
+        /// <param name="entity">The entity.</param>
         public async Task DeleteAsync(TEntity entity)
         {
             try
@@ -137,6 +159,10 @@ namespace BSolutions.SHES.Data.Repositories
             }
         }
 
+        #endregion
+
+        /// <summary>Detaches an entity.</summary>
+        /// <param name="entity">The entity.</param>
         private void DetachEntity(TEntity entity)
         {
             var localEntity = this._dbContext.Set<TEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(entity.Id));
