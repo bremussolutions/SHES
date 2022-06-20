@@ -1,4 +1,5 @@
-﻿using BSolutions.SHES.Models.Observables;
+﻿using BSolutions.SHES.Models.Entities;
+using BSolutions.SHES.Models.Observables;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 

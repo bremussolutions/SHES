@@ -1,4 +1,5 @@
 ﻿using BSolutions.SHES.App.ComponentModels;
+using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

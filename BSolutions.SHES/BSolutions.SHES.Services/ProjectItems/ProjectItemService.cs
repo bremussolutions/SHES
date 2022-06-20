@@ -64,6 +64,15 @@ namespace BSolutions.SHES.Services.ProjectItems
             }
         }
 
+        public async Task UpdateRangeAsync(ObservableCollection<ObservableProjectItem> observableProjectItems)
+        {
+            // Update project items
+            foreach(var item in observableProjectItems)
+            {
+                await this._projectItemRepository.UpdateAsync(item.entity);
+            }
+        }
+
         public async Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject, bool includeDevices = false)
         {
             try

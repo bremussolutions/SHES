@@ -1,4 +1,5 @@
-﻿using BSolutions.SHES.Models.Observables;
+﻿using BSolutions.SHES.Models.Entities;
+using BSolutions.SHES.Models.Observables;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -10,5 +11,6 @@ namespace BSolutions.SHES.Services.ProjectItems
         Task AddRangeAsync(ObservableCollection<ObservableProjectItem> observableProjectItems);
         Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject, bool includeDevices = false);
         Task<ObservableProjectItem> UpdateAsync(ObservableProjectItem observableProjectItem);
+        Task UpdateRangeAsync(ObservableCollection<ObservableProjectItem> observableProjectItems);
     }
 }

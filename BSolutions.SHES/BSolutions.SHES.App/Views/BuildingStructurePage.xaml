@@ -31,7 +31,8 @@
                 <controls:DataGrid Grid.Column="1"
                                    AutoGenerateColumns="False"
                                    GridLinesVisibility="Horizontal" CanUserSortColumns="True"
-                                   ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}">
+                                   ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
+                                   CellEditEnded="{x:Bind ViewModel.DataGrid_CellEditEnded}">
                     <controls:DataGrid.Columns>
                         <controls:DataGridTemplateColumn>
                             <controls:DataGridTemplateColumn.CellTemplate>

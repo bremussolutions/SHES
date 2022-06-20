@@ -1,12 +1,11 @@
 ﻿using BSolutions.SHES.Data.Repositories.Devices;
-using BSolutions.SHES.Data.Repositories.Projects;
 using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BSolutions.SHES.Services.Devices
@@ -20,6 +19,30 @@ namespace BSolutions.SHES.Services.Devices
         {
             this._deviceRepository = deviceRepository;
         }
+
+        //public async Task<ObservableDevice> UpdateAsync(ObservableDevice observableDevice)
+        //{
+        //    try
+        //    {
+        //        observableDevice.LastModificationTime = DateTime.Now;
+
+        //        await this._deviceRepository.UpdateAsync(observableDevice.entity);
+        //        return observableDevice;
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        //public async Task UpdateRangeAsync(ObservableCollection<ObservableDevice> observableDevices)
+        //{
+        //    // Update devices
+        //    foreach (var item in observableDevices)
+        //    {
+        //        await this._deviceRepository.UpdateAsync(item.entity);
+        //    }
+        //}
 
         public async Task<List<ObservableDevice>> GetDevicesForLocationAsync(ObservableProjectItem observableProjectItem)
         {

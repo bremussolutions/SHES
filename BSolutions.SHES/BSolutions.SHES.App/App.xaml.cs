@@ -51,6 +51,7 @@ namespace BSolutions.SHES.App
                     Directory.CreateDirectory(shesDatabasePath);
 
                     options.UseSqlite($"Data Source={Path.Combine(shesDatabasePath, "shes.db")};");
+                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 });
 
                 // Repositories
