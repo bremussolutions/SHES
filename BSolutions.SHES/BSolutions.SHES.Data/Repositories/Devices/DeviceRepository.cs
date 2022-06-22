@@ -23,31 +23,22 @@ namespace BSolutions.SHES.Data.Repositories.Devices
 
         #endregion
 
-        public List<Device> GetDevicesForLocation(ProjectItem projectItem)
+        public async Task<List<Device>> GetDevicesForLocationAsync(ProjectItem projectItem)
         {
             try
             {
                 // TODO: Dies muss definitiv noch optimiert werden!
-                return this._dbContext.ProjectItems.Include("Children.Children.Children.Children.Children.Children.Children.Children.Children")
-                    .First(pi => pi.Id == projectItem.Id)
-                    .Children.Traverse(pi => pi.Children)
-                    .Cast<Device>()
-                    .ToList();
+                var parent = await this._dbContext.ProjectItems.Include("Children.Children.Children.Children.Children.Children.Children.Children.Children")
+                    .FirstOrDefaultAsync(pi => pi.Id == projectItem.Id);
 
+                if (parent != null)
+                { 
+                    return parent.Children.Traverse(pi => pi.Children)
+                        .Cast<Device>()
+                        .ToList();
+                }
 
-                //var query = this._dbContext.Set<TEntity>().Where(expression);
-
-                //if (!string.IsNullOrWhiteSpace(includeProperties))
-                //{
-                //    string[] includes = includeProperties.Split(';');
-
-                //    foreach (string include in includes)
-                //    {
-                //        query = query.Include(include);
-                //    }
-                //}
-
-                //return await query.ToListAsync();
+                return new List<Device>();
             }
             catch (Exception ex)
             {

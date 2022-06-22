@@ -22,16 +22,14 @@ namespace BSolutions.SHES.Models.Extensions
 
         public static List<ProjectItemTypeInfo> GetRestrictChildrenInfos(this ProjectItem projectItem)
         {
-            List<ProjectItemTypeInfo> result = new List<ProjectItemTypeInfo>();
+            List<ProjectItemTypeInfo> result = new();
             List<Type> restrictChildrenTypes = projectItem.GetRestrictChildrenTypes();
 
             if (restrictChildrenTypes != null)
             {
                 foreach (var type in restrictChildrenTypes)
                 {
-                    ProjectItemInfoAttribute attribute = type.GetCustomAttributes(typeof(ProjectItemInfoAttribute), true).FirstOrDefault() as ProjectItemInfoAttribute;
-
-                    if (attribute != null)
+                    if (type.GetCustomAttributes(typeof(ProjectItemInfoAttribute), true).FirstOrDefault() is ProjectItemInfoAttribute attribute)
                     {
                         result.Add(new ProjectItemTypeInfo
                         {
@@ -53,10 +51,15 @@ namespace BSolutions.SHES.Models.Extensions
             while (stack.Any())
             {
                 var next = stack.Pop();
-                if(next.GetType() == typeof(Device))
-                yield return next;
+                if (next.GetType() == typeof(Device))
+                {
+                    yield return next;
+                }
+
                 foreach (var child in childSelector(next))
+                {
                     stack.Push(child);
+                }
             }
         }
     }

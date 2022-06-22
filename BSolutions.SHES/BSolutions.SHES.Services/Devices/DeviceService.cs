@@ -20,35 +20,11 @@ namespace BSolutions.SHES.Services.Devices
             this._deviceRepository = deviceRepository;
         }
 
-        //public async Task<ObservableDevice> UpdateAsync(ObservableDevice observableDevice)
-        //{
-        //    try
-        //    {
-        //        observableDevice.LastModificationTime = DateTime.Now;
-
-        //        await this._deviceRepository.UpdateAsync(observableDevice.entity);
-        //        return observableDevice;
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
-
-        //public async Task UpdateRangeAsync(ObservableCollection<ObservableDevice> observableDevices)
-        //{
-        //    // Update devices
-        //    foreach (var item in observableDevices)
-        //    {
-        //        await this._deviceRepository.UpdateAsync(item.entity);
-        //    }
-        //}
-
         public async Task<List<ObservableDevice>> GetDevicesForLocationAsync(ObservableProjectItem observableProjectItem)
         {
             try
             {
-                var devices = this._deviceRepository.GetDevicesForLocation(observableProjectItem.entity);
+                var devices = await this._deviceRepository.GetDevicesForLocationAsync(observableProjectItem.entity);
 
                 return devices.Select(d => new ObservableDevice(d)).ToList();
             }
