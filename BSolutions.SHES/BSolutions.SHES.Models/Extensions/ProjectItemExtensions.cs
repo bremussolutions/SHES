@@ -46,5 +46,18 @@ namespace BSolutions.SHES.Models.Extensions
 
             return result;
         }
+
+        public static IEnumerable<T> Traverse<T>(this IEnumerable<T> items, Func<T, IEnumerable<T>> childSelector)
+        {
+            var stack = new Stack<T>(items);
+            while (stack.Any())
+            {
+                var next = stack.Pop();
+                if(next.GetType() == typeof(Device))
+                yield return next;
+                foreach (var child in childSelector(next))
+                    stack.Push(child);
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace BSolutions.SHES.Models.Observables
             set => SetProperty(entity.Name, value, entity, (u, n) => u.Name = n);
         }
 
-        private string _icon;
+        private readonly string _icon;
         public string Icon
         {
             get => _icon;
@@ -35,11 +35,11 @@ namespace BSolutions.SHES.Models.Observables
             set => SetProperty(entity.Comment, value, entity, (u, n) => u.Comment = n);
         }
 
-        public ObservableCollection<ObservableProjectItem> Children = new ObservableCollection<ObservableProjectItem>();
+        public ObservableCollection<ObservableProjectItem> Children = new();
 
         public ObservableProjectItem Parent
         {
-            get => new ObservableProjectItem(entity.Parent);
+            get => new(entity.Parent);
             set => SetProperty(entity.Parent, value.entity, entity, (u, n) => u.Parent = n);
         }
 
@@ -54,9 +54,7 @@ namespace BSolutions.SHES.Models.Observables
         public ObservableProjectItem(ProjectItem projectItem)
             : base(projectItem)
         {
-            var attribute = projectItem.GetType().GetCustomAttributes(typeof(ProjectItemInfoAttribute), false).FirstOrDefault() as ProjectItemInfoAttribute;
-            
-            if(attribute != null)
+            if (projectItem.GetType().GetCustomAttributes(typeof(ProjectItemInfoAttribute), false).FirstOrDefault() is ProjectItemInfoAttribute attribute)
             {
                 this._icon = attribute.Icon;
             }

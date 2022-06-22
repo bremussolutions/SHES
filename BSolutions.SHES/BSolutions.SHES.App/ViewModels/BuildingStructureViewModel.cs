@@ -72,7 +72,6 @@ namespace BSolutions.SHES.App.ViewModels
             if (changedDevice != null)
             {
                 await this._projectItemService.UpdateAsync(changedDevice);
-                //await this._deviceService.UpdateAsync(changedDevice);
             }
         }
 

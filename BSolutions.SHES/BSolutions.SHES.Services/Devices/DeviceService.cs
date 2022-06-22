@@ -48,7 +48,8 @@ namespace BSolutions.SHES.Services.Devices
         {
             try
             {
-                var devices = await this._deviceRepository.GetByExpressionAsync(d => d.ParentId == observableProjectItem.Id);
+                var devices = this._deviceRepository.GetDevicesForLocation(observableProjectItem.entity);
+
                 return devices.Select(d => new ObservableDevice(d)).ToList();
             }
             catch
