@@ -41,6 +41,7 @@
                                 </DataTemplate>
                             </controls:DataGridTemplateColumn.CellTemplate>
                         </controls:DataGridTemplateColumn>
+                        <controls:DataGridTextColumn Binding="{Binding Parent.Name}" Header="Raum" />
                         <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" />
                         <controls:DataGridTemplateColumn Header="Typ">
                             <controls:DataGridTemplateColumn.CellTemplate>
