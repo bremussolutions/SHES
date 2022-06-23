@@ -8,12 +8,15 @@ using BSolutions.SHES.Shared.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI.UI.Controls;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
+using Windows.UI.Core;
 
 namespace BSolutions.SHES.App.ViewModels
 {
@@ -21,6 +24,9 @@ namespace BSolutions.SHES.App.ViewModels
     {
         private readonly IDeviceService _deviceService;
         private readonly IProjectItemService _projectItemService;
+        private readonly Timer _dataGridFilterTimer = new();
+        private DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+        private List<ObservableDevice> _devicesForCurrentLocation;
 
         #region --- Properties ---
 
@@ -53,6 +59,18 @@ namespace BSolutions.SHES.App.ViewModels
             }
         }
 
+        private string _dataGridFilter;
+        public string DataGridFilter
+        {
+            get => _dataGridFilter;
+            set
+            {
+                SetProperty(ref _dataGridFilter, value);
+                this._dataGridFilterTimer.Stop();
+                this._dataGridFilterTimer.Start();
+            }
+        }
+
         public List<DeviceType> DeviceTypes { get; set; }
 
         #endregion
@@ -75,6 +93,11 @@ namespace BSolutions.SHES.App.ViewModels
             this.DeviceTypes = Enum.GetValues(typeof(DeviceType))
                 .Cast<DeviceType>()
                 .ToList();
+
+            // Data Grid Filter Timer
+            this._dataGridFilterTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            this._dataGridFilterTimer.Interval = 400;
+            this._dataGridFilterTimer.AutoReset = false;
         }
 
         #endregion
@@ -164,11 +187,15 @@ namespace BSolutions.SHES.App.ViewModels
 
         private async void LoadDevicesForLocationAsync()
         {
-            var devices = await this._deviceService.GetDevicesForLocationAsync(this.CurrentLocation);
+            this._devicesForCurrentLocation = await this._deviceService.GetDevicesForLocationAsync(this.CurrentLocation);
+            this.Devices = new ObservableCollection<ObservableDevice>(_devicesForCurrentLocation);
+            this.OnPropertyChanged(nameof(this.Devices));
+        }
 
-
-            this.Devices.Clear();
-            this.Devices.AddRange(devices);
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation.Where(d => d.Name.Contains(this.DataGridFilter)));
+            dispatcherQueue.TryEnqueue(() => this.OnPropertyChanged(nameof(this.Devices)));
         }
     }
 }

@@ -14,12 +14,24 @@ namespace BSolutions.SHES.Services.Devices
     {
         private readonly IDeviceRepository _deviceRepository;
 
+        #region --- Constructor ---
+
+        /// <summary>Initializes a new instance of the <see cref="DeviceService" /> class.</summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="deviceRepository">The device repository.</param>
         public DeviceService(ILogger<DeviceService> logger, IDeviceRepository deviceRepository)
             : base(logger)
         {
             this._deviceRepository = deviceRepository;
         }
 
+        #endregion
+
+        #region --- IDeviceService ---
+
+        /// <summary>Gets the devices for location asynchronous.</summary>
+        /// <param name="observableProjectItem">The observable project item.</param>
+        /// <returns>Returns devices.</returns>
         public async Task<List<ObservableDevice>> GetDevicesForLocationAsync(ObservableProjectItem observableProjectItem)
         {
             try
@@ -33,5 +45,7 @@ namespace BSolutions.SHES.Services.Devices
                 return null;
             }
         }
+
+        #endregion
     }
 }
