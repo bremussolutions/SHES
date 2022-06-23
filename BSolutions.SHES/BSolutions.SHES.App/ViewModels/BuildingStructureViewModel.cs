@@ -96,7 +96,7 @@ namespace BSolutions.SHES.App.ViewModels
 
             // Data Grid Filter Timer
             this._dataGridFilterTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            this._dataGridFilterTimer.Interval = 400;
+            this._dataGridFilterTimer.Interval = 500;
             this._dataGridFilterTimer.AutoReset = false;
         }
 
@@ -188,14 +188,19 @@ namespace BSolutions.SHES.App.ViewModels
         private async void LoadDevicesForLocationAsync()
         {
             this._devicesForCurrentLocation = await this._deviceService.GetDevicesForLocationAsync(this.CurrentLocation);
-            this.Devices = new ObservableCollection<ObservableDevice>(_devicesForCurrentLocation);
+            this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation);
             this.OnPropertyChanged(nameof(this.Devices));
+
+            this.OnTimedEvent(this._dataGridFilterTimer, null);
         }
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation.Where(d => d.Name.Contains(this.DataGridFilter)));
-            dispatcherQueue.TryEnqueue(() => this.OnPropertyChanged(nameof(this.Devices)));
+            if (this._devicesForCurrentLocation != null)
+            {
+                this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation.Where(d => d.Name.Contains(this.DataGridFilter)));
+                dispatcherQueue.TryEnqueue(() => this.OnPropertyChanged(nameof(this.Devices)));
+            }
         }
     }
 }
