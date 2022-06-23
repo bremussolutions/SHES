@@ -19,7 +19,11 @@ namespace BSolutions.SHES.Models.Observables
         public BusType BusType
         {
             get => ((Device)entity).BusType;
-            set => SetProperty(((Device)entity).BusType, value, (Device)entity, (u, n) => u.BusType = n);
+            set
+            {
+                SetProperty(((Device)entity).BusType, value, (Device)entity, (u, n) => u.BusType = n);
+                OnPropertyChanged(nameof(TypeIcon));
+            }
         }
 
         public string TypeIcon

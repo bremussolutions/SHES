@@ -30,20 +30,23 @@
 
                 <controls:DataGrid Grid.Column="1"
                                    AutoGenerateColumns="False"
-                                   GridLinesVisibility="Horizontal" CanUserSortColumns="True"
+                                   GridLinesVisibility="Horizontal"
+                                   CanUserSortColumns="True"
+                                   Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
                                    ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
+                                   SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}"
                                    CellEditEnded="{x:Bind ViewModel.DataGrid_CellEditEnded}">
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTemplateColumn>
+                        <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
                             <controls:DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon}" />
+                                    <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon, Mode=OneWay}" />
                                 </DataTemplate>
                             </controls:DataGridTemplateColumn.CellTemplate>
                         </controls:DataGridTemplateColumn>
-                        <controls:DataGridTextColumn Binding="{Binding Parent.Name}" Header="Raum" />
-                        <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" />
-                        <controls:DataGridTemplateColumn Header="Typ">
+                        <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
+                        <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
+                        <controls:DataGridTemplateColumn Header="Typ" Tag="Type">
                             <controls:DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
@@ -66,7 +69,44 @@
                         </DataTemplate>
                     </Pivot.HeaderTemplate>
                     <PivotItem Header="Eigenschaften">
-                        <TextBlock Text="Eigenschaften werden hier verändert." />
+                        <StackPanel>
+                            <TextBlock Text="Name" FontWeight="Bold" Margin="0 10 0 5" />
+                            <TextBox Text="{x:Bind ViewModel.CurrentDevice.Name, Mode=TwoWay}"
+                                     TextChanged="{x:Bind ViewModel.InputField_ValueChanged}" />
+
+                            <TextBlock Text="Beschreibung" FontWeight="Bold" Margin="0 10 0 5" />
+                            <TextBox Text="{x:Bind ViewModel.CurrentDevice.Description, Mode=TwoWay}"
+                                     TextChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                                     TextWrapping="Wrap" AcceptsReturn="True" Height="100" />
+
+                            <TextBlock Text="Bustyp" FontWeight="Bold" Margin="0 10 0 5" />
+                            <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
+                                      SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                                      ItemsSource="{ui:EnumValues Type=enums:BusType}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <TextBlock Text="Typ" FontWeight="Bold" Margin="0 10 0 5" />
+                            <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
+                                      SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                                      ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <TextBlock Text="Hinzugefügt" FontWeight="Bold" Margin="0 10 0 5" />
+                            <TextBlock Text="{x:Bind ViewModel.CurrentDevice.CreationTime, Mode=OneWay}" />
+
+                            <TextBlock Text="Zuletzt geändert" FontWeight="Bold" Margin="0 10 0 5" />
+                            <TextBlock Text="{x:Bind ViewModel.CurrentDevice.LastModificationTime, Mode=OneWay}" />
+                        </StackPanel>
                     </PivotItem>
                     <PivotItem Header="Information">
                         <TextBlock Text="Informationen werden hier präsentiert." />
