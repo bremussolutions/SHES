@@ -8,8 +8,9 @@ namespace BSolutions.SHES.Data.Repositories
     public interface IRepository<TEntity> where TEntity : class, new()
     {
         /// <summary>Gets all entities asynchronous.</summary>
+        /// <param name="orderBy">The property to order by.</param>
         /// <returns>Returns a list of all entities.</returns>
-        Task<List<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetAllAsync(string orderBy = "");
 
         /// <summary>Gets an entity by identifier asynchronous.</summary>
         /// <param name="id">The identifier.</param>
@@ -19,8 +20,9 @@ namespace BSolutions.SHES.Data.Repositories
         /// <summary>Gets an entity by expression asynchronous.</summary>
         /// <param name="expression">The expression.</param>
         /// <param name="includeProperties">The include properties.</param>
+        /// <param name="orderBy">The property to order by.</param>
         /// <returns>Returns an entity.</returns>
-        Task<List<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, string includeProperties = "");
+        Task<List<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, string includeProperties = "", string orderBy = "");
 
         /// <summary>Adds an entity asynchronous.</summary>
         /// <param name="entity">The entity.</param>

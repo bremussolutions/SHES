@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
 
 namespace BSolutions.SHES.Data.Repositories
 {
@@ -34,11 +35,20 @@ namespace BSolutions.SHES.Data.Repositories
         #region --- IRepository ---
 
         /// <summary>Gets all entities asynchronous.</summary>
+        /// <param name="orderBy">The property to order by.</param>
         /// <returns>Returns a list of all entities.</returns>
-        public async Task<List<TEntity>> GetAllAsync()
+        public async Task<List<TEntity>> GetAllAsync(string orderBy = "")
         {
             try
             {
+                var query = this._dbContext.Set<TEntity>().AsQueryable();
+
+                // Order by
+                if (!string.IsNullOrWhiteSpace(orderBy))
+                {
+                    query = query.OrderBy(orderBy);
+                }
+
                 return await this._dbContext.Set<TEntity>().ToListAsync();
             }
             catch (Exception ex)
@@ -67,13 +77,15 @@ namespace BSolutions.SHES.Data.Repositories
         /// <summary>Gets an entity by expression asynchronous.</summary>
         /// <param name="expression">The expression.</param>
         /// <param name="includeProperties">The include properties.</param>
+        /// <param name="orderBy">The property to order by.</param>
         /// <returns>Returns an entity.</returns>
-        public async Task<List<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, string includeProperties = "")
+        public async Task<List<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, string includeProperties = "", string orderBy = "")
         {
             try
             {
                 var query = this._dbContext.Set<TEntity>().Where(expression);
 
+                // Include Properties
                 if (!string.IsNullOrWhiteSpace(includeProperties))
                 {
                     string[] includes = includeProperties.Split(';');
@@ -82,6 +94,12 @@ namespace BSolutions.SHES.Data.Repositories
                     {
                         query = query.Include(include);
                     }
+                }
+
+                // Order by
+                if(!string.IsNullOrWhiteSpace(orderBy))
+                {
+                    query = query.OrderBy(orderBy);
                 }
 
                 return await query.ToListAsync();
