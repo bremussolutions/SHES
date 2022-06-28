@@ -31,6 +31,11 @@ namespace BSolutions.SHES.Models.Observables
             get => this.BusType.GetEnumAttribute<BusTypeInfoAttribute>()?.Icon;
         }
 
+        public string Location
+        {
+            get => this.Parent.Name;
+        }
+
         public List<DeviceType> DeviceTypes
         {
             get => Enum.GetValues(typeof(DeviceType)).Cast<DeviceType>().ToList();

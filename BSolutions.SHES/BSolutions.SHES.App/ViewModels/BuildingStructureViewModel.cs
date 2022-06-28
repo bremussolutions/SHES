@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Windows.UI.Core;
+using System.Linq.Dynamic.Core;
 
 namespace BSolutions.SHES.App.ViewModels
 {
@@ -141,35 +142,24 @@ namespace BSolutions.SHES.App.ViewModels
             DataGrid dataGrid = (DataGrid)sender;
 
             // Sorting columns
-            if(e.Column.Tag != null)
+            if (e.Column.Tag != null)
             {
-                if (e.Column.Tag.ToString() == "Location")
+                IQueryable<ObservableDevice> query = this.Devices.AsQueryable();
+
+                if (e.Column.SortDirection == null || e.Column.SortDirection == DataGridSortDirection.Descending)
                 {
-                    if (e.Column.SortDirection == null || e.Column.SortDirection == DataGridSortDirection.Descending)
-                    {
-                        this.Devices = new ObservableCollection<ObservableDevice>(this.Devices.OrderBy(d => d.Parent.Name));
-                        e.Column.SortDirection = DataGridSortDirection.Ascending;
-                    }
-                    else
-                    {
-                        this.Devices = new ObservableCollection<ObservableDevice>(this.Devices.OrderByDescending(d => d.Parent.Name));
-                        e.Column.SortDirection = DataGridSortDirection.Descending;
-                    }
+                    query = query.OrderBy(e.Column.Tag.ToString());
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
                 }
                 else
                 {
-                    if (e.Column.SortDirection == null || e.Column.SortDirection == DataGridSortDirection.Descending)
-                    {
-                        this.Devices = new ObservableCollection<ObservableDevice>(this.Devices.OrderBy(e.Column.Tag.ToString()));
-                        e.Column.SortDirection = DataGridSortDirection.Ascending;
-                    }
-                    else
-                    {
-                        this.Devices = new ObservableCollection<ObservableDevice>(this.Devices.OrderByDescending(e.Column.Tag.ToString()));
-                        e.Column.SortDirection = DataGridSortDirection.Descending;
-                    }
+                    query = query.OrderBy($"{e.Column.Tag.ToString()} desc");
+                    this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
 
+                this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
                 OnPropertyChanged(nameof(this.Devices));
             }
 
@@ -196,7 +186,7 @@ namespace BSolutions.SHES.App.ViewModels
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            if (this._devicesForCurrentLocation != null)
+            if (this._devicesForCurrentLocation != null && !string.IsNullOrWhiteSpace(this.DataGridFilter))
             {
                 this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation.Where(d => d.Name.Contains(this.DataGridFilter)));
                 dispatcherQueue.TryEnqueue(() => this.OnPropertyChanged(nameof(this.Devices)));
