@@ -29,6 +29,9 @@ namespace BSolutions.SHES.App.ViewModels
         private DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         private List<ObservableDevice> _devicesForCurrentLocation;
 
+        private string _currentSortColumn;
+        private DataGridSortDirection _currentSortDirection;
+
         #region --- Properties ---
 
         public ObservableCollection<ObservableDevice> Devices { get; private set; } = new ObservableCollection<ObservableDevice>();
@@ -144,23 +147,22 @@ namespace BSolutions.SHES.App.ViewModels
             // Sorting columns
             if (e.Column.Tag != null)
             {
-                IQueryable<ObservableDevice> query = this.Devices.AsQueryable();
+                this._currentSortColumn = e.Column.Tag.ToString();
 
+                // Ascending
                 if (e.Column.SortDirection == null || e.Column.SortDirection == DataGridSortDirection.Descending)
                 {
-                    query = query.OrderBy(e.Column.Tag.ToString());
-
+                    this._currentSortDirection = DataGridSortDirection.Ascending;
                     e.Column.SortDirection = DataGridSortDirection.Ascending;
                 }
+                // Descending
                 else
                 {
-                    query = query.OrderBy($"{e.Column.Tag.ToString()} desc");
-                    this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
+                    this._currentSortDirection = DataGridSortDirection.Descending;
                     e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
 
-                this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
-                OnPropertyChanged(nameof(this.Devices));
+                this.SortDevices();
             }
 
             // Remove sorting indicators from other columns
@@ -181,7 +183,11 @@ namespace BSolutions.SHES.App.ViewModels
             this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation);
             this.OnPropertyChanged(nameof(this.Devices));
 
+            // Apply existing filter
             this.OnTimedEvent(this._dataGridFilterTimer, null);
+
+            // Apply existing sorting
+            this.SortDevices();
         }
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
@@ -190,6 +196,28 @@ namespace BSolutions.SHES.App.ViewModels
             {
                 this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation.Where(d => d.Name.Contains(this.DataGridFilter)));
                 dispatcherQueue.TryEnqueue(() => this.OnPropertyChanged(nameof(this.Devices)));
+            }
+        }
+
+        private void SortDevices()
+        {
+            if (!string.IsNullOrEmpty(this._currentSortColumn))
+            {
+                IQueryable<ObservableDevice> query = this.Devices.AsQueryable();
+
+                // Ascending
+                if (this._currentSortDirection == DataGridSortDirection.Ascending)
+                {
+                    query = query.OrderBy(this._currentSortColumn);
+                }
+                // Descending
+                else
+                {
+                    query = query.OrderBy($"{this._currentSortColumn} desc");
+                }
+
+                this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
+                OnPropertyChanged(nameof(this.Devices));
             }
         }
     }

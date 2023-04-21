@@ -40,7 +40,9 @@
                     <controls:DataGrid
                                    AutoGenerateColumns="False"
                                    GridLinesVisibility="Horizontal"
-                                   CanUserSortColumns="True"
+                                   CanUserSortColumns="True" 
+                              ScrollViewer.IsDeferredScrollingEnabled="True" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Visible"
                                    Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
                                    ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
                                    SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}"
