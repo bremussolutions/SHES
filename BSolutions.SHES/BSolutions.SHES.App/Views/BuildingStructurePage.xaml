@@ -41,8 +41,8 @@
                                    AutoGenerateColumns="False"
                                    GridLinesVisibility="Horizontal"
                                    CanUserSortColumns="True" 
-                              ScrollViewer.IsDeferredScrollingEnabled="True" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                  ScrollViewer.IsDeferredScrollingEnabled="True" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
                                    Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
                                    ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
                                    SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}"
@@ -57,7 +57,8 @@
                             </controls:DataGridTemplateColumn>
                             <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
                             <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
-                            <controls:DataGridTemplateColumn Header="Typ" Tag="Type">
+                            <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
+                            <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
@@ -69,7 +70,7 @@
                                         </ComboBox>
                                     </DataTemplate>
                                 </controls:DataGridTemplateColumn.CellTemplate>
-                            </controls:DataGridTemplateColumn>
+                            </controls:DataGridTemplateColumn>-->
                         </controls:DataGrid.Columns>
                     </controls:DataGrid>
                 </StackPanel>
@@ -82,7 +83,7 @@
                             <TextBlock Text="{Binding}" FontSize="13" />
                         </DataTemplate>
                     </Pivot.HeaderTemplate>
-                    <PivotItem Header="Eigenschaften">
+                    <PivotItem Header="Eigenschaften" Visibility="{x:Bind ViewModel.DevicePropertiesVisibility, Mode=OneWay}">
                         <StackPanel>
                             <TextBlock Text="Name" FontWeight="Bold" Margin="0 10 0 5" />
                             <TextBox Text="{x:Bind ViewModel.CurrentDevice.Name, Mode=TwoWay}"

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Windows.UI.Core;
 using System.Linq.Dynamic.Core;
+using Microsoft.UI.Xaml;
 
 namespace BSolutions.SHES.App.ViewModels
 {
@@ -44,8 +45,13 @@ namespace BSolutions.SHES.App.ViewModels
             {
                 if (value != null)
                 {
+                    ObservableProjectItem previousItem = _currentLocation;
                     SetProperty(ref _currentLocation, value);
-                    this.LoadDevicesForLocationAsync();
+
+                    if (value.Id != previousItem?.Id)
+                    {
+                        this.LoadDevicesForLocationAsync();
+                    }
                 }
             }
         }
@@ -56,11 +62,14 @@ namespace BSolutions.SHES.App.ViewModels
             get => _currentDevice;
             private set
             {
-                if (value != null)
-                {
-                    SetProperty(ref _currentDevice, value);
-                }
+                SetProperty(ref _currentDevice, value);
+                OnPropertyChanged(nameof(DevicePropertiesVisibility));
             }
+        }
+
+        public Visibility DevicePropertiesVisibility
+        {
+            get => this._currentDevice != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private string _dataGridFilter;
