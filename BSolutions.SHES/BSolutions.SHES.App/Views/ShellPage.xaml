@@ -60,7 +60,16 @@
             </behaviors:NavigationViewHeaderBehavior>
         </i:Interaction.Behaviors>
         <Grid>
-            <Frame x:Name="shellFrame" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <InfoBar
+                IsOpen="{x:Bind ViewModel.ApplicationInfoBarOptions.IsOpen, Mode=OneWay}"
+                Severity="{x:Bind ViewModel.ApplicationInfoBarOptions.Severity, Mode=OneWay}"
+                Title="{x:Bind ViewModel.ApplicationInfoBarOptions.Title, Mode=OneWay}"
+                Message="{x:Bind ViewModel.ApplicationInfoBarOptions.Message, Mode=OneWay}" />
+            <Frame Grid.Row="1" x:Name="shellFrame" />
         </Grid>
     </NavigationView>
 </Page>

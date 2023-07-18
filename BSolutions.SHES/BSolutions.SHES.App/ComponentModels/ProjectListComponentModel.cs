@@ -1,4 +1,5 @@
 ﻿using BSolutions.SHES.App.Messages;
+using BSolutions.SHES.App.ViewModels;
 using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using BSolutions.SHES.Services.Knx;
@@ -185,6 +186,10 @@ namespace BSolutions.SHES.App.ComponentModels
             if (result.Successful)
             {
                 this.ProjectList.Add(result.Data.Project);
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel { IsOpen = true, Severity = InfoBarSeverity.Error, Title = "Fehler", Message = result.ErrorMessage }));
             }
         }
 

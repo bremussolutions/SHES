@@ -9,6 +9,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Navigation;
 using BSolutions.SHES.Models.Observables;
 using Microsoft.UI.Xaml;
+using System.Timers;
+using System.Runtime.CompilerServices;
 
 namespace BSolutions.SHES.App.ViewModels
 {
@@ -17,6 +19,9 @@ namespace BSolutions.SHES.App.ViewModels
         private bool _isBackEnabled;
         private object _selected;
         private ObservableProject _currentProject;
+        private AppInfoBarViewModel _applicationInfoBarOptions = new AppInfoBarViewModel();
+
+        #region --- Properties ---
 
         public INavigationService NavigationService { get; }
 
@@ -33,7 +38,6 @@ namespace BSolutions.SHES.App.ViewModels
             get { return _selected; }
             set { SetProperty(ref _selected, value); }
         }
-
         
         public ObservableProject CurrentProject
         {
@@ -50,6 +54,22 @@ namespace BSolutions.SHES.App.ViewModels
             get => _currentProject != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        public AppInfoBarViewModel ApplicationInfoBarOptions
+        {
+            get => _applicationInfoBarOptions;
+            private set
+            {
+                SetProperty(ref _applicationInfoBarOptions, value);
+            }
+        }
+
+        #endregion
+
+        #region --- Constructor ---
+
+        /// <summary>Initializes a new instance of the <see cref="ShellViewModel" /> class.</summary>
+        /// <param name="navigationService">The navigation service.</param>
+        /// <param name="navigationViewService">The navigation view service.</param>
         public ShellViewModel(INavigationService navigationService, INavigationViewService navigationViewService)
         {
             NavigationService = navigationService;
@@ -57,7 +77,10 @@ namespace BSolutions.SHES.App.ViewModels
             NavigationViewService = navigationViewService;
 
             WeakReferenceMessenger.Default.Register<ShellViewModel, CurrentProjectChangedMessage>(this, (r, m) => r.CurrentProject = m.Value);
+            WeakReferenceMessenger.Default.Register<ShellViewModel, ApplicationInfoBarChangedMessage>(this, (r, m) => r.ApplicationInfoBarOptions = m.Value);
         }
+
+        #endregion
 
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
