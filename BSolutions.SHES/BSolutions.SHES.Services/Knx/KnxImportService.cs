@@ -74,12 +74,12 @@ namespace BSolutions.SHES.Services.Knx
             this._options = options;
             this._result = new KnxImportResult();
 
-            try
-            {
-                // Import project file
-                using var file = File.OpenRead(path);
-                await this.UnzipAsync(file, password);
+            // Import project file
+            using var file = File.OpenRead(path);
+            await this.UnzipAsync(file, password);
 
+            if (this._result.Successful)
+            {
                 // Add new project
                 if (!await this._projectRepository.ExistsAsync(this._project.Name))
                 {
@@ -92,47 +92,70 @@ namespace BSolutions.SHES.Services.Knx
                     this._result.Successful = false;
                 }
             }
-            catch(Exception ex)
-            {
-                this._logger.LogError(ex, "Import not successfully!");
-                this._result.ErrorMessage = ex.Message;
-                this._result.Successful = false;
-            }
 
             return this._result;
         }
 
         #endregion
 
+        #region --- Helper ---
+
+        /// <summary>Unzips files from an ETS project file and processes them</summary>
+        /// <param name="file">The file to unzip.</param>
+        /// <param name="password">The zip file password.</param>
         private async Task UnzipAsync(Stream file, string password)
         {
-            using var ms = new MemoryStream();
-            await file.CopyToAsync(ms);
-            ms.Position = 0;
-
-            using var zip = new ZipFile(ms);
-            zip.Password = password;
-
-            foreach (ZipEntry zipEntry in zip)
+            try
             {
-                // Password protected project
-                if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$") && zipEntry.IsFile)
-                {
-                    await this.UnzipAsync(zip.GetInputStream(zipEntry), password);
-                }
+                using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+                ms.Position = 0;
 
-                // Project XML
-                if ((Regex.IsMatch(zipEntry.Name, @"^project.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/project.xml$")) && zipEntry.IsFile)
-                {
-                    await this.ReadProjectFile(zipEntry, zip);
-                }
+                using var zip = new ZipFile(ms);
+                zip.Password = password;
 
-                // Structure XML
-                if ((Regex.IsMatch(zipEntry.Name, @"^0.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/0.xml$")) && zipEntry.IsFile)
+                foreach (ZipEntry zipEntry in zip)
                 {
-                    await this.ReadStructureFile(zipEntry, zip);
+                    // ETS Schema Version
+                    if (zipEntry.Name == "knx_master.xml" && zipEntry.IsFile)
+                    {
+                        await this.ReadEtsSchemaVersion(zipEntry, zip);
+                    }
+
+                    // Password protected project
+                    if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$") && zipEntry.IsFile)
+                    {
+                        await this.UnzipAsync(zip.GetInputStream(zipEntry), password);
+                    }
+
+                    // Project XML
+                    if ((Regex.IsMatch(zipEntry.Name, @"^project.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/project.xml$")) && zipEntry.IsFile)
+                    {
+                        await this.ReadProjectFile(zipEntry, zip);
+                    }
+
+                    // Structure XML
+                    if ((Regex.IsMatch(zipEntry.Name, @"^0.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/0.xml$")) && zipEntry.IsFile)
+                    {
+                        await this.ReadStructureFile(zipEntry, zip);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                this._result.Successful = false;
+                this._result.ErrorMessage = ex.Message;
+            }
+        }
+
+        private async Task ReadEtsSchemaVersion(ZipEntry zipEntry, ZipFile zip)
+        {
+            await Task.Run(() =>
+            {
+                var stream = zip.GetInputStream(zipEntry);
+                var ns = XElement.Load(stream).GetDefaultNamespace().NamespaceName;
+                this._result.Data.SchemaVersion = Convert.ToInt32(ns.Split('/').Last());
+            });
         }
 
         private async Task ReadProjectFile(ZipEntry zipEntry, ZipFile zip)
@@ -145,14 +168,14 @@ namespace BSolutions.SHES.Services.Knx
             this._project = new Project
             {
                 Number = this._result.Data.ProjectXml
-                .Element(XName.Get("KNX", "http://knx.org/xml/project/20"))
-                .Element(XName.Get("Project", "http://knx.org/xml/project/20"))
+                .Element(XName.Get("KNX", this._result.Data.SchemaNamespace))
+                .Element(XName.Get("Project", this._result.Data.SchemaNamespace))
                 .Attribute(XName.Get("Id")).Value,
 
                 Name = this._result.Data.ProjectXml
-                .Element(XName.Get("KNX", "http://knx.org/xml/project/20"))
-                .Element(XName.Get("Project", "http://knx.org/xml/project/20"))
-                .Element(XName.Get("ProjectInformation", "http://knx.org/xml/project/20"))
+                .Element(XName.Get("KNX", this._result.Data.SchemaNamespace))
+                .Element(XName.Get("Project", this._result.Data.SchemaNamespace))
+                .Element(XName.Get("ProjectInformation", this._result.Data.SchemaNamespace))
                 .Attribute(XName.Get("Name")).Value
             };
         }
@@ -165,18 +188,18 @@ namespace BSolutions.SHES.Services.Knx
             var xml = XDocument.Parse(await reader.ReadToEndAsync());
 
             // Topology
-            this._result.Data.TopologyXml = xml.Descendants(XName.Get("Topology", "http://knx.org/xml/project/20")).FirstOrDefault();
+            this._result.Data.TopologyXml = xml.Descendants(XName.Get("Topology", this._result.Data.SchemaNamespace)).FirstOrDefault();
 
             // Locations
-            this._result.Data.LocationsXml = xml.Descendants(XName.Get("Locations", "http://knx.org/xml/project/20")).FirstOrDefault();
+            this._result.Data.LocationsXml = xml.Descendants(XName.Get("Locations", this._result.Data.SchemaNamespace)).FirstOrDefault();
 
             // Trades
-            this._result.Data.TradesXml = xml.Descendants(XName.Get("Trades", "http://knx.org/xml/project/20")).FirstOrDefault();
+            this._result.Data.TradesXml = xml.Descendants(XName.Get("Trades", this._result.Data.SchemaNamespace)).FirstOrDefault();
 
             // Project Items
             if (this._options.ImportStructure)
             {
-                var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", "http://knx.org/xml/project/20"));
+                var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", this._result.Data.SchemaNamespace));
                 this._projectItems = this.LoadProjectItems(spaces);
 
                 this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
@@ -195,12 +218,12 @@ namespace BSolutions.SHES.Services.Knx
                 PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
                 // Locations
-                var projectItems = LoadProjectItems(space.Elements(XName.Get("Space", "http://knx.org/xml/project/20")));
+                var projectItems = LoadProjectItems(space.Elements(XName.Get("Space", this._result.Data.SchemaNamespace)));
 
                 // Devices
                 if (this._options.ImportDevices)
                 {
-                    projectItems.AddRange(this.LoadDevices(space.Elements(XName.Get("DeviceInstanceRef", "http://knx.org/xml/project/20"))));
+                    projectItems.AddRange(this.LoadDevices(space.Elements(XName.Get("DeviceInstanceRef", this._result.Data.SchemaNamespace))));
                 }
 
                 propertyInfos.First(p => p.Name == "Name").SetValue(entity, space.Attribute("Name").Value);
@@ -219,7 +242,7 @@ namespace BSolutions.SHES.Services.Knx
             foreach (XElement deviceInstanceReference in deviceInstanceReferences)
             {
                 string refId = deviceInstanceReference.Attribute("RefId").Value;
-                var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", "http://knx.org/xml/project/20"));
+                var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", this._result.Data.SchemaNamespace));
                 var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
                 string deviceName = deviceInstance.Attribute("Name").Value;
                 string deviceComment = deviceInstance.Attribute("Comment")?.Value;
@@ -240,5 +263,7 @@ namespace BSolutions.SHES.Services.Knx
             { "Corridor", "Corridor" },
             { "DistributionBoard", "Cabinet" }
         };
+
+        #endregion
     }
 }

@@ -181,7 +181,11 @@ namespace BSolutions.SHES.App.ComponentModels
             };
 
             var result = await this._knxImportService.ImportProjectAsync(this.ImportProjectFile.Path, options, this.ImportProjectPassword);
-            this.ProjectList.Add(result.Data.Project);
+
+            if (result.Successful)
+            {
+                this.ProjectList.Add(result.Data.Project);
+            }
         }
 
         private void OpenProject()
