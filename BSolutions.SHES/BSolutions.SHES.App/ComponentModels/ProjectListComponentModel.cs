@@ -23,6 +23,7 @@ namespace BSolutions.SHES.App.ComponentModels
 {
     public class ProjectListComponentModel : ObservableRecipient
     {
+        private readonly ResourceLoader _resourceLoader;
         private readonly IProjectService _projectService;
         private readonly IProjectItemService _projectItemService;
         private readonly IKnxImportService _knxImportService;
@@ -107,6 +108,9 @@ namespace BSolutions.SHES.App.ComponentModels
 
         public ProjectListComponentModel(IProjectService projectService, IProjectItemService projectItemService, IKnxImportService knxImportService)
         {
+            // Resource Loader
+            this._resourceLoader = ResourceLoader.GetForViewIndependentUse();
+
             // Services
             this._projectService = projectService;
             this._projectItemService = projectItemService;
@@ -149,6 +153,14 @@ namespace BSolutions.SHES.App.ComponentModels
             // Add project
             await this._projectService.InsertAsync(this.NewProject);
             this.ProjectList.Add(this.NewProject);
+
+            WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel
+            {
+                IsOpen = true,
+                Severity = InfoBarSeverity.Success,
+                Title = this._resourceLoader.GetString("Shell_AppInfoBar_Success"),
+                Message = this._resourceLoader.GetString("Main_ProjectList_NewProjectDialog_Success")
+            }));
         }
 
         private async Task ImportKnxProjectDialog(ContentDialog dialog)
@@ -190,12 +202,11 @@ namespace BSolutions.SHES.App.ComponentModels
             }
             else
             {
-                var resourceLoader = ResourceLoader.GetForCurrentView();
                 WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel
                 {
                     IsOpen = true,
                     Severity = InfoBarSeverity.Error,
-                    Title = resourceLoader.GetString("Shell_AppInfoBar_Error"),
+                    Title = this._resourceLoader.GetString("Shell_AppInfoBar_Error"),
                     Message = result.ErrorMessage
                 }));
             }
@@ -222,6 +233,14 @@ namespace BSolutions.SHES.App.ComponentModels
             await this._projectService.DeleteAsync(this.selectedProject);
             this.ProjectList.Remove(this.selectedProject);
             WeakReferenceMessenger.Default.Send(new CurrentProjectChangedMessage(null));
+
+            WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel
+            {
+                IsOpen = true,
+                Severity = InfoBarSeverity.Success,
+                Title = this._resourceLoader.GetString("Shell_AppInfoBar_Success"),
+                Message = this._resourceLoader.GetString("Main_ProjectList_NewProjectDialog_Success")
+            }));
         }
 
         #endregion

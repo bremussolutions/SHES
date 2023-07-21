@@ -143,7 +143,7 @@ namespace BSolutions.SHES.Services.Knx
                     }
                 }
             }
-            catch (ZipException ex)
+            catch (ZipException)
             {
                 this._result.Successful = false;
                 this._result.ErrorMessage = this._resourceLoader.GetString("Main_ProjectList_EtsImport_PasswordError");

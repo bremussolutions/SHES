@@ -6,9 +6,10 @@
     <DataTemplate x:Key="RequiredHeaderTemplate">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding}" />
-            <TextBlock Text="(erforderlich)"
-                           Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+            <TextBlock Text="*"
+                           Foreground="Red"
                            FontSize="12"
+                           FontWeight="Bold"
                            Margin="4,0,0,1"
                            VerticalAlignment="Bottom" />
         </StackPanel>

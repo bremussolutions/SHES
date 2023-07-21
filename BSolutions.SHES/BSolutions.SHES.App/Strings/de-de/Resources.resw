@@ -123,17 +123,8 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>Smarthome Essentials Suite</value>
   </data>
-  <data name="AppInfoBar_Error" xml:space="preserve">
-    <value>Fehler</value>
-  </data>
-  <data name="AppInfoBar_Info" xml:space="preserve">
-    <value>Information</value>
-  </data>
-  <data name="AppInfoBar_Success" xml:space="preserve">
-    <value>Erfolgreich</value>
-  </data>
-  <data name="AppInfoBar_Warning" xml:space="preserve">
-    <value>Warnung</value>
+  <data name="BuildingStructure.Content" xml:space="preserve">
+    <value>Gebäudestruktur</value>
   </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>
@@ -141,8 +132,128 @@
   <data name="ListDetails_NoSelection.Text" xml:space="preserve">
     <value>Select an item from the list.</value>
   </data>
+  <data name="Main.Content" xml:space="preserve">
+    <value>Projekte</value>
+  </data>
+  <data name="Main_MyProjects.Text" xml:space="preserve">
+    <value>Meine Projekte</value>
+  </data>
+  <data name="Main_News.Text" xml:space="preserve">
+    <value>Aktuelle Nachrichten</value>
+  </data>
+  <data name="Main_ProjectList_Delete.Content" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog.CloseButtonText" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog.Title" xml:space="preserve">
+    <value>Projekt löschen</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog_Commitment.Text" xml:space="preserve">
+    <value>Möchtest du das Projekt wirklich löschen?</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog_Success" xml:space="preserve">
+    <value>Das Projekt wurde endgültig gelöscht.</value>
+  </data>
+  <data name="Main_ProjectList_EtsImport.Text" xml:space="preserve">
+    <value>KNX Projekt importieren</value>
+  </data>
   <data name="Main_ProjectList_EtsImport_PasswordError" xml:space="preserve">
     <value>Das Passwort für die zu importierende ETS-Projektdatei ist falsch.</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog.CloseButtonText" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog.Title" xml:space="preserve">
+    <value>KNX Projekt importieren</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_BuildingStructure.Content" xml:space="preserve">
+    <value>Gebäudestruktur</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_Devices.Content" xml:space="preserve">
+    <value>Geräte</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_ImportFilter.Text" xml:space="preserve">
+    <value>Welche Daten sollen importiert werden:</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_MasterData.Content" xml:space="preserve">
+    <value>Stammdaten des Projekts</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_PasswordProtection.Text" xml:space="preserve">
+    <value>Das Projekt ist passwortgeschützt. Bitte geben Sie das Passwort ein,&lt;LineBreak /&gt; welches in der ETS vergeben wurde.</value>
+  </data>
+  <data name="Main_ProjectList_New.Text" xml:space="preserve">
+    <value>Neu</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog.CloseButtonText" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Anlegen</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog.Title" xml:space="preserve">
+    <value>Neues Projekt anlegen</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_BuildingOwner.Text" xml:space="preserve">
+    <value>Bauherrschaft</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_City.Header" xml:space="preserve">
+    <value>Ort</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_ConstructionSite.Text" xml:space="preserve">
+    <value>Baustelle</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Email.Header" xml:space="preserve">
+    <value>E-Mail-Adresse</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_FirstName.Header" xml:space="preserve">
+    <value>Vorname</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_LastName.Header" xml:space="preserve">
+    <value>Nachname</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Name.Header" xml:space="preserve">
+    <value>Bezeichnung</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Number.Header" xml:space="preserve">
+    <value>Nummer</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Phone.Header" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_PostalCode.Header" xml:space="preserve">
+    <value>PLZ</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Projekt.Text" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Street.Header" xml:space="preserve">
+    <value>Straße</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Success" xml:space="preserve">
+    <value>Das Projekt wurde erfolgreich angelegt.</value>
+  </data>
+  <data name="Main_ProjectList_Open.Content" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="Main_ProjectList_OpenHabImport.Text" xml:space="preserve">
+    <value>openHAB Projekt importieren</value>
+  </data>
+  <data name="Main_ProjectList_ProjectName.Text" xml:space="preserve">
+    <value>Projektname</value>
+  </data>
+  <data name="Main_ProjectList_ProjectNumber.Text" xml:space="preserve">
+    <value>Projektnummer</value>
+  </data>
+  <data name="Main_ProjectList_ProjectStatus.Text" xml:space="preserve">
+    <value>Projektstatus</value>
   </data>
   <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
     <value>Privacy Statement</value>
@@ -171,10 +282,16 @@
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
     <value>Light</value>
   </data>
-  <data name="Shell_BuildingStructure.Content" xml:space="preserve">
-    <value>Gebäudestruktur</value>
+  <data name="Shell_AppInfoBar_Error" xml:space="preserve">
+    <value>Fehler</value>
   </data>
-  <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Projekte</value>
+  <data name="Shell_AppInfoBar_Info" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Shell_AppInfoBar_Success" xml:space="preserve">
+    <value>Erfolgreich</value>
+  </data>
+  <data name="Shell_AppInfoBar_Warning" xml:space="preserve">
+    <value>Warnung</value>
   </data>
 </root>

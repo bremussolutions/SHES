@@ -24,12 +24,12 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Meine Projekte" />
+                <TextBlock x:Uid="Main_MyProjects" />
 
                 <components:ProjectListComponent Grid.Row="1" />
             </Grid>
 
-            <TextBlock Grid.Column="1">Nachrichtenbereich</TextBlock>
+            <TextBlock x:Uid="Main_News" Grid.Column="1" />
         </Grid>
     </Grid>
 </Page>

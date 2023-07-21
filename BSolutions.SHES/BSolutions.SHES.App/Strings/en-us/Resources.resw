@@ -123,7 +123,7 @@
   <data name="AppDescription" xml:space="preserve">
     <value>The Smarthome Essentials Suite is an application designed to simplify the work of a smarthome integrators or electrician. It supports the planning, implementation and documentation of smart home projects and supports a large number of systems that are used in building automation.</value>
   </data>
-  <data name="Shell_Main.Content" xml:space="preserve">
+  <data name="Main.Content" xml:space="preserve">
     <value>Projects</value>
   </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
@@ -159,11 +159,41 @@
   <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
     <value>https://YourPrivacyUrlGoesHere/</value>
   </data>
-  <data name="Shell_BuildingStructure.Content" xml:space="preserve">
+  <data name="BuildingStructure.Content" xml:space="preserve">
     <value>Building Structure</value>
   </data>
   <data name="Main_ProjectList_EtsImport_PasswordError" xml:space="preserve">
     <value>The password for the ETS project file to be imported is incorrect.</value>
+  </data>
+  <data name="Main_MyProjects.Text" xml:space="preserve">
+    <value>My Projects</value>
+  </data>
+  <data name="Main_News.Text" xml:space="preserve">
+    <value>Latest News</value>
+  </data>
+  <data name="Main_ProjectList_Delete.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Main_ProjectList_EtsImport.Text" xml:space="preserve">
+    <value>Import KNX Project</value>
+  </data>
+  <data name="Main_ProjectList_New.Text" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="Main_ProjectList_Open.Content" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Main_ProjectList_OpenHabImport.Text" xml:space="preserve">
+    <value>Import openHAB Project</value>
+  </data>
+  <data name="Main_ProjectList_ProjectName.Text" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
+  <data name="Main_ProjectList_ProjectNumber.Text" xml:space="preserve">
+    <value>Project Number</value>
+  </data>
+  <data name="Main_ProjectList_ProjectStatus.Text" xml:space="preserve">
+    <value>Project Status</value>
   </data>
   <data name="Shell_AppInfoBar_Error" xml:space="preserve">
     <value>Error</value>
@@ -176,5 +206,92 @@
   </data>
   <data name="Shell_AppInfoBar_Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog.Title" xml:space="preserve">
+    <value>Delete project</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog_Commitment.Text" xml:space="preserve">
+    <value>Do you really want to delete the project?</value>
+  </data>
+  <data name="Main_ProjectList_DeleteDialog_Success" xml:space="preserve">
+    <value>The project has been permanently deleted.</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog.Title" xml:space="preserve">
+    <value>Import KNX project</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_BuildingStructure.Content" xml:space="preserve">
+    <value>Building structure</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_Devices.Content" xml:space="preserve">
+    <value>Devices</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_ImportFilter.Text" xml:space="preserve">
+    <value>Which data should be imported:</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_MasterData.Content" xml:space="preserve">
+    <value>Project master data</value>
+  </data>
+  <data name="Main_ProjectList_KnxImportDialog_PasswordProtection.Text" xml:space="preserve">
+    <value>The project is password protected. Please enter the password which was assigned in the ETS.</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog.Title" xml:space="preserve">
+    <value>Create new project</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_BuildingOwner.Text" xml:space="preserve">
+    <value>Building owner</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_City.Header" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_ConstructionSite.Text" xml:space="preserve">
+    <value>Construction site</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Email.Header" xml:space="preserve">
+    <value>E-mail address</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_FirstName.Header" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_LastName.Header" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Name.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Number.Header" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Phone.Header" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_PostalCode.Header" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Projekt.Text" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Street.Header" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="Main_ProjectList_NewProjectDialog_Success" xml:space="preserve">
+    <value>The project was successfully created.</value>
   </data>
 </root>
