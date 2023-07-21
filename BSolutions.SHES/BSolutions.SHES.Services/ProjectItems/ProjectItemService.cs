@@ -2,6 +2,7 @@
 using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using Microsoft.Extensions.Logging;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,8 +18,8 @@ namespace BSolutions.SHES.Services.ProjectItems
 
         #region --- Constructor ---
 
-        public ProjectItemService(ILogger<ProjectItemService> logger, IProjectItemRepository projectItemRepository)
-            : base(logger)
+        public ProjectItemService(ResourceLoader resourceLoader, ILogger<ProjectItemService> logger, IProjectItemRepository projectItemRepository)
+            : base(resourceLoader, logger)
         {
             this._projectItemRepository = projectItemRepository;
         }

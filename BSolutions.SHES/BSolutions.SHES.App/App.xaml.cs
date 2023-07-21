@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -100,8 +101,8 @@ namespace BSolutions.SHES.App
                 services.AddTransient<ListDetailsPage>();
                 services.AddTransient<DataGridViewModel>();
                 services.AddTransient<DataGridPage>();
-                
-                
+
+                services.AddTransient<ResourceLoader>();
 
                 // Configuration
                 services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));

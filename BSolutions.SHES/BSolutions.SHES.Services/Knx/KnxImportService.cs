@@ -6,12 +6,14 @@ using BSolutions.SHES.Services.Projects;
 using BSolutions.SHES.Shared.Extensions;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -29,8 +31,8 @@ namespace BSolutions.SHES.Services.Knx
 
         #region --- Constructor ---
 
-        public KnxImportService(ILogger<KnxImportService> logger, IProjectRepository projectRepository)
-            : base(logger)
+        public KnxImportService (ResourceLoader resourceLoader, ILogger<KnxImportService> logger, IProjectRepository projectRepository)
+            : base(resourceLoader, logger)
         {
             this._projectRepository = projectRepository;
         }
@@ -140,6 +142,11 @@ namespace BSolutions.SHES.Services.Knx
                         await this.ReadStructureFile(zipEntry, zip);
                     }
                 }
+            }
+            catch (ZipException ex)
+            {
+                this._result.Successful = false;
+                this._result.ErrorMessage = this._resourceLoader.GetString("Main_ProjectList_EtsImport_PasswordError");
             }
             catch (Exception ex)
             {

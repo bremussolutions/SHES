@@ -118,28 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>BSolutions.SHES.App</value>
+    <value>Smarthome Essentials Suite</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>BSolutions.SHES.App</value>
+    <value>The Smarthome Essentials Suite is an application designed to simplify the work of a smarthome integrators or electrician. It supports the planning, implementation and documentation of smart home projects and supports a large number of systems that are used in building automation.</value>
   </data>
   <data name="Shell_Main.Content" xml:space="preserve">
     <value>Projects</value>
-  </data>
-  <data name="Shell_DataGrid.Content" xml:space="preserve">
-    <value>DataGrid</value>
   </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>
   </data>
   <data name="ListDetails_NoSelection.Text" xml:space="preserve">
     <value>Select an item from the list.</value>
-  </data>
-  <data name="Shell_ListDetails.Content" xml:space="preserve">
-    <value>ListDetails</value>
-  </data>
-  <data name="Shell_ContentGrid.Content" xml:space="preserve">
-    <value>ContentGrid</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalization</value>
@@ -170,5 +161,20 @@
   </data>
   <data name="Shell_BuildingStructure.Content" xml:space="preserve">
     <value>Building Structure</value>
+  </data>
+  <data name="Main_ProjectList_EtsImport_PasswordError" xml:space="preserve">
+    <value>The password for the ETS project file to be imported is incorrect.</value>
+  </data>
+  <data name="Shell_AppInfoBar_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Shell_AppInfoBar_Info" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Shell_AppInfoBar_Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Shell_AppInfoBar_Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
 </root>

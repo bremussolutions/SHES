@@ -2,6 +2,7 @@
 using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using Microsoft.Extensions.Logging;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,8 +20,8 @@ namespace BSolutions.SHES.Services.Devices
         /// <summary>Initializes a new instance of the <see cref="DeviceService" /> class.</summary>
         /// <param name="logger">The logger.</param>
         /// <param name="deviceRepository">The device repository.</param>
-        public DeviceService(ILogger<DeviceService> logger, IDeviceRepository deviceRepository)
-            : base(logger)
+        public DeviceService(ResourceLoader resourceLoader, ILogger<DeviceService> logger, IDeviceRepository deviceRepository)
+            : base(resourceLoader, logger)
         {
             this._deviceRepository = deviceRepository;
         }

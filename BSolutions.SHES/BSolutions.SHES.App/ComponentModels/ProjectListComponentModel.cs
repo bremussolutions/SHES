@@ -15,6 +15,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 
@@ -189,7 +190,14 @@ namespace BSolutions.SHES.App.ComponentModels
             }
             else
             {
-                WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel { IsOpen = true, Severity = InfoBarSeverity.Error, Title = "Fehler", Message = result.ErrorMessage }));
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel
+                {
+                    IsOpen = true,
+                    Severity = InfoBarSeverity.Error,
+                    Title = resourceLoader.GetString("Shell_AppInfoBar_Error"),
+                    Message = result.ErrorMessage
+                }));
             }
         }
 

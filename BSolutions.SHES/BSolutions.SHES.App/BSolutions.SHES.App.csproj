@@ -10,12 +10,9 @@
     <PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>de-DE</DefaultLanguage>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="Strings\de-de\Resources.resx" />
-  </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\materialdesignicons-webfont.ttf" />
     <None Remove="Components\ProjectItemTreeComponent.xaml" />
@@ -70,17 +67,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PRIResource Include="Strings\de-de\Resources.resx">
-      <Generator></Generator>
-    </PRIResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Assets\Fonts\materialdesignicons-webfont.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\Fonts\smarthome-webfont.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PRIResource Update="Strings\en-us\Resources.resw">
+      <CustomToolNamespace>Lang</CustomToolNamespace>
+    </PRIResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PRIResource Update="Strings\de-de\Resources.resw">
+      <Generator></Generator>
+      <CustomToolNamespace>Lang</CustomToolNamespace>
+    </PRIResource>
   </ItemGroup>
 </Project>

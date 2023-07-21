@@ -3,6 +3,7 @@ using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
 using BSolutions.SHES.Services.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +17,8 @@ namespace BSolutions.SHES.Services.Projects
     {
         private readonly IProjectRepository _projectRepository;
 
-        public ProjectService(ILogger<ProjectService> logger, IProjectRepository projectRepository)
-            : base(logger)
+        public ProjectService(ResourceLoader resourceLoader, ILogger<ProjectService> logger, IProjectRepository projectRepository)
+            : base(resourceLoader, logger)
         {
             this._projectRepository = projectRepository;
         }

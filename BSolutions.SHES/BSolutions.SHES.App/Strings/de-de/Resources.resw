@@ -118,16 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDescription" xml:space="preserve">
-    <value>BSolutions.SHES.App</value>
+    <value>Die Smarthome Essentials Suite ist eine Anwendung, die die Arbeit eines Smarthome-Integrators oder Elektrikers vereinfachen soll. Sie unterstützt die Planung, Umsetzung und Dokumentation von Smart Home-Projekten und unterstützt eine Vielzahl von Systemen, die in der Gebäudeautomation eingesetzt werden.</value>
   </data>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>BSolutions.SHES.App</value>
+    <value>Smarthome Essentials Suite</value>
+  </data>
+  <data name="AppInfoBar_Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="AppInfoBar_Info" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="AppInfoBar_Success" xml:space="preserve">
+    <value>Erfolgreich</value>
+  </data>
+  <data name="AppInfoBar_Warning" xml:space="preserve">
+    <value>Warnung</value>
   </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>
   </data>
   <data name="ListDetails_NoSelection.Text" xml:space="preserve">
     <value>Select an item from the list.</value>
+  </data>
+  <data name="Main_ProjectList_EtsImport_PasswordError" xml:space="preserve">
+    <value>Das Passwort für die zu importierende ETS-Projektdatei ist falsch.</value>
   </data>
   <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
     <value>Privacy Statement</value>
@@ -159,16 +174,7 @@
   <data name="Shell_BuildingStructure.Content" xml:space="preserve">
     <value>Gebäudestruktur</value>
   </data>
-  <data name="Shell_ContentGrid.Content" xml:space="preserve">
-    <value>ContentGrid</value>
-  </data>
-  <data name="Shell_DataGrid.Content" xml:space="preserve">
-    <value>DataGrid</value>
-  </data>
-  <data name="Shell_ListDetails.Content" xml:space="preserve">
-    <value>ListDetails</value>
-  </data>
   <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Main</value>
+    <value>Projekte</value>
   </data>
 </root>
