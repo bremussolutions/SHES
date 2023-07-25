@@ -14,6 +14,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Versioning;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -24,7 +26,7 @@ namespace BSolutions.SHES.Services.Knx
     {
         private KnxImportOptions _options;
         private KnxImportResult _result;
-        private Project _project;
+        private Project _project = new();
         private List<ProjectItem> _projectItems;
 
         private readonly IProjectRepository _projectRepository;
@@ -127,7 +129,14 @@ namespace BSolutions.SHES.Services.Knx
                     // Password protected project
                     if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$") && zipEntry.IsFile)
                     {
-                        await this.UnzipAsync(zip.GetInputStream(zipEntry), password);
+                        if (this._result.Data.SchemaVersion >= 21)
+                        {
+                            await this.UnzipAsync(zip.GetInputStream(zipEntry), this.EncryptEtsPassword(password));
+                        }
+                        else
+                        {
+                            await this.UnzipAsync(zip.GetInputStream(zipEntry), password);
+                        }
                     }
 
                     // Project XML
@@ -172,19 +181,16 @@ namespace BSolutions.SHES.Services.Knx
 
             this._result.Data.ProjectXml = XDocument.Parse(await reader.ReadToEndAsync());
 
-            this._project = new Project
-            {
-                Number = this._result.Data.ProjectXml
+            this._project.Number = this._result.Data.ProjectXml
                 .Element(XName.Get("KNX", this._result.Data.SchemaNamespace))
                 .Element(XName.Get("Project", this._result.Data.SchemaNamespace))
-                .Attribute(XName.Get("Id")).Value,
+                .Attribute(XName.Get("Id")).Value;
 
-                Name = this._result.Data.ProjectXml
+            this._project.Name = this._result.Data.ProjectXml
                 .Element(XName.Get("KNX", this._result.Data.SchemaNamespace))
                 .Element(XName.Get("Project", this._result.Data.SchemaNamespace))
                 .Element(XName.Get("ProjectInformation", this._result.Data.SchemaNamespace))
-                .Attribute(XName.Get("Name")).Value
-            };
+                .Attribute(XName.Get("Name")).Value;
         }
 
         private async Task ReadStructureFile(ZipEntry zipEntry, ZipFile zip)
@@ -259,6 +265,23 @@ namespace BSolutions.SHES.Services.Knx
             }
 
             return devices;
+        }
+
+        /// <summary>Encrypts a password, as this is required from ETS6 to unpack the project file.</summary>
+        /// <param name="password">The plain text password.</param>
+        /// <returns>
+        ///   Returns the encrypted ETS project password.
+        /// </returns>
+        private string EncryptEtsPassword(string password)
+        {
+            int iterations = 65536;
+            byte[] salt = Encoding.ASCII.GetBytes("21.project.ets.knx.org");
+
+            using (var deriveBytes = new Rfc2898DeriveBytes(Encoding.Unicode.GetBytes(password), salt, iterations, HashAlgorithmName.SHA256))
+            {
+                byte[] bytes = deriveBytes.GetBytes(32);
+                return Convert.ToBase64String(bytes);
+            }
         }
 
         private static readonly Dictionary<string, string> projectTypeMapping = new()
