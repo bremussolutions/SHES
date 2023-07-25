@@ -96,10 +96,12 @@
                 <StackPanel Margin="0 0 20 0">
                     <TextBlock x:Uid="Main_ProjectList_NewProjectDialog_Project"
                                Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBox x:Uid="Main_ProjectList_NewProjectDialog_Name" HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                    <TextBox x:Uid="Main_ProjectList_NewProjectDialog_Name"
+                             HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
                              Text="{x:Bind ViewModel.NewProject.Name, Mode=TwoWay}"
                              Margin="0 10 0 0" />
-                    <TextBox x:Uid="Main_ProjectList_NewProjectDialog_Number" HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                    <TextBox x:Uid="Main_ProjectList_NewProjectDialog_Number"
+                             HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
                              Text="{x:Bind ViewModel.NewProject.Number, Mode=TwoWay}"
                              Margin="0 10 0 0" />
 
@@ -154,7 +156,9 @@
                 <!-- PASSWORD PROTECTION-->
                 <StackPanel Visibility="{x:Bind ViewModel.IsImportProjectProtected, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                     <TextBlock TextWrapping="Wrap" x:Uid="Main_ProjectList_KnxImportDialog_PasswordProtection" />
-                    <PasswordBox Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay}"
+                    <PasswordBox x:Uid="Main_ProjectList_KnxImportDialog_Password"
+                                 Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay}"
+                                 HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
                                  Margin="0 10 0 0" />
                 </StackPanel>
 

@@ -294,4 +294,7 @@
   <data name="Main_ProjectList_NewProjectDialog_Success" xml:space="preserve">
     <value>The project was successfully created.</value>
   </data>
+  <data name="Main_ProjectList_KnxImportDialog_Password.Header" xml:space="preserve">
+    <value>Password</value>
+  </data>
 </root>

@@ -186,8 +186,11 @@
   <data name="Main_ProjectList_KnxImportDialog_MasterData.Content" xml:space="preserve">
     <value>Stammdaten des Projekts</value>
   </data>
+  <data name="Main_ProjectList_KnxImportDialog_Password.Header" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
   <data name="Main_ProjectList_KnxImportDialog_PasswordProtection.Text" xml:space="preserve">
-    <value>Das Projekt ist passwortgeschützt. Bitte geben Sie das Passwort ein,&lt;LineBreak /&gt; welches in der ETS vergeben wurde.</value>
+    <value>Das Projekt ist passwortgeschützt. Bitte geben Sie das Passwort ein, welches in der ETS vergeben wurde.</value>
   </data>
   <data name="Main_ProjectList_New.Text" xml:space="preserve">
     <value>Neu</value>
