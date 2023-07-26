@@ -37,16 +37,15 @@
                         <AppBarButton Icon="Delete" Label="Löschen"/>
                     </CommandBar>
                     
-                    <controls:DataGrid
-                                   AutoGenerateColumns="False"
-                                   GridLinesVisibility="Horizontal"
-                                   CanUserSortColumns="True" 
-                                  ScrollViewer.IsDeferredScrollingEnabled="True" 
-                                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                                   Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
-                                   ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
-                                   SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}"
-                                   CellEditEnded="{x:Bind ViewModel.DataGrid_CellEditEnded}">
+                    <controls:DataGrid AutoGenerateColumns="False"
+                                       GridLinesVisibility="Horizontal"
+                                       CanUserSortColumns="True"
+                                       IsReadOnly="True"
+                                       ScrollViewer.IsDeferredScrollingEnabled="True"
+                                       ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                       Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
+                                       ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
+                                       SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}">
                         <controls:DataGrid.Columns>
                             <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
                                 <controls:DataGridTemplateColumn.CellTemplate>

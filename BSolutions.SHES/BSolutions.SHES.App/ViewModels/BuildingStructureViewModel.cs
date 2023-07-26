@@ -117,19 +117,6 @@ namespace BSolutions.SHES.App.ViewModels
 
         #region --- Events ---
 
-        /// <summary>Handles the CellEditEnded event of the DataGrid control.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DataGridCellEditEndedEventArgs" /> instance containing the event data.</param>
-        public async void DataGrid_CellEditEnded(object sender, DataGridCellEditEndedEventArgs e)
-        {
-            ObservableDevice changedDevice = e.Row.DataContext as ObservableDevice;
-
-            if (changedDevice != null)
-            {
-                await this._projectItemService.UpdateAsync(changedDevice);
-            }
-        }
-
         /// <summary>Handles the SelectionChanged event of the DataGrid control.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
