@@ -36,7 +36,8 @@
                     </CommandBar>
 
                     <ScrollViewer x:Name="DataGridScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
-                        <controls:DataGrid AutoGenerateColumns="False"
+                        <Grid>
+                            <controls:DataGrid AutoGenerateColumns="False"
                                        GridLinesVisibility="Horizontal"
                                        CanUserSortColumns="True"
                                        IsReadOnly="True"
@@ -44,19 +45,20 @@
                                        ScrollViewer.HorizontalScrollBarVisibility="Visible"
                                        Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
                                        ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
-                                       SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}">
-                            <controls:DataGrid.Columns>
-                                <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
-                                    <controls:DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon, Mode=OneWay}" />
-                                        </DataTemplate>
-                                    </controls:DataGridTemplateColumn.CellTemplate>
-                                </controls:DataGridTemplateColumn>
-                                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
-                                <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
-                                <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
-                                <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
+                                       SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}"
+                                       Visibility="{x:Bind ViewModel.LocationDetailsVisibility, Mode=OneWay}">
+                                <controls:DataGrid.Columns>
+                                    <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
+                                        <controls:DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </controls:DataGridTemplateColumn.CellTemplate>
+                                    </controls:DataGridTemplateColumn>
+                                    <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
+                                    <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
+                                    <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
+                                    <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
@@ -69,8 +71,12 @@
                                     </DataTemplate>
                                 </controls:DataGridTemplateColumn.CellTemplate>
                             </controls:DataGridTemplateColumn>-->
-                            </controls:DataGrid.Columns>
-                        </controls:DataGrid>
+                                </controls:DataGrid.Columns>
+                            </controls:DataGrid>
+
+                            <components:CabinetDetailsComponent Visibility="{x:Bind ViewModel.CabinetDetailsVisibility, Mode=OneWay}" />
+                        </Grid>
+                        
                     </ScrollViewer>
                 </StackPanel>
 

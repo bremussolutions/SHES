@@ -29,6 +29,8 @@ namespace BSolutions.SHES.App.ViewModels
         private readonly Timer _dataGridFilterTimer = new();
         private DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         private List<ObservableDevice> _devicesForCurrentLocation;
+        private Visibility _locationDetailsVisibility = Visibility.Collapsed;
+        private Visibility _cabinetDetailsVisibility = Visibility.Collapsed;
 
         private string _currentSortColumn;
         private DataGridSortDirection _currentSortDirection;
@@ -51,6 +53,7 @@ namespace BSolutions.SHES.App.ViewModels
                     if (value.Id != previousItem?.Id)
                     {
                         this.LoadDevicesForLocationAsync();
+                        this.DetailsVisibility(value.entity.GetType());
                     }
                 }
             }
@@ -70,6 +73,24 @@ namespace BSolutions.SHES.App.ViewModels
         public Visibility DevicePropertiesVisibility
         {
             get => this._currentDevice != null ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public Visibility LocationDetailsVisibility
+        {
+            get => _locationDetailsVisibility;
+            private set
+            {
+                SetProperty(ref _locationDetailsVisibility, value);
+            }
+        }
+
+        public Visibility CabinetDetailsVisibility
+        {
+            get => _cabinetDetailsVisibility;
+            private set
+            {
+                SetProperty(ref _cabinetDetailsVisibility, value);
+            }
         }
 
         private string _dataGridFilter;
@@ -214,6 +235,22 @@ namespace BSolutions.SHES.App.ViewModels
 
                 this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
                 OnPropertyChanged(nameof(this.Devices));
+            }
+        }
+
+        private void DetailsVisibility(Type locationType)
+        {
+            this.LocationDetailsVisibility = Visibility.Collapsed;
+            this.CabinetDetailsVisibility = Visibility.Collapsed;
+
+            switch (locationType.Name)
+            {
+                case "Cabinet":
+                    this.CabinetDetailsVisibility = Visibility.Visible;
+                    break;
+                default:
+                    this.LocationDetailsVisibility= Visibility.Visible;
+                    break;
             }
         }
     }
