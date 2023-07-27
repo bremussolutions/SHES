@@ -31,5 +31,10 @@ namespace BSolutions.SHES.App.Views
             ViewModel = App.GetService<BuildingStructureViewModel>();
             this.InitializeComponent();
         }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.DataGridScrollViewer.Height = e.NewSize.Height - 50;
+        }
     }
 }

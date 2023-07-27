@@ -10,25 +10,23 @@
     xmlns:ui="using:CommunityToolkit.WinUI.UI"
     xmlns:enums="using:BSolutions.SHES.Models.Enumerations"
     mc:Ignorable="d"
+    SizeChanged="Page_SizeChanged"
     Style="{StaticResource PageStyle}">
 
     <Page.Resources>
         <converters:EnumDisplayConverter x:Key="EnumDisplayConverter"/>
     </Page.Resources>
     
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+    <Grid x:Name="ContentArea">
         <Grid
             Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="300" />
-                </Grid.ColumnDefinitions>
+            <Grid ColumnDefinitions="300, 16, *, 16, 300">
 
-                <components:ProjectItemTreeComponent />
+                <components:ProjectItemTreeComponent Margin="5 0" />
 
-                <StackPanel Grid.Column="1">
+                <controls:GridSplitter Grid.Column="1" />
+
+                <StackPanel Grid.Column="2" Margin="5 0">
                     <CommandBar FlowDirection="LeftToRight" VerticalContentAlignment="Center" DefaultLabelPosition="Right">
                         <CommandBar.Content>
                             <TextBox Text="{x:Bind ViewModel.DataGridFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Suchen" MinWidth="250" />
@@ -36,8 +34,9 @@
                         <AppBarButton Icon="Add" Label="Hinzufügen"/>
                         <AppBarButton Icon="Delete" Label="Löschen"/>
                     </CommandBar>
-                    
-                    <controls:DataGrid AutoGenerateColumns="False"
+
+                    <ScrollViewer x:Name="DataGridScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
+                        <controls:DataGrid AutoGenerateColumns="False"
                                        GridLinesVisibility="Horizontal"
                                        CanUserSortColumns="True"
                                        IsReadOnly="True"
@@ -46,18 +45,18 @@
                                        Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
                                        ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
                                        SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}">
-                        <controls:DataGrid.Columns>
-                            <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
-                                <controls:DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon, Mode=OneWay}" />
-                                    </DataTemplate>
-                                </controls:DataGridTemplateColumn.CellTemplate>
-                            </controls:DataGridTemplateColumn>
-                            <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
-                            <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
-                            <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
-                            <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
+                            <controls:DataGrid.Columns>
+                                <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
+                                    <controls:DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon, Mode=OneWay}" />
+                                        </DataTemplate>
+                                    </controls:DataGridTemplateColumn.CellTemplate>
+                                </controls:DataGridTemplateColumn>
+                                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
+                                <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
+                                <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
+                                <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
@@ -70,13 +69,14 @@
                                     </DataTemplate>
                                 </controls:DataGridTemplateColumn.CellTemplate>
                             </controls:DataGridTemplateColumn>-->
-                        </controls:DataGrid.Columns>
-                    </controls:DataGrid>
+                            </controls:DataGrid.Columns>
+                        </controls:DataGrid>
+                    </ScrollViewer>
                 </StackPanel>
-                
-                
 
-                <Pivot Grid.Column="2" IsHeaderItemsCarouselEnabled="False">
+                <controls:GridSplitter Grid.Column="3" />
+
+                <Pivot Grid.Column="4" IsHeaderItemsCarouselEnabled="False" Margin="5 0">
                     <Pivot.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}" FontSize="13" />

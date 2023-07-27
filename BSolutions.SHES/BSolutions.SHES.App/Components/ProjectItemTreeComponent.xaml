@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:observables="using:BSolutions.SHES.Models.Observables"
-    mc:Ignorable="d" Loaded="{x:Bind ViewModel.OnLoaded}">
+    mc:Ignorable="d" Loaded="{x:Bind ViewModel.OnLoaded}" SizeChanged="UserControl_SizeChanged">
 
     <StackPanel>
         <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
@@ -27,7 +27,7 @@
             </AppBarButton>
         </CommandBar>
 
-        <ScrollViewer MaxHeight="500"
+        <ScrollViewer x:Name="ProjectElementTreeScrollViewer"
                       HorizontalScrollMode="Enabled"
                       VerticalScrollMode="Enabled"
                       HorizontalScrollBarVisibility="Auto"
