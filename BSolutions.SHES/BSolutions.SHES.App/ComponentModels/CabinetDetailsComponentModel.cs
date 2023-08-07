@@ -15,7 +15,6 @@ namespace BSolutions.SHES.App.ComponentModels
         #region --- Constructor ---
 
         /// <summary>Initializes a new instance of the <see cref="CabinetDetailsComponentModel" /> class.</summary>
-        /// <param name="projectItemService">The project item service.</param>
         public CabinetDetailsComponentModel()
         {
         }

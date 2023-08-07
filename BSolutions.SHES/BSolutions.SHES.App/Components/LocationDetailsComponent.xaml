@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="BSolutions.SHES.App.Components.LocationDetailsComponent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSolutions.SHES.App.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:BSolutions.SHES.App.Converters"
+    xmlns:enums="using:BSolutions.SHES.Models.Enumerations"
+    xmlns:ui="using:CommunityToolkit.WinUI.UI"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    SizeChanged="UserControl_SizeChanged"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:EnumDisplayConverter x:Key="EnumDisplayConverter"/>
+    </UserControl.Resources>
+
+    <Grid ColumnDefinitions="*, 16, 300">
+        <StackPanel>
+            <CommandBar FlowDirection="LeftToRight" VerticalContentAlignment="Center" DefaultLabelPosition="Right">
+                <CommandBar.Content>
+                    <TextBox Text="{x:Bind ViewModel.DataGridFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Suchen" MinWidth="250" />
+                </CommandBar.Content>
+                <AppBarButton Icon="Add" Label="Hinzufügen"/>
+                <AppBarButton Icon="Delete" Label="Löschen"/>
+            </CommandBar>
+
+            <ScrollViewer x:Name="DataGridScrollViewer"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollMode="Enabled">
+                <controls:DataGrid AutoGenerateColumns="False"
+                           GridLinesVisibility="Horizontal"
+                           CanUserSortColumns="True"
+                           IsReadOnly="True"
+                           ScrollViewer.IsDeferredScrollingEnabled="True"
+                           ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                           Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
+                           ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
+                           SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <FontIcon FontFamily="{StaticResource SmarthomeIcons}" Glyph="{Binding TypeIcon, Mode=OneWay}" />
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
+                        <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
+                        <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
+                        <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
+                        <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
+                                <controls:DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </controls:DataGridTemplateColumn.CellTemplate>
+                            </controls:DataGridTemplateColumn>-->
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+
+        <controls:GridSplitter Grid.Column="1" />
+
+        <Pivot Grid.Column="2" IsHeaderItemsCarouselEnabled="False" Margin="5 0">
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="13" />
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <PivotItem Header="Eigenschaften" Visibility="{x:Bind ViewModel.DevicePropertiesVisibility, Mode=OneWay}">
+                <StackPanel>
+                    <TextBlock Text="Name" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBox Text="{x:Bind ViewModel.CurrentDevice.Name, Mode=TwoWay}"
+                                     TextChanged="{x:Bind ViewModel.InputField_ValueChanged}" />
+
+                    <TextBlock Text="Beschreibung" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBox Text="{x:Bind ViewModel.CurrentDevice.Description, Mode=TwoWay}"
+                                     TextChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                                     TextWrapping="Wrap" AcceptsReturn="True" Height="100" />
+
+                    <TextBlock Text="Bustyp" FontWeight="Bold" Margin="0 10 0 5" />
+                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
+                                      SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                                      ItemsSource="{ui:EnumValues Type=enums:BusType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="Typ" FontWeight="Bold" Margin="0 10 0 5" />
+                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
+                                      SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                                      ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="Hinzugefügt" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock Text="{x:Bind ViewModel.CurrentDevice.CreationTime, Mode=OneWay}" />
+
+                    <TextBlock Text="Zuletzt geändert" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock Text="{x:Bind ViewModel.CurrentDevice.LastModificationTime, Mode=OneWay}" />
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Information">
+                <TextBlock Text="Informationen werden hier präsentiert." />
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</UserControl>

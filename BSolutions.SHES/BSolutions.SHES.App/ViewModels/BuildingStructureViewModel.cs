@@ -17,27 +17,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Windows.UI.Core;
-using System.Linq.Dynamic.Core;
 using Microsoft.UI.Xaml;
 
 namespace BSolutions.SHES.App.ViewModels
 {
     public class BuildingStructureViewModel : ObservableRecipient
     {
-        private readonly IDeviceService _deviceService;
-        private readonly IProjectItemService _projectItemService;
-        private readonly Timer _dataGridFilterTimer = new();
-        private DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
-        private List<ObservableDevice> _devicesForCurrentLocation;
-        private Visibility _locationDetailsVisibility = Visibility.Collapsed;
-        private Visibility _cabinetDetailsVisibility = Visibility.Collapsed;
-
-        private string _currentSortColumn;
-        private DataGridSortDirection _currentSortDirection;
+        private Visibility _locationTabVisibility = Visibility.Visible;
+        private Visibility _cabinetTabVisibility = Visibility.Collapsed;
 
         #region --- Properties ---
-
-        public ObservableCollection<ObservableDevice> Devices { get; private set; } = new ObservableCollection<ObservableDevice>();
 
         private ObservableProjectItem _currentLocation;
         public ObservableProjectItem CurrentLocation
@@ -52,56 +41,27 @@ namespace BSolutions.SHES.App.ViewModels
 
                     if (value.Id != previousItem?.Id)
                     {
-                        this.LoadDevicesForLocationAsync();
                         this.DetailsVisibility(value.entity.GetType());
                     }
                 }
             }
         }
 
-        private ObservableDevice _currentDevice;
-        public ObservableDevice CurrentDevice
+        public Visibility LocationTabVisibility
         {
-            get => _currentDevice;
+            get => _locationTabVisibility;
             private set
             {
-                SetProperty(ref _currentDevice, value);
-                OnPropertyChanged(nameof(DevicePropertiesVisibility));
+                SetProperty(ref _locationTabVisibility, value);
             }
         }
 
-        public Visibility DevicePropertiesVisibility
+        public Visibility CabinetTabVisibility
         {
-            get => this._currentDevice != null ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        public Visibility LocationDetailsVisibility
-        {
-            get => _locationDetailsVisibility;
+            get => _cabinetTabVisibility;
             private set
             {
-                SetProperty(ref _locationDetailsVisibility, value);
-            }
-        }
-
-        public Visibility CabinetDetailsVisibility
-        {
-            get => _cabinetDetailsVisibility;
-            private set
-            {
-                SetProperty(ref _cabinetDetailsVisibility, value);
-            }
-        }
-
-        private string _dataGridFilter;
-        public string DataGridFilter
-        {
-            get => _dataGridFilter;
-            set
-            {
-                SetProperty(ref _dataGridFilter, value);
-                this._dataGridFilterTimer.Stop();
-                this._dataGridFilterTimer.Start();
+                SetProperty(ref _cabinetTabVisibility, value);
             }
         }
 
@@ -114,11 +74,8 @@ namespace BSolutions.SHES.App.ViewModels
         /// <summary>Initializes a new instance of the <see cref="BuildingStructureViewModel" /> class.</summary>
         /// <param name="projectItemService">The project item service.</param>
         /// <param name="deviceService">The device service.</param>
-        public BuildingStructureViewModel(IProjectItemService projectItemService, IDeviceService deviceService)
+        public BuildingStructureViewModel()
         {
-            this._projectItemService = projectItemService;
-            this._deviceService = deviceService;
-
             // Messages
             WeakReferenceMessenger.Default.Register<BuildingStructureViewModel, CurrentLocationChangedMessage>(this, (r, m) => r.CurrentLocation = m.Value);
 
@@ -127,129 +84,23 @@ namespace BSolutions.SHES.App.ViewModels
             this.DeviceTypes = Enum.GetValues(typeof(DeviceType))
                 .Cast<DeviceType>()
                 .ToList();
-
-            // Data Grid Filter Timer
-            this._dataGridFilterTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            this._dataGridFilterTimer.Interval = 500;
-            this._dataGridFilterTimer.AutoReset = false;
         }
 
         #endregion
-
-        #region --- Events ---
-
-        /// <summary>Handles the SelectionChanged event of the DataGrid control.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
-        public void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            this.CurrentDevice = ((DataGrid)sender).SelectedItem as ObservableDevice;
-        }
-
-        /// <summary>Inputs the field value changed.</summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The e.</param>
-        public async void InputField_ValueChanged(object sender, object e)
-        {
-            await this._projectItemService.UpdateAsync(this._currentDevice);
-        }
-
-        /// <summary>Handles the Sorting event of the DataGrid control.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DataGridColumnEventArgs" /> instance containing the event data.</param>
-        public void DataGrid_Sorting(object sender, DataGridColumnEventArgs e)
-        {
-            DataGrid dataGrid = (DataGrid)sender;
-
-            // Sorting columns
-            if (e.Column.Tag != null)
-            {
-                this._currentSortColumn = e.Column.Tag.ToString();
-
-                // Ascending
-                if (e.Column.SortDirection == null || e.Column.SortDirection == DataGridSortDirection.Descending)
-                {
-                    this._currentSortDirection = DataGridSortDirection.Ascending;
-                    e.Column.SortDirection = DataGridSortDirection.Ascending;
-                }
-                // Descending
-                else
-                {
-                    this._currentSortDirection = DataGridSortDirection.Descending;
-                    e.Column.SortDirection = DataGridSortDirection.Descending;
-                }
-
-                this.SortDevices();
-            }
-
-            // Remove sorting indicators from other columns
-            foreach (var column in dataGrid.Columns)
-            {
-                if (column.Tag != null && column.Tag.ToString() != e.Column.Tag.ToString())
-                {
-                    column.SortDirection = null;
-                }
-            }
-        }
-
-        #endregion
-
-        private async void LoadDevicesForLocationAsync()
-        {
-            this._devicesForCurrentLocation = await this._deviceService.GetDevicesForLocationAsync(this.CurrentLocation);
-            this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation);
-            this.OnPropertyChanged(nameof(this.Devices));
-
-            // Apply existing filter
-            this.OnTimedEvent(this._dataGridFilterTimer, null);
-
-            // Apply existing sorting
-            this.SortDevices();
-        }
-
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
-        {
-            if (this._devicesForCurrentLocation != null && !string.IsNullOrWhiteSpace(this.DataGridFilter))
-            {
-                this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation.Where(d => d.Name.Contains(this.DataGridFilter)));
-                dispatcherQueue.TryEnqueue(() => this.OnPropertyChanged(nameof(this.Devices)));
-            }
-        }
-
-        private void SortDevices()
-        {
-            if (!string.IsNullOrEmpty(this._currentSortColumn))
-            {
-                IQueryable<ObservableDevice> query = this.Devices.AsQueryable();
-
-                // Ascending
-                if (this._currentSortDirection == DataGridSortDirection.Ascending)
-                {
-                    query = query.OrderBy(this._currentSortColumn);
-                }
-                // Descending
-                else
-                {
-                    query = query.OrderBy($"{this._currentSortColumn} desc");
-                }
-
-                this.Devices = new ObservableCollection<ObservableDevice>(query.ToList());
-                OnPropertyChanged(nameof(this.Devices));
-            }
-        }
 
         private void DetailsVisibility(Type locationType)
         {
-            this.LocationDetailsVisibility = Visibility.Collapsed;
-            this.CabinetDetailsVisibility = Visibility.Collapsed;
+            this.LocationTabVisibility = Visibility.Collapsed;
+            this.CabinetTabVisibility = Visibility.Collapsed;
 
             switch (locationType.Name)
             {
                 case "Cabinet":
-                    this.CabinetDetailsVisibility = Visibility.Visible;
+                    this.LocationTabVisibility = Visibility.Visible;
+                    this.CabinetTabVisibility = Visibility.Visible;
                     break;
                 default:
-                    this.LocationDetailsVisibility= Visibility.Visible;
+                    this.LocationTabVisibility = Visibility.Visible;
                     break;
             }
         }

@@ -34,7 +34,8 @@ namespace BSolutions.SHES.App.Views
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.DataGridScrollViewer.Height = e.NewSize.Height - 50;
+            this.LocationDetailsComponent.Height = e.NewSize.Height - 50;
+            this.CabinetDetailsComponent.Height = e.NewSize.Height - 50;
         }
     }
 }

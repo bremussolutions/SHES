@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Remove="Assets\materialdesignicons-webfont.ttf" />
     <None Remove="Components\CabinetDetailsComponent.xaml" />
+    <None Remove="Components\LocationDetailsComponent.xaml" />
     <None Remove="Components\ProjectItemTreeComponent.xaml" />
     <None Remove="Components\ProjectListComponent.xaml" />
     <None Remove="Styles\DataTemplates.xaml" />
@@ -49,6 +50,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Components\LocationDetailsComponent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Components\CabinetDetailsComponent.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
