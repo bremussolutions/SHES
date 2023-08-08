@@ -1,5 +1,5 @@
 ﻿using BSolutions.SHES.Models.Entities;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
