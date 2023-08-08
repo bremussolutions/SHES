@@ -17,36 +17,33 @@
     </Page.Resources>
     
     <Grid x:Name="ContentArea">
-        <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-            <Grid ColumnDefinitions="300, 16, *">
+        <Grid ColumnDefinitions="300, 16, *">
 
-                <components:ProjectItemTreeComponent Margin="5 0" />
+            <components:ProjectItemTreeComponent Margin="5 0" />
 
-                <controls:GridSplitter Grid.Column="1" />
+            <controls:GridSplitter Grid.Column="1" />
 
-                <TabView Grid.Column="2"
-                         IsAddTabButtonVisible="False"
-                         TabWidthMode="SizeToContent"
-                         Margin="5 0">
-                    <TabViewItem Header="Devices"
-                                 IsClosable="False"
-                                 Visibility="{x:Bind ViewModel.LocationTabVisibility, Mode=OneWay}">
-                        <TabViewItem.IconSource>
-                            <SymbolIconSource Symbol="Admin" />
-                        </TabViewItem.IconSource>
-                        <components:LocationDetailsComponent x:Name="LocationDetailsComponent" />
-                    </TabViewItem>
-                    <TabViewItem Header="Stromlaufplan"
-                                 IsClosable="False"
-                                 Visibility="{x:Bind ViewModel.CabinetTabVisibility, Mode=OneWay}">
-                        <TabViewItem.IconSource>
-                            <SymbolIconSource Symbol="Caption" />
-                        </TabViewItem.IconSource>
-                        <components:CabinetDetailsComponent x:Name="CabinetDetailsComponent" />
-                    </TabViewItem>
-                </TabView>
-            </Grid>
+            <TabView Grid.Column="2"
+                        IsAddTabButtonVisible="False"
+                        TabWidthMode="SizeToContent"
+                        Margin="5 0">
+                <TabViewItem Header="Devices"
+                             IsClosable="False"
+                             Visibility="{x:Bind ViewModel.LocationTabVisibility, Mode=OneWay}">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource Symbol="Admin" />
+                    </TabViewItem.IconSource>
+                    <components:LocationDetailsComponent x:Name="LocationDetailsComponent" />
+                </TabViewItem>
+                <TabViewItem Header="Stromlaufplan"
+                                IsClosable="False"
+                                Visibility="{x:Bind ViewModel.CabinetTabVisibility, Mode=OneWay}">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource Symbol="Caption" />
+                    </TabViewItem.IconSource>
+                    <components:CabinetDetailsComponent x:Name="CabinetDetailsComponent" />
+                </TabViewItem>
+            </TabView>
         </Grid>
     </Grid>
 </Page>
