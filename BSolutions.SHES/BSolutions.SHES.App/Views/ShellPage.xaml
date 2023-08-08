@@ -27,12 +27,18 @@
             Edit String/en-US/Resources.resw: Add a menu item title for each page
             -->
             <NavigationViewItem x:Uid="Main"
-                                Icon="Document"
-                                helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.MainViewModel" />
+                                helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.MainViewModel">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC50;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
             <NavigationViewItem x:Uid="BuildingStructure"
-                                Icon="Document"
                                 helpers:NavigationHelper.NavigateTo="BSolutions.SHES.App.ViewModels.BuildingStructureViewModel"
-                                Visibility="{x:Bind ViewModel.ProjectNavigationVisibility, Mode=OneWay}"/>
+                                Visibility="{x:Bind ViewModel.ProjectNavigationVisibility, Mode=OneWay}">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE731;"/>
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
         </NavigationView.MenuItems>
         <NavigationView.HeaderTemplate>
             <DataTemplate>

@@ -31,7 +31,7 @@
                              IsClosable="False"
                              Visibility="{x:Bind ViewModel.LocationTabVisibility, Mode=OneWay}">
                     <TabViewItem.IconSource>
-                        <SymbolIconSource Symbol="Admin" />
+                        <FontIconSource FontFamily="{StaticResource MaterialDesignIcons}" Glyph="&#xF1080;" />
                     </TabViewItem.IconSource>
                     <components:LocationDetailsComponent x:Name="LocationDetailsComponent" />
                 </TabViewItem>
@@ -39,7 +39,7 @@
                                 IsClosable="False"
                                 Visibility="{x:Bind ViewModel.CabinetTabVisibility, Mode=OneWay}">
                     <TabViewItem.IconSource>
-                        <SymbolIconSource Symbol="Caption" />
+                        <FontIconSource FontFamily="{StaticResource MaterialDesignIcons}" Glyph="&#xF0F91;" />
                     </TabViewItem.IconSource>
                     <components:CabinetDetailsComponent x:Name="CabinetDetailsComponent" />
                 </TabViewItem>
