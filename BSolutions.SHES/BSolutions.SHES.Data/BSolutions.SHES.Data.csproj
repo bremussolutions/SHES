@@ -17,4 +17,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BSolutions.SHES.Models\BSolutions.SHES.Models.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
 </Project>

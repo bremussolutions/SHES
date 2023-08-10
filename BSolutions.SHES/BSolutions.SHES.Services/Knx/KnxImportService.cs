@@ -254,14 +254,30 @@ namespace BSolutions.SHES.Services.Knx
 
             foreach (XElement deviceInstanceReference in deviceInstanceReferences)
             {
+                Device device = new Device() { BusType = BusType.Knx };
+
                 string refId = deviceInstanceReference.Attribute("RefId").Value;
                 var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", this._result.Data.SchemaNamespace));
                 var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
-                string deviceName = deviceInstance.Attribute("Name").Value;
-                string deviceComment = deviceInstance.Attribute("Comment")?.Value;
-                string deviceDescription = deviceInstance.Attribute("Description")?.Value;
+                
+                // Basic Infomation
+                device.Name = deviceInstance.Attribute("Name").Value;
+                device.Comment = deviceInstance.Attribute("Comment")?.Value;
+                device.Description = deviceInstance.Attribute("Description")?.Value;
 
-                devices.Add(new Device { Name = deviceName, Comment = deviceComment, Description = deviceDescription, BusType = BusType.Knx });
+                // Topology
+                string area = deviceInstance.Parent.Parent.Parent.Attribute("Address")?.Value;
+                string line = deviceInstance.Parent.Parent.Attribute("Address")?.Value;
+                string address = deviceInstance.Attribute("Address")?.Value;
+
+                if (!string.IsNullOrEmpty(area) && !string.IsNullOrEmpty(line) && !string.IsNullOrEmpty(address))
+                {
+                    device.KnxTopologyArea = Convert.ToInt32(area);
+                    device.KnxTopologyLine = Convert.ToInt32(line);
+                    device.KnxTopologyAddress = Convert.ToInt32(address);
+                }
+
+                devices.Add(device);
             }
 
             return devices;

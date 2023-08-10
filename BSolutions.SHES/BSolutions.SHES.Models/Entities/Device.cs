@@ -9,5 +9,11 @@ namespace BSolutions.SHES.Models.Entities
         public DeviceType Type { get; set; }
 
         public BusType BusType { get; set; }
+
+        public int? KnxTopologyArea { get; set; }
+
+        public int? KnxTopologyLine { get; set; }
+
+        public int? KnxTopologyAddress { get; set; }
     }
 }

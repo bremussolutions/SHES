@@ -15,7 +15,7 @@ namespace BSolutions.SHES.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Project", b =>
                 {
@@ -96,6 +96,8 @@ namespace BSolutions.SHES.Data.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("ProjectItems", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Building", b =>
@@ -136,6 +138,15 @@ namespace BSolutions.SHES.Data.Migrations
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
                     b.Property<int>("BusType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("KnxTopologyAddress")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("KnxTopologyArea")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("KnxTopologyLine")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Type")

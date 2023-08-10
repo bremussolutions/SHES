@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BSolutions.SHES.Data.Migrations
 {
+    /// <inheritdoc />
     public partial class Initial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -112,7 +114,10 @@ namespace BSolutions.SHES.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    BusType = table.Column<int>(type: "INTEGER", nullable: false)
+                    BusType = table.Column<int>(type: "INTEGER", nullable: false),
+                    KnxTopologyArea = table.Column<int>(type: "INTEGER", nullable: true),
+                    KnxTopologyLine = table.Column<int>(type: "INTEGER", nullable: true),
+                    KnxTopologyAddress = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -211,6 +216,7 @@ namespace BSolutions.SHES.Data.Migrations
                 column: "ParentId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
