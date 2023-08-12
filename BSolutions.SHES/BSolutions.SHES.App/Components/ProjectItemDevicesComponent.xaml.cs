@@ -6,13 +6,13 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace BSolutions.SHES.App.Components
 {
-    public sealed partial class LocationDetailsComponent : UserControl
+    public sealed partial class ProjectItemDevicesComponent : UserControl
     {
-        public LocationDetailsComponentModel ViewModel { get; }
+        public ProjectItemDevicesComponentModel ViewModel { get; }
 
-        public LocationDetailsComponent()
+        public ProjectItemDevicesComponent()
         {
-            ViewModel = App.GetService<LocationDetailsComponentModel>();
+            ViewModel = App.GetService<ProjectItemDevicesComponentModel>();
             this.InitializeComponent();
         }
 

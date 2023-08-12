@@ -4,9 +4,9 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace BSolutions.SHES.App.Messages
 {
-    public class CurrentLocationChangedMessage : ValueChangedMessage<ObservableProjectItem>
+    public class CurrentDevicesProjectItemChangedMessage : ValueChangedMessage<ObservableProjectItem>
     {
-        public CurrentLocationChangedMessage(ObservableProjectItem projectItem)
+        public CurrentDevicesProjectItemChangedMessage(ObservableProjectItem projectItem)
             : base(projectItem)
         {
         }

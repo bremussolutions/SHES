@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UserControl
-    x:Class="BSolutions.SHES.App.Components.LocationDetailsComponent"
+    x:Class="BSolutions.SHES.App.Components.ProjectItemDevicesComponent"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSolutions.SHES.App.Components"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:BSolutions.SHES.App.Converters"
-    xmlns:enums="using:BSolutions.SHES.Models.Enumerations"
-    xmlns:ui="using:CommunityToolkit.WinUI.UI"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     SizeChanged="UserControl_SizeChanged"
     mc:Ignorable="d">
@@ -17,7 +15,7 @@
         <converters:EnumDisplayConverter x:Key="EnumDisplayConverter"/>
     </UserControl.Resources>
 
-    <Grid ColumnDefinitions="*, 16, 300">
+    <Grid>
         <StackPanel>
             <CommandBar FlowDirection="LeftToRight" VerticalContentAlignment="Center" DefaultLabelPosition="Right">
                 <CommandBar.Content>
@@ -68,58 +66,5 @@
                 </controls:DataGrid>
             </ScrollViewer>
         </StackPanel>
-
-        <controls:GridSplitter Grid.Column="1" />
-
-        <Pivot Grid.Column="2" IsHeaderItemsCarouselEnabled="False" Margin="5 0">
-            <Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="13" />
-                </DataTemplate>
-            </Pivot.HeaderTemplate>
-            <PivotItem Header="Eigenschaften" Visibility="{x:Bind ViewModel.DevicePropertiesVisibility, Mode=OneWay}">
-                <StackPanel>
-                    <TextBlock Text="Name" FontWeight="Bold" Margin="0 10 0 5" />
-                    <TextBox Text="{x:Bind ViewModel.CurrentDevice.Name, Mode=TwoWay}"
-                                     TextChanged="{x:Bind ViewModel.InputField_ValueChanged}" />
-
-                    <TextBlock Text="Beschreibung" FontWeight="Bold" Margin="0 10 0 5" />
-                    <TextBox Text="{x:Bind ViewModel.CurrentDevice.Description, Mode=TwoWay}"
-                                     TextChanged="{x:Bind ViewModel.InputField_ValueChanged}"
-                                     TextWrapping="Wrap" AcceptsReturn="True" Height="100" />
-
-                    <TextBlock Text="Bustyp" FontWeight="Bold" Margin="0 10 0 5" />
-                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
-                                      SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
-                                      ItemsSource="{ui:EnumValues Type=enums:BusType}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
-                    <TextBlock Text="Typ" FontWeight="Bold" Margin="0 10 0 5" />
-                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
-                                      SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
-                                      ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
-                    <TextBlock Text="Hinzugefügt" FontWeight="Bold" Margin="0 10 0 5" />
-                    <TextBlock Text="{x:Bind ViewModel.CurrentDevice.CreationTime, Mode=OneWay}" />
-
-                    <TextBlock Text="Zuletzt geändert" FontWeight="Bold" Margin="0 10 0 5" />
-                    <TextBlock Text="{x:Bind ViewModel.CurrentDevice.LastModificationTime, Mode=OneWay}" />
-                </StackPanel>
-            </PivotItem>
-            <PivotItem Header="Information">
-                <TextBlock Text="Informationen werden hier präsentiert." />
-            </PivotItem>
-        </Pivot>
     </Grid>
 </UserControl>

@@ -19,7 +19,7 @@ using BSolutions.SHES.App.Messages;
 
 namespace BSolutions.SHES.App.ComponentModels
 {
-    public class LocationDetailsComponentModel : ObservableRecipient
+    public class ProjectItemDevicesComponentModel : ObservableRecipient
     {
         private readonly IDeviceService _deviceService;
         private readonly IProjectItemService _projectItemService;
@@ -34,27 +34,16 @@ namespace BSolutions.SHES.App.ComponentModels
 
         public ObservableCollection<ObservableDevice> Devices { get; private set; } = new ObservableCollection<ObservableDevice>();
 
-        private ObservableDevice _currentDevice;
-        public ObservableDevice CurrentDevice
+        private ObservableProjectItem _currentProjectItem;
+        public ObservableProjectItem CurrentProjectItem
         {
-            get => _currentDevice;
-            private set
-            {
-                SetProperty(ref _currentDevice, value);
-                OnPropertyChanged(nameof(DevicePropertiesVisibility));
-            }
-        }
-
-        private ObservableProjectItem _currentLocation;
-        public ObservableProjectItem CurrentLocation
-        {
-            get => _currentLocation;
+            get => _currentProjectItem;
             private set
             {
                 if (value != null)
                 {
-                    ObservableProjectItem previousItem = _currentLocation;
-                    SetProperty(ref _currentLocation, value);
+                    ObservableProjectItem previousItem = _currentProjectItem;
+                    SetProperty(ref _currentProjectItem, value);
 
                     if (value.Id != previousItem?.Id)
                     {
@@ -64,9 +53,14 @@ namespace BSolutions.SHES.App.ComponentModels
             }
         }
 
-        public Visibility DevicePropertiesVisibility
+        private ObservableDevice _currentDevice;
+        public ObservableDevice CurrentDevice
         {
-            get => this._currentDevice != null ? Visibility.Visible : Visibility.Collapsed;
+            get => _currentDevice;
+            private set
+            {
+                SetProperty(ref _currentDevice, value);
+            }
         }
 
         private string _dataGridFilter;
@@ -85,11 +79,11 @@ namespace BSolutions.SHES.App.ComponentModels
 
         #region --- Constructor ---
 
-        /// <summary>Initializes a new instance of the <see cref="LocationDetailsComponentModel" /> class.</summary>
-        public LocationDetailsComponentModel(IDeviceService deviceService, IProjectItemService projectItemService)
+        /// <summary>Initializes a new instance of the <see cref="ProjectItemDevicesComponentModel" /> class.</summary>
+        public ProjectItemDevicesComponentModel(IDeviceService deviceService, IProjectItemService projectItemService)
         {
             // Messages
-            WeakReferenceMessenger.Default.Register<LocationDetailsComponentModel, CurrentLocationChangedMessage>(this, (r, m) => r.CurrentLocation = m.Value);
+            WeakReferenceMessenger.Default.Register<ProjectItemDevicesComponentModel, CurrentTreeProjectItemChangedMessage>(this, (r, m) => r.CurrentProjectItem = m.Value);
 
             this._deviceService = deviceService;
             this._projectItemService = projectItemService;
@@ -110,14 +104,9 @@ namespace BSolutions.SHES.App.ComponentModels
         public void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.CurrentDevice = ((DataGrid)sender).SelectedItem as ObservableDevice;
-        }
 
-        /// <summary>Inputs the field value changed.</summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The e.</param>
-        public async void InputField_ValueChanged(object sender, object e)
-        {
-            await this._projectItemService.UpdateAsync(this._currentDevice);
+            // Set current project item
+            WeakReferenceMessenger.Default.Send(new CurrentDevicesProjectItemChangedMessage(this.CurrentDevice));
         }
 
         /// <summary>Handles the Sorting event of the DataGrid control.</summary>
@@ -184,7 +173,7 @@ namespace BSolutions.SHES.App.ComponentModels
 
         private async void LoadDevicesForLocationAsync()
         {
-            this._devicesForCurrentLocation = await this._deviceService.GetDevicesForLocationAsync(this.CurrentLocation);
+            this._devicesForCurrentLocation = await this._deviceService.GetDevicesForLocationAsync(this.CurrentProjectItem);
             this.Devices = new ObservableCollection<ObservableDevice>(this._devicesForCurrentLocation);
             this.OnPropertyChanged(nameof(this.Devices));
 

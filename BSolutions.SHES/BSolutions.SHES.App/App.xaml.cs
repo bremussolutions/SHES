@@ -90,7 +90,8 @@ namespace BSolutions.SHES.App
 
                 services.AddTransient<ProjectListComponentModel>();
                 services.AddTransient<ProjectItemTreeComponentModel>();
-                services.AddTransient<LocationDetailsComponentModel>();
+                services.AddTransient<ProjectItemDevicesComponentModel>();
+                services.AddTransient<ProjectItemMetadataComponentModel>();
                 services.AddTransient<CabinetDetailsComponentModel>();
 
                 services.AddTransient<SettingsViewModel>();

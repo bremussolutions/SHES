@@ -49,7 +49,8 @@ namespace BSolutions.SHES.App.ComponentModels
                 this.UpdateProjectItemTypes();
 
                 // Set current project item
-                WeakReferenceMessenger.Default.Send(new CurrentLocationChangedMessage(this.SelectedProjectItem));
+                WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(this.SelectedProjectItem));
+                WeakReferenceMessenger.Default.Send(new CurrentDevicesProjectItemChangedMessage(this.SelectedProjectItem));
             }
         }
 

@@ -17,7 +17,7 @@
     </Page.Resources>
     
     <Grid x:Name="ContentArea">
-        <Grid ColumnDefinitions="300, 16, *">
+        <Grid ColumnDefinitions="300, 16, *, 16, 300">
 
             <components:ProjectItemTreeComponent Margin="5 0" />
 
@@ -33,7 +33,7 @@
                     <TabViewItem.IconSource>
                         <FontIconSource FontFamily="{StaticResource MaterialDesignIcons}" Glyph="&#xF1080;" />
                     </TabViewItem.IconSource>
-                    <components:LocationDetailsComponent x:Name="LocationDetailsComponent" />
+                    <components:ProjectItemDevicesComponent x:Name="LocationDetailsComponent" />
                 </TabViewItem>
                 <TabViewItem Header="Stromlaufplan"
                                 IsClosable="False"
@@ -44,6 +44,10 @@
                     <components:CabinetDetailsComponent x:Name="CabinetDetailsComponent" />
                 </TabViewItem>
             </TabView>
+
+            <controls:GridSplitter Grid.Column="3" />
+
+            <components:ProjectItemMetadataComponent Grid.Column="4" Margin="5 0" />
         </Grid>
     </Grid>
 </Page>

@@ -29,7 +29,7 @@ namespace BSolutions.SHES.App.ViewModels
         #region --- Properties ---
 
         private ObservableProjectItem _currentLocation;
-        public ObservableProjectItem CurrentLocation
+        public ObservableProjectItem CurrentProjectItem
         {
             get => _currentLocation;
             private set
@@ -77,7 +77,7 @@ namespace BSolutions.SHES.App.ViewModels
         public BuildingStructureViewModel()
         {
             // Messages
-            WeakReferenceMessenger.Default.Register<BuildingStructureViewModel, CurrentLocationChangedMessage>(this, (r, m) => r.CurrentLocation = m.Value);
+            WeakReferenceMessenger.Default.Register<BuildingStructureViewModel, CurrentTreeProjectItemChangedMessage>(this, (r, m) => r.CurrentProjectItem = m.Value);
 
             // Device Types
             // https://code.4noobz.net/wpf-enum-binding-with-description-in-a-combobox/

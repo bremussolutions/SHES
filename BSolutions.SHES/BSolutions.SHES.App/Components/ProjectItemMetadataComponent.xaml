@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="BSolutions.SHES.App.Components.ProjectItemMetadataComponent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSolutions.SHES.App.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:CommunityToolkit.WinUI.UI"
+    xmlns:converters="using:BSolutions.SHES.App.Converters"
+    xmlns:enums="using:BSolutions.SHES.Models.Enumerations"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:EnumDisplayConverter x:Key="EnumDisplayConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <TabView Grid.Column="2"
+                 IsAddTabButtonVisible="False"
+                 TabWidthMode="SizeToContent"
+                 Margin="5 0" SelectedIndex="{x:Bind ViewModel.SelectedTabIndex, Mode=TwoWay}">
+            <TabViewItem Header="Allgemein"
+                         IsClosable="False">
+                <StackPanel>
+                    <TextBlock Text="Name" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBox Text="{x:Bind ViewModel.CurrentProjectItem.Name, Mode=TwoWay}"
+                             TextChanged="{x:Bind ViewModel.InputField_ValueChanged}" />
+
+                    <TextBlock Text="Beschreibung" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBox Text="{x:Bind ViewModel.CurrentProjectItem.Description, Mode=TwoWay}"
+                             TextChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                             TextWrapping="Wrap" AcceptsReturn="True" Height="100" />
+
+
+
+                    <TextBlock Text="Hinzugefügt" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock Text="{x:Bind ViewModel.CurrentProjectItem.CreationTime, Mode=OneWay}" />
+
+                    <TextBlock Text="Zuletzt geändert" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock Text="{x:Bind ViewModel.CurrentProjectItem.LastModificationTime, Mode=OneWay}" />
+                </StackPanel>
+            </TabViewItem>
+            <TabViewItem Header="Details"
+                         IsClosable="False"
+                         Visibility="{x:Bind ViewModel.DetailsTabVisibility, Mode=OneWay}">
+                <StackPanel>
+                    <TextBlock Text="Bustyp" FontWeight="Bold" Margin="0 10 0 5" />
+                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
+                              SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                              ItemsSource="{ui:EnumValues Type=enums:BusType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock Text="Typ" FontWeight="Bold" Margin="0 10 0 5" />
+                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
+                              SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
+                              ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </TabViewItem>
+        </TabView>
+    </Grid>
+</UserControl>

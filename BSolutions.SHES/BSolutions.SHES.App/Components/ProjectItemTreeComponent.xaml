@@ -33,14 +33,14 @@
                       VerticalScrollMode="Enabled"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">
-                <TreeView Name="ProjectElementTree" ItemsSource="{x:Bind ViewModel.ProjectItems}" Tapped="ProjectElementTree_Tapped"
+                <TreeView Name="ProjectElementTree" ItemsSource="{x:Bind ViewModel.ProjectItems, Mode=OneWay}" Tapped="ProjectElementTree_Tapped"
                           Margin="0 0 10 10">
                     <TreeView.ItemTemplate>
                         <DataTemplate x:DataType="observables:ObservableProjectItem">
-                            <TreeViewItem ItemsSource="{x:Bind Children}">
+                            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <FontIcon FontFamily="{StaticResource MaterialDesignIcons}" Glyph="{Binding Icon}" Margin="0 0 5 0" />
-                                    <TextBlock Text="{x:Bind Name}" />
+                                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" />
                                 </StackPanel>
                             </TreeViewItem>
                         </DataTemplate>
