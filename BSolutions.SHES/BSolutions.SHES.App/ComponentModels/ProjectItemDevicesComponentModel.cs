@@ -104,9 +104,6 @@ namespace BSolutions.SHES.App.ComponentModels
         public void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.CurrentDevice = ((DataGrid)sender).SelectedItem as ObservableDevice;
-
-            // Set current project item
-            WeakReferenceMessenger.Default.Send(new CurrentDevicesProjectItemChangedMessage(this.CurrentDevice));
         }
 
         /// <summary>Handles the Sorting event of the DataGrid control.</summary>
