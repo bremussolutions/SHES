@@ -297,4 +297,16 @@
   <data name="Main_ProjectList_KnxImportDialog_Password.Header" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Location.Header" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Name.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Type.Header" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemDevices_Search.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

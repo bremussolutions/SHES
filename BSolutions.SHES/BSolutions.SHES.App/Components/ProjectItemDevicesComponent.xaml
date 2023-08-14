@@ -19,10 +19,8 @@
         <StackPanel>
             <CommandBar FlowDirection="LeftToRight" VerticalContentAlignment="Center" DefaultLabelPosition="Right">
                 <CommandBar.Content>
-                    <TextBox Text="{x:Bind ViewModel.DataGridFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Suchen" MinWidth="250" />
+                    <TextBox x:Uid="BuildingStructure_ProjectItemDevices_Search" Text="{x:Bind ViewModel.DataGridFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="250" />
                 </CommandBar.Content>
-                <AppBarButton Icon="Add" Label="Hinzufügen"/>
-                <AppBarButton Icon="Delete" Label="Löschen"/>
             </CommandBar>
 
             <ScrollViewer x:Name="DataGridScrollViewer"
@@ -46,9 +44,16 @@
                                 </DataTemplate>
                             </controls:DataGridTemplateColumn.CellTemplate>
                         </controls:DataGridTemplateColumn>
-                        <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Parent.Name}" Header="Ort" Tag="Location" />
-                        <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" Tag="Name" />
-                        <controls:DataGridTextColumn Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}" Header="Typ" Tag="Type" />
+                        <controls:DataGridTextColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Location"
+                                                     IsReadOnly="True"
+                                                     Binding="{Binding Parent.Name}"
+                                                     Tag="Location" />
+                        <controls:DataGridTextColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Name"
+                                                     Binding="{Binding Name}"
+                                                     Tag="Name" />
+                        <controls:DataGridTextColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Type"
+                                                     Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}"
+                                                     Tag="Type" />
                         <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>

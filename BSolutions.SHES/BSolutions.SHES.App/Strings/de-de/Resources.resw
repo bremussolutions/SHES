@@ -126,6 +126,18 @@
   <data name="BuildingStructure.Content" xml:space="preserve">
     <value>Gebäudestruktur</value>
   </data>
+  <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Location.Header" xml:space="preserve">
+    <value>Ort</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Name.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Type.Header" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemDevices_Search.PlaceholderText" xml:space="preserve">
+    <value>Suchen</value>
+  </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>
   </data>
