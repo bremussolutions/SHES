@@ -20,32 +20,42 @@
                  IsAddTabButtonVisible="False"
                  TabWidthMode="SizeToContent"
                  Margin="5 0" SelectedIndex="{x:Bind ViewModel.SelectedTabIndex, Mode=TwoWay}">
-            <TabViewItem Header="Allgemein"
+            <TabViewItem x:Uid="BuildingStructure_ProjectItemMetadata_GeneralTab"
                          IsClosable="False">
                 <StackPanel>
-                    <TextBlock Text="Name" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_GeneralTab_Name"
+                               FontWeight="Bold"
+                               Margin="0 10 0 5" />
                     <TextBox Text="{x:Bind ViewModel.CurrentProjectItem.Name, Mode=TwoWay}"
                              TextChanged="{x:Bind ViewModel.InputField_ValueChanged}" />
 
-                    <TextBlock Text="Beschreibung" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_GeneralTab_Description"
+                               FontWeight="Bold"
+                               Margin="0 10 0 5" />
                     <TextBox Text="{x:Bind ViewModel.CurrentProjectItem.Description, Mode=TwoWay}"
                              TextChanged="{x:Bind ViewModel.InputField_ValueChanged}"
                              TextWrapping="Wrap" AcceptsReturn="True" Height="100" />
 
 
 
-                    <TextBlock Text="Hinzugefügt" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_GeneralTab_CreationDate"
+                               FontWeight="Bold"
+                               Margin="0 10 0 5" />
                     <TextBlock Text="{x:Bind ViewModel.CurrentProjectItem.CreationTime, Mode=OneWay}" />
 
-                    <TextBlock Text="Zuletzt geändert" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_GeneralTab_LastModificationDate"
+                               FontWeight="Bold" 
+                               Margin="0 10 0 5" />
                     <TextBlock Text="{x:Bind ViewModel.CurrentProjectItem.LastModificationTime, Mode=OneWay}" />
                 </StackPanel>
             </TabViewItem>
-            <TabViewItem Header="Details"
+            <TabViewItem x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab"
                          IsClosable="False"
                          Visibility="{x:Bind ViewModel.DetailsTabVisibility, Mode=OneWay}">
                 <StackPanel>
-                    <TextBlock Text="Bustyp" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType"
+                               FontWeight="Bold"
+                               Margin="0 10 0 5" />
                     <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
                               SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
                               ItemsSource="{ui:EnumValues Type=enums:BusType}">
@@ -56,7 +66,9 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Text="Typ" FontWeight="Bold" Margin="0 10 0 5" />
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab_Type"
+                               FontWeight="Bold"
+                               Margin="0 10 0 5" />
                     <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
                               SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
                               ItemsSource="{ui:EnumValues Type=enums:DeviceType}">

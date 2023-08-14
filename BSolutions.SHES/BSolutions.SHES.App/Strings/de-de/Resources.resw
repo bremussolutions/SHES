@@ -126,6 +126,12 @@
   <data name="BuildingStructure.Content" xml:space="preserve">
     <value>Gebäudestruktur</value>
   </data>
+  <data name="BuildingStructure_CabinetTab.Header" xml:space="preserve">
+    <value>Schaltschrankaufbau</value>
+  </data>
+  <data name="BuildingStructure_DevicesTab.Header" xml:space="preserve">
+    <value>Geräte</value>
+  </data>
   <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Location.Header" xml:space="preserve">
     <value>Ort</value>
   </data>
@@ -137,6 +143,63 @@
   </data>
   <data name="BuildingStructure_ProjectItemDevices_Search.PlaceholderText" xml:space="preserve">
     <value>Suchen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab.Header" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType.Text" xml:space="preserve">
+    <value>Bustyp</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_Type.Text" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab.Header" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_CreationDate.Text" xml:space="preserve">
+    <value>Erstellt am</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_Description.Text" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_LastModificationDate.Text" xml:space="preserve">
+    <value>Geändert am</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_Name.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add.Label" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog.CloseButtonText" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog.PrimaryButtonText" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog.Title" xml:space="preserve">
+    <value>Neues Element hinzufügen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Name.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type.Header" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type.PlaceholderText" xml:space="preserve">
+    <value>Wählen Sie einen Typ</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete.Label" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Cancel.Content" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete.Content" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Info.Text" xml:space="preserve">
+    <value>Möchten Sie das Element wirklich löschen?</value>
   </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>

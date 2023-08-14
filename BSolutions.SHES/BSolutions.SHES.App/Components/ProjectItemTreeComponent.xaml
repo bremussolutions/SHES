@@ -10,17 +10,21 @@
 
     <StackPanel>
         <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Add" Label="Hinzufügen"
+            <AppBarButton x:Uid="BuildingStructure_ProjectItemTree_Commands_Add" Icon="Add"
                           Command="{x:Bind ViewModel.AddProjectItemDialogCommand}"
                           CommandParameter="{Binding ElementName=AddProjectItemDialog}" />
-            <AppBarButton Icon="Delete" Label="Löschen">
+            <AppBarButton x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete" Icon="Delete">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <StackPanel>
-                            <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="Möchten Sie das markierte Element wirklich löschen?" Margin="0,0,0,12" />
+                            <TextBlock x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Info"
+                                       Style="{ThemeResource BaseTextBlockStyle}"
+                                       Margin="0,0,0,12" />
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Löschen" Style="{StaticResource AccentButtonStyle}" Margin="0 0 5 0" />
-                                <Button Content="Abbrechen" />
+                                <Button x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete"
+                                        Style="{StaticResource AccentButtonStyle}"
+                                        Margin="0 0 5 0" />
+                                <Button x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Cancel" />
                             </StackPanel>
                         </StackPanel>
                     </Flyout>
@@ -33,7 +37,9 @@
                       VerticalScrollMode="Enabled"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">
-                <TreeView Name="ProjectElementTree" ItemsSource="{x:Bind ViewModel.ProjectItems, Mode=OneWay}" Tapped="ProjectElementTree_Tapped"
+                <TreeView Name="ProjectElementTree"
+                          ItemsSource="{x:Bind ViewModel.ProjectItems, Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.SelectedProjectItem, Mode=TwoWay}"
                           Margin="0 0 10 10">
                     <TreeView.ItemTemplate>
                         <DataTemplate x:DataType="observables:ObservableProjectItem">
@@ -48,23 +54,22 @@
                 </TreeView>
         </ScrollViewer>
 
-        <!-- DIALOG: New Project -->
+        <!-- DIALOG: New Project Item -->
         <ContentDialog x:Name="AddProjectItemDialog"
-                       Title="Neues Element hinzufügen"
-                       PrimaryButtonText="Hinzufügen"
-                       CloseButtonText="Abbrechen"
+                       x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog"
                        DefaultButton="Primary"
                        PrimaryButtonCommand="{x:Bind ViewModel.AddProjectItemCommand}">
             <StackPanel>
-                <ComboBox Header="Typ"
-                          PlaceholderText="Wählen Sie einen Typ"
+                <ComboBox x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type"
                           ItemsSource="{x:Bind ViewModel.RestrictedProjectItemInfos}"
                           SelectedItem="{x:Bind ViewModel.NewProjectItemType, Mode=TwoWay}"
                           DisplayMemberPath="DisplayName"
                           Width="300"
                           Margin="0 0 0 10" />
 
-                <TextBox Header="Bezeichnung" Text="{x:Bind ViewModel.NewProjectItemName, Mode=TwoWay}" Width="300" />
+                <TextBox x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Name"
+                         Text="{x:Bind ViewModel.NewProjectItemName, Mode=TwoWay}"
+                         Width="300" />
             </StackPanel>
         </ContentDialog>
     </StackPanel>

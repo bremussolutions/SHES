@@ -31,11 +31,6 @@ namespace BSolutions.SHES.App.Components
             this.InitializeComponent();
         }
 
-        private void ProjectElementTree_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            this.ViewModel.SelectedProjectItem = this.ProjectElementTree.SelectedItem as ObservableProjectItem;
-        }
-
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.ProjectElementTreeScrollViewer.Height = e.NewSize.Height - 50;

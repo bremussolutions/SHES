@@ -27,7 +27,7 @@
                         IsAddTabButtonVisible="False"
                         TabWidthMode="SizeToContent"
                         Margin="5 0">
-                <TabViewItem Header="Devices"
+                <TabViewItem x:Uid="BuildingStructure_DevicesTab"
                              IsClosable="False"
                              Visibility="{x:Bind ViewModel.LocationTabVisibility, Mode=OneWay}">
                     <TabViewItem.IconSource>
@@ -35,7 +35,7 @@
                     </TabViewItem.IconSource>
                     <components:ProjectItemDevicesComponent x:Name="LocationDetailsComponent" />
                 </TabViewItem>
-                <TabViewItem Header="Stromlaufplan"
+                <TabViewItem x:Uid="BuildingStructure_CabinetTab"
                                 IsClosable="False"
                                 Visibility="{x:Bind ViewModel.CabinetTabVisibility, Mode=OneWay}">
                     <TabViewItem.IconSource>

@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BSolutions.SHES.App.ComponentModels
@@ -100,6 +101,7 @@ namespace BSolutions.SHES.App.ComponentModels
         {
             var projectItems = await this._projectItemService.GetProjectItemsAsync(this.CurrentProject, true);
             this.ProjectItems.AddRange(projectItems);
+            this.SelectedProjectItem = projectItems.FirstOrDefault();
         }
 
         #endregion

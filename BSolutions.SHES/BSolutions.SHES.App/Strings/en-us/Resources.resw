@@ -297,6 +297,12 @@
   <data name="Main_ProjectList_KnxImportDialog_Password.Header" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="BuildingStructure_CabinetTab.Header" xml:space="preserve">
+    <value>Cabinet Design</value>
+  </data>
+  <data name="BuildingStructure_DevicesTab.Header" xml:space="preserve">
+    <value>Devices</value>
+  </data>
   <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Location.Header" xml:space="preserve">
     <value>Location</value>
   </data>
@@ -308,5 +314,62 @@
   </data>
   <data name="BuildingStructure_ProjectItemDevices_Search.PlaceholderText" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab.Header" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType.Text" xml:space="preserve">
+    <value>Bus Type</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_Type.Text" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab.Header" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_CreationDate.Text" xml:space="preserve">
+    <value>Creation</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_Description.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_LastModificationDate.Text" xml:space="preserve">
+    <value>Last Modification</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemMetadata_GeneralTab_Name.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add.Label" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog.PrimaryButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog.Title" xml:space="preserve">
+    <value>Add new Project Item</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Name.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type.Header" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type.PlaceholderText" xml:space="preserve">
+    <value>Choose a type</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete.Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Cancel.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Info.Text" xml:space="preserve">
+    <value>Do you really want to delete the selected item?</value>
   </data>
 </root>
