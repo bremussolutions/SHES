@@ -150,8 +150,8 @@
   <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType.Text" xml:space="preserve">
     <value>Bustyp</value>
   </data>
-  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_Type.Text" xml:space="preserve">
-    <value>Typ</value>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_DeviceType.Text" xml:space="preserve">
+    <value>Gerätetyp</value>
   </data>
   <data name="BuildingStructure_ProjectItemMetadata_GeneralTab.Header" xml:space="preserve">
     <value>Allgemein</value>

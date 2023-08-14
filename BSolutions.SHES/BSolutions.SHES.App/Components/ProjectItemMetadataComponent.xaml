@@ -53,12 +53,12 @@
                          IsClosable="False"
                          Visibility="{x:Bind ViewModel.DetailsTabVisibility, Mode=OneWay}">
                 <StackPanel>
-                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType"
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab_DeviceType"
                                FontWeight="Bold"
                                Margin="0 10 0 5" />
-                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
+                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
                               SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
-                              ItemsSource="{ui:EnumValues Type=enums:BusType}">
+                              ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
@@ -66,12 +66,12 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab_Type"
+                    <TextBlock x:Uid="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType"
                                FontWeight="Bold"
                                Margin="0 10 0 5" />
-                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.Type, Mode=TwoWay}"
+                    <ComboBox SelectedItem="{x:Bind ViewModel.CurrentDevice.BusType, Mode=TwoWay}"
                               SelectionChanged="{x:Bind ViewModel.InputField_ValueChanged}"
-                              ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
+                              ItemsSource="{ui:EnumValues Type=enums:BusType}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />

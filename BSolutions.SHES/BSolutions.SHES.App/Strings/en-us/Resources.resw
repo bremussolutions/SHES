@@ -321,8 +321,8 @@
   <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_BusType.Text" xml:space="preserve">
     <value>Bus Type</value>
   </data>
-  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_Type.Text" xml:space="preserve">
-    <value>Type</value>
+  <data name="BuildingStructure_ProjectItemMetadata_DetailsTab_DeviceType.Text" xml:space="preserve">
+    <value>Device Type</value>
   </data>
   <data name="BuildingStructure_ProjectItemMetadata_GeneralTab.Header" xml:space="preserve">
     <value>General</value>
