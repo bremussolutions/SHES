@@ -6,10 +6,12 @@ using BSolutions.SHES.Services.ProjectItems;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -19,6 +21,7 @@ namespace BSolutions.SHES.App.ComponentModels
     {
         private readonly IProjectItemService _projectItemService;
         private readonly IDeviceService _deviceService;
+        private ObservableProjectItem _freezedProjectItem;
 
         #region --- Properties ---
 
@@ -89,12 +92,27 @@ namespace BSolutions.SHES.App.ComponentModels
 
         #region --- Events ---
 
-        /// <summary>Inputs the field value changed.</summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The e.</param>
-        public async void InputField_ValueChanged(object sender, object e)
+        /// <summary>
+        /// This event freezes the current project item because when the item is changed in the tree view,
+        /// the CurrentProjectItem property is changed first before the LostFocus event is called.
+        /// </summary>
+        /// <param name="sender">The event-sending input element.</param>
+        /// <param name="e">The event parameters.</param>
+        /// <remarks>The problem is that when changing an item in the tree view, the CurrentProjectItem is
+        /// changed first and only then the LostFocus event is called.</remarks>
+        public void InputField_GotFocus(object sender, object e)
         {
-            await this._projectItemService.UpdateAsync(this.CurrentProjectItem);
+            this._freezedProjectItem = this.CurrentProjectItem;
+        }
+
+        /// <summary>
+        /// This event is called when leaving the focus from a metadata input field and saves the changed project item.
+        /// </summary>
+        /// <param name="sender">The event-sending input element.</param>
+        /// <param name="e">The event parameters.</param>
+        public async void InputField_LostFocus(object sender, object e)
+        {
+            await this._projectItemService.UpdateAsync(this._freezedProjectItem);
         }
 
         #endregion

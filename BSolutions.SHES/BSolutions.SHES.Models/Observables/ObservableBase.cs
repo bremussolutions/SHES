@@ -41,15 +41,15 @@ namespace BSolutions.SHES.Models.Observables
         {
             this.entity = entity;
 
-            this.PropertyChanged += StudyGroup_PropertyChanged;
-            this.ErrorsChanged += StudyGroup_ErrorsChanged;
+            this.PropertyChanged += ObservableBase_PropertyChanged;
+            this.ErrorsChanged += ObservableBase_ErrorsChanged;
         }
 
         #endregion
 
         #region --- Events ---
 
-        private void StudyGroup_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ObservableBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(HasErrors))
             {
@@ -57,7 +57,7 @@ namespace BSolutions.SHES.Models.Observables
             }
         }
 
-        private void StudyGroup_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        private void ObservableBase_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Errors));
         }
