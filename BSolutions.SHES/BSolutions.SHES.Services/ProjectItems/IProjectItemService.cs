@@ -12,5 +12,6 @@ namespace BSolutions.SHES.Services.ProjectItems
         Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject, bool includeDevices = false);
         Task<ObservableProjectItem> UpdateAsync(ObservableProjectItem observableProjectItem);
         Task UpdateRangeAsync(ObservableCollection<ObservableProjectItem> observableProjectItems);
+        Task<bool> DeleteAsync(ObservableProjectItem observableProjectItem);
     }
 }

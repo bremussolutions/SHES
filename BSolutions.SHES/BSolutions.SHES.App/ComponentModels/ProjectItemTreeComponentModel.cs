@@ -26,6 +26,7 @@ namespace BSolutions.SHES.App.ComponentModels
 
         public IAsyncRelayCommand AddProjectItemDialogCommand { get; }
         public IAsyncRelayCommand AddProjectItemCommand { get; }
+        public IAsyncRelayCommand DeleteProjectItemCommand { get; }
 
         public ObservableCollection<ObservableProjectItem> ProjectItems { get; } = new ObservableCollection<ObservableProjectItem>();
         public ObservableCollection<ProjectItemTypeInfo> RestrictedProjectItemInfos { get; } = new ObservableCollection<ProjectItemTypeInfo>();
@@ -50,8 +51,8 @@ namespace BSolutions.SHES.App.ComponentModels
                 this.UpdateProjectItemTypes();
 
                 // Set current project item
-                WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(this.SelectedProjectItem));
-                WeakReferenceMessenger.Default.Send(new CurrentDevicesProjectItemChangedMessage(this.SelectedProjectItem));
+                WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(value));
+                WeakReferenceMessenger.Default.Send(new CurrentDevicesProjectItemChangedMessage(value));
             }
         }
 
@@ -88,6 +89,7 @@ namespace BSolutions.SHES.App.ComponentModels
             // Commands
             AddProjectItemDialogCommand = new AsyncRelayCommand<ContentDialog>(async (dialog) => await AddProjectItemDialog(dialog));
             AddProjectItemCommand = new AsyncRelayCommand(AddProjectItem);
+            DeleteProjectItemCommand = new AsyncRelayCommand(DeleteProjectItem);
 
             // Messages
             WeakReferenceMessenger.Default.Register<ProjectItemTreeComponentModel, CurrentProjectChangedMessage>(this, (r, m) => r.CurrentProject = m.Value);
@@ -127,6 +129,16 @@ namespace BSolutions.SHES.App.ComponentModels
 
             // Add new project item to project tree
             this.SelectedProjectItem.Children.Add(item);
+        }
+
+        private async Task DeleteProjectItem()
+        {
+            ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
+                .FirstOrDefault(pi => pi.Id == this.SelectedProjectItem.Parent.Id);
+
+            await this._projectItemService.DeleteAsync(this.SelectedProjectItem);
+            parent.Children.Remove(this.SelectedProjectItem);
+            this.SelectedProjectItem = parent;
         }
 
         #endregion

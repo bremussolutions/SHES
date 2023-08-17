@@ -33,7 +33,7 @@ namespace BSolutions.SHES.Data.Repositories.Devices
 
                 if (parent != null)
                 { 
-                    return parent.Children.Traverse(pi => pi.Children)
+                    return parent.Children.Traverse(pi => pi.Children, typeof(Device))
                         .Cast<Device>()
                         .ToList();
                 }

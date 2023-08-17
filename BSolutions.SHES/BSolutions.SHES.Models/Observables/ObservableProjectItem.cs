@@ -62,5 +62,10 @@ namespace BSolutions.SHES.Models.Observables
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return $"{this.GetType().Name} ({this.Id}): {this.Name}";
+        }
     }
 }

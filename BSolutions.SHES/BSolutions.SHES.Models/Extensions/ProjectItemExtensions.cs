@@ -45,13 +45,28 @@ namespace BSolutions.SHES.Models.Extensions
             return result;
         }
 
-        public static IEnumerable<T> Traverse<T>(this IEnumerable<T> items, Func<T, IEnumerable<T>> childSelector)
+        /// <summary>
+        /// This method reads a hierarchical structure and transforms it into a flat list.
+        /// </summary>
+        /// <typeparam name="T">The content type of the list.</typeparam>
+        /// <param name="items">The items of the list from the first hierarchy level.</param>
+        /// <param name="childSelector">The child selector.</param>
+        /// <param name="filterType">The type which should be considered exclusively.</param>
+        /// <returns>Returns a flat list of a hierarchical order.</returns>
+        public static IEnumerable<T> Traverse<T>(this IEnumerable<T> items, Func<T, IEnumerable<T>> childSelector, Type filterType = null)
         {
             var stack = new Stack<T>(items);
             while (stack.Any())
             {
                 var next = stack.Pop();
-                if (next.GetType() == typeof(Device))
+                if (filterType != null)
+                {
+                    if(next.GetType() == filterType)
+                    {
+                        yield return next;
+                    }
+                }
+                else
                 {
                     yield return next;
                 }

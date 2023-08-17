@@ -22,6 +22,7 @@
                                        Margin="0,0,0,12" />
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete"
+                                        Command="{x:Bind ViewModel.DeleteProjectItemCommand}"
                                         Style="{StaticResource AccentButtonStyle}"
                                         Margin="0 0 5 0" />
                                 <Button x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Cancel" />

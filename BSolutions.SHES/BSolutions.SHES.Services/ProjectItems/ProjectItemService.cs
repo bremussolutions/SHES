@@ -86,5 +86,18 @@ namespace BSolutions.SHES.Services.ProjectItems
                 return null;
             }
         }
+
+        public async Task<bool> DeleteAsync(ObservableProjectItem observableProjectItem)
+        {
+            try
+            {
+                await this._projectItemRepository.DeleteAsync(observableProjectItem.entity);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
