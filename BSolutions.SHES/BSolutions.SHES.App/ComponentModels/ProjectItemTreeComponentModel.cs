@@ -117,7 +117,9 @@ namespace BSolutions.SHES.App.ComponentModels
             await dialog.ShowAsync();
         }
 
-        /// <summary>Adds a project item.</summary>
+        /// <summary>
+        /// Adds a new project item as child of the selected project item.
+        /// </summary>
         private async Task AddProjectItem()
         {
             ObservableProjectItem item = new ObservableProjectItem(ReflectionHelper.GetInstance<ProjectItem>(this.NewProjectItemType.FullName));
@@ -131,6 +133,9 @@ namespace BSolutions.SHES.App.ComponentModels
             this.SelectedProjectItem.Children.Add(item);
         }
 
+        /// <summary>
+        /// Deletes the selected project item.
+        /// </summary>
         private async Task DeleteProjectItem()
         {
             ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
