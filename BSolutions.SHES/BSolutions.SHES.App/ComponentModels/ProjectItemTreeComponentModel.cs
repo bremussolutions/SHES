@@ -89,7 +89,7 @@ namespace BSolutions.SHES.App.ComponentModels
             // Commands
             AddProjectItemDialogCommand = new AsyncRelayCommand<ContentDialog>(async (dialog) => await AddProjectItemDialog(dialog));
             AddProjectItemCommand = new AsyncRelayCommand(AddProjectItem);
-            DeleteProjectItemCommand = new AsyncRelayCommand(DeleteProjectItem);
+            DeleteProjectItemCommand = new AsyncRelayCommand<Flyout>(async (flyout) => await DeleteProjectItem(flyout));
 
             // Messages
             WeakReferenceMessenger.Default.Register<ProjectItemTreeComponentModel, CurrentProjectChangedMessage>(this, (r, m) => r.CurrentProject = m.Value);
@@ -136,7 +136,7 @@ namespace BSolutions.SHES.App.ComponentModels
         /// <summary>
         /// Deletes the selected project item.
         /// </summary>
-        private async Task DeleteProjectItem()
+        private async Task DeleteProjectItem(Flyout flyout)
         {
             ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
                 .FirstOrDefault(pi => pi.Id == this.SelectedProjectItem.Parent.Id);
@@ -144,6 +144,8 @@ namespace BSolutions.SHES.App.ComponentModels
             await this._projectItemService.DeleteAsync(this.SelectedProjectItem);
             parent.Children.Remove(this.SelectedProjectItem);
             this.SelectedProjectItem = parent;
+
+            flyout.Hide();
         }
 
         #endregion

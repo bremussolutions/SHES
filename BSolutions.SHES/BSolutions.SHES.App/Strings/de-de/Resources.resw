@@ -192,9 +192,6 @@
   <data name="BuildingStructure_ProjectItemTree_Commands_Delete.Label" xml:space="preserve">
     <value>Löschen</value>
   </data>
-  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Cancel.Content" xml:space="preserve">
-    <value>Abbrechen</value>
-  </data>
   <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete.Content" xml:space="preserve">
     <value>Löschen</value>
   </data>
