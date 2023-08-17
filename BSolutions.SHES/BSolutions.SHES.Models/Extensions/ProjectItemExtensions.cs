@@ -7,19 +7,25 @@ using System.Linq;
 
 namespace BSolutions.SHES.Models.Extensions
 {
+    /// <summary>
+    /// Provides enhancements in handling project items.
+    /// </summary>
     public static class ProjectItemExtensions
     {
         /// <summary>Gets the restrict children types of a project item.</summary>
         /// <param name="projectItem">The project item.</param>
-        /// <returns>
-        ///   Returns the restricted children types of a project item.
-        /// </returns>
+        /// <returns>Returns the restricted children types of a project item.</returns>
         public static List<Type> GetRestrictChildrenTypes(this ProjectItem projectItem)
         {
             return projectItem.GetType()
                 .GetAttributeValue((RestrictChildrenAttribute attr) => attr.RestrictedChildrenTypes);
         }
 
+        /// <summary>
+        /// Reads out the restricted project items that are valid as child for the current item.
+        /// </summary>
+        /// <param name="projectItem">The parent project item.</param>
+        /// <returns>Returns a list of allowed child item types.</returns>
         public static List<ProjectItemTypeInfo> GetRestrictChildrenInfos(this ProjectItem projectItem)
         {
             List<ProjectItemTypeInfo> result = new();
