@@ -40,7 +40,6 @@ namespace BSolutions.SHES.Models.Observables
         public ObservableProjectItem Parent
         {
             get => new(entity.Parent);
-            set => SetProperty(entity.Parent, value.entity, entity, (u, n) => u.Parent = n);
         }
 
         #endregion

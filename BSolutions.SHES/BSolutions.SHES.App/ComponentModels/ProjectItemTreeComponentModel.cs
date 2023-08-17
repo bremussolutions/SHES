@@ -119,7 +119,7 @@ namespace BSolutions.SHES.App.ComponentModels
         private async Task AddProjectItem()
         {
             ObservableProjectItem item = new ObservableProjectItem(ReflectionHelper.GetInstance<ProjectItem>(this.NewProjectItemType.FullName));
-            item.Parent = this.SelectedProjectItem;
+            item.entity.ParentId = this.SelectedProjectItem.Id;
             item.Name = this.NewProjectItemName;
 
             // Insert new project item
