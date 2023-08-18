@@ -20,6 +20,7 @@ using BSolutions.SHES.Services.Projects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.ApplicationModel.Resources;
 using System.Globalization;
@@ -38,11 +39,18 @@ namespace BSolutions.SHES.App
         // https://docs.microsoft.com/dotnet/core/extensions/logging
         private static IHost _host = Host
             .CreateDefaultBuilder()
+            .ConfigureLogging((context, logging) =>
+            {
+                logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                logging.ClearProviders();
+                logging.AddConsole();
+                logging.AddDebug();
+            })
             .ConfigureServices((context, services) =>
             {
                 // Default Activation Handler
                 services.AddTransient<ActivationHandler<LaunchActivatedEventArgs>, DefaultActivationHandler>();
-
+                
                 // Database
                 services.AddDbContext<ShesDbContext>(options =>
                 {
