@@ -1,4 +1,5 @@
 ﻿using BSolutions.SHES.App.Messages;
+using BSolutions.SHES.App.ViewModels;
 using BSolutions.SHES.Models;
 using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Extensions;
@@ -15,11 +16,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 
 namespace BSolutions.SHES.App.ComponentModels
 {
     public class ProjectItemTreeComponentModel : ObservableRecipient
     {
+        private readonly ResourceLoader _resourceLoader;
         private readonly IProjectItemService _projectItemService;
 
         #region --- Properties ---
@@ -86,6 +89,9 @@ namespace BSolutions.SHES.App.ComponentModels
         {
             this._projectItemService = projectItemService;
 
+            // Resource Loader
+            this._resourceLoader = ResourceLoader.GetForViewIndependentUse();
+
             // Commands
             AddProjectItemDialogCommand = new AsyncRelayCommand<ContentDialog>(async (dialog) => await AddProjectItemDialog(dialog));
             AddProjectItemCommand = new AsyncRelayCommand(AddProjectItem);
@@ -138,12 +144,25 @@ namespace BSolutions.SHES.App.ComponentModels
         /// </summary>
         private async Task DeleteProjectItem(Flyout flyout)
         {
-            ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
-                .FirstOrDefault(pi => pi.Id == this.SelectedProjectItem.Parent.Id);
+            if (this.SelectedProjectItem.Id != this.ProjectItems.First().Id)
+            {
+                ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
+                    .FirstOrDefault(pi => pi.Id == this.SelectedProjectItem.Parent.Id);
 
-            await this._projectItemService.DeleteAsync(this.SelectedProjectItem);
-            parent.Children.Remove(this.SelectedProjectItem);
-            this.SelectedProjectItem = parent;
+                await this._projectItemService.DeleteAsync(this.SelectedProjectItem);
+                parent.Children.Remove(this.SelectedProjectItem);
+                this.SelectedProjectItem = parent;
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel
+                {
+                    IsOpen = true,
+                    Severity = InfoBarSeverity.Error,
+                    Title = this._resourceLoader.GetString("Shell_AppInfoBar_Error"),
+                    Message = this._resourceLoader.GetString("BuildingStructure_ProjectItemTree_LastItemNotDeletable")
+                }));
+            }
 
             flyout.Hide();
         }

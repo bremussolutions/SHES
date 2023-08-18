@@ -198,6 +198,9 @@
   <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Info.Text" xml:space="preserve">
     <value>Möchten Sie das Element wirklich löschen?</value>
   </data>
+  <data name="BuildingStructure_ProjectItemTree_LastItemNotDeletable" xml:space="preserve">
+    <value>Das letzte Projektelement kann nicht gelöscht werden.</value>
+  </data>
   <data name="ListDetails.ListHeader" xml:space="preserve">
     <value>ListDetails</value>
   </data>
