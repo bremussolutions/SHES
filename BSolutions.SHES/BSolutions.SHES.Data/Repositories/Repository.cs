@@ -125,6 +125,7 @@ namespace BSolutions.SHES.Data.Repositories
             {
                 await this._dbContext.AddAsync(entity);
                 await this._dbContext.SaveChangesAsync();
+                this._logger.LogInformation($"A new entity (Id: {entity.Id}) was added.");
             }
             catch (Exception ex)
             {
@@ -149,8 +150,8 @@ namespace BSolutions.SHES.Data.Repositories
 
                 // set Modified flag in your entry
                 this._dbContext.Entry(entity).State = EntityState.Modified;
-
                 await this._dbContext.SaveChangesAsync();
+                this._logger.LogInformation($"An existing entity (Id: {entity.Id}) was updated.");
             }
             catch (Exception ex)
             {
@@ -166,9 +167,10 @@ namespace BSolutions.SHES.Data.Repositories
             try
             {
                 this.DetachEntity(entity);
-
                 this._dbContext.Remove(entity);
                 await this._dbContext.SaveChangesAsync();
+
+                this._logger.LogInformation($"An existing entity (Id: {entity.Id}) was deleted.");
             }
             catch (Exception ex)
             {

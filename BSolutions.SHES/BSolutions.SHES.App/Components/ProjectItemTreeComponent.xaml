@@ -15,20 +15,8 @@
                           Command="{x:Bind ViewModel.AddProjectItemDialogCommand}"
                           CommandParameter="{Binding ElementName=AddProjectItemDialog}" />
             <AppBarButton x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete"
+                          Command="{x:Bind ViewModel.DeleteProjectItemCommand}"
                           Icon="Delete">
-                <AppBarButton.Flyout>
-                    <Flyout x:Name="DeleteProjectItemFlyout">
-                        <StackPanel>
-                            <TextBlock x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Info"
-                                       Style="{ThemeResource BaseTextBlockStyle}"
-                                       Margin="0,0,0,12" />
-                            <Button x:Uid="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete"
-                                    Click="Button_Click"
-                                    Style="{StaticResource AccentButtonStyle}"
-                                    Margin="0 0 5 0" />
-                        </StackPanel>
-                    </Flyout>
-                </AppBarButton.Flyout>
             </AppBarButton>
         </CommandBar>
 

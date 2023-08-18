@@ -23,6 +23,8 @@ namespace BSolutions.SHES.Data.Repositories.Devices
 
         #endregion
 
+        #region --- IDeviceRepository ---
+
         public async Task<List<Device>> GetDevicesForLocationAsync(ProjectItem projectItem)
         {
             try
@@ -47,6 +49,6 @@ namespace BSolutions.SHES.Data.Repositories.Devices
             }
         }
 
-        
+        #endregion
     }
 }

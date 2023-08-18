@@ -363,13 +363,4 @@
   <data name="BuildingStructure_ProjectItemTree_Commands_Delete.Label" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Delete.Content" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="BuildingStructure_ProjectItemTree_Commands_Delete_Confirmation_Info.Text" xml:space="preserve">
-    <value>Do you really want to delete the selected item?</value>
-  </data>
-  <data name="BuildingStructure_ProjectItemTree_LastItemNotDeletable" xml:space="preserve">
-    <value>The last project item cannot be deleted.</value>
-  </data>
 </root>

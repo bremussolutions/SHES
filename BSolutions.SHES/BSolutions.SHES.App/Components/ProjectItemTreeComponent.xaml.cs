@@ -35,10 +35,5 @@ namespace BSolutions.SHES.App.Components
         {
             this.ProjectElementTreeScrollViewer.Height = e.NewSize.Height - 50;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.ViewModel.DeleteProjectItemCommand.Execute(DeleteProjectItemFlyout);
-        }
     }
 }

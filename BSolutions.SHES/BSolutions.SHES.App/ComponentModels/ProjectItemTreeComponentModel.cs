@@ -51,6 +51,7 @@ namespace BSolutions.SHES.App.ComponentModels
             set
             {
                 SetProperty(ref _selectedProjectItem, value);
+                DeleteProjectItemCommand.NotifyCanExecuteChanged();
                 this.UpdateProjectItemTypes();
 
                 // Set current project item
@@ -95,7 +96,7 @@ namespace BSolutions.SHES.App.ComponentModels
             // Commands
             AddProjectItemDialogCommand = new AsyncRelayCommand<ContentDialog>(async (dialog) => await AddProjectItemDialog(dialog));
             AddProjectItemCommand = new AsyncRelayCommand(AddProjectItem);
-            DeleteProjectItemCommand = new AsyncRelayCommand<Flyout>(async (flyout) => await DeleteProjectItem(flyout));
+            DeleteProjectItemCommand = new AsyncRelayCommand(async () => await DeleteProjectItem(), CanDeleteProjectItem);
 
             // Messages
             WeakReferenceMessenger.Default.Register<ProjectItemTreeComponentModel, CurrentProjectChangedMessage>(this, (r, m) => r.CurrentProject = m.Value);
@@ -142,29 +143,19 @@ namespace BSolutions.SHES.App.ComponentModels
         /// <summary>
         /// Deletes the selected project item.
         /// </summary>
-        private async Task DeleteProjectItem(Flyout flyout)
+        private async Task DeleteProjectItem()
         {
-            if (this.SelectedProjectItem.Id != this.ProjectItems.First().Id)
-            {
-                ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
-                    .FirstOrDefault(pi => pi.Id == this.SelectedProjectItem.Parent.Id);
+            ObservableProjectItem parent = this.ProjectItems.Traverse(pi => pi.Children)
+                .FirstOrDefault(pi => pi.Id == this.SelectedProjectItem.Parent.Id);
 
-                await this._projectItemService.DeleteAsync(this.SelectedProjectItem);
-                parent.Children.Remove(this.SelectedProjectItem);
-                this.SelectedProjectItem = parent;
-            }
-            else
-            {
-                WeakReferenceMessenger.Default.Send(new ApplicationInfoBarChangedMessage(new AppInfoBarViewModel
-                {
-                    IsOpen = true,
-                    Severity = InfoBarSeverity.Error,
-                    Title = this._resourceLoader.GetString("Shell_AppInfoBar_Error"),
-                    Message = this._resourceLoader.GetString("BuildingStructure_ProjectItemTree_LastItemNotDeletable")
-                }));
-            }
+            await this._projectItemService.DeleteAsync(this.SelectedProjectItem);
+            parent.Children.Remove(this.SelectedProjectItem);
+            this.SelectedProjectItem = parent;
+        }
 
-            flyout.Hide();
+        private bool CanDeleteProjectItem()
+        {
+            return this.SelectedProjectItem != null && this.SelectedProjectItem.Id != this.ProjectItems.First().Id;
         }
 
         #endregion
