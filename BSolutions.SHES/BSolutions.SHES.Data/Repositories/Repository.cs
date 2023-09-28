@@ -166,9 +166,9 @@ namespace BSolutions.SHES.Data.Repositories
         {
             try
             {
-                this.DetachEntity(entity);
                 this._dbContext.Remove(entity);
                 await this._dbContext.SaveChangesAsync();
+                this._dbContext.ChangeTracker.Clear();
 
                 this._logger.LogInformation($"An existing entity (Id: {entity.Id}) was deleted.");
             }
