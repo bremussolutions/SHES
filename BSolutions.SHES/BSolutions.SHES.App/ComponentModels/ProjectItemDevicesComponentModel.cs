@@ -45,10 +45,10 @@ namespace BSolutions.SHES.App.ComponentModels
                     ObservableProjectItem previousItem = _currentProjectItem;
                     SetProperty(ref _currentProjectItem, value);
 
-                    if (value.Id != previousItem?.Id)
-                    {
+                    //if (value.Id != previousItem?.Id)
+                    //{
                         this.LoadDevicesForLocationAsync();
-                    }
+                    //}
                 }
             }
         }

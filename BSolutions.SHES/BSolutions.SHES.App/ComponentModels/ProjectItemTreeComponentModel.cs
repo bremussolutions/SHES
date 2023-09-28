@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -138,6 +139,8 @@ namespace BSolutions.SHES.App.ComponentModels
 
             // Add new project item to project tree
             this.SelectedProjectItem.Children.Add(item);
+
+            WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(this._selectedProjectItem));
         }
 
         /// <summary>
