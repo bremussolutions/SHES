@@ -22,7 +22,7 @@ using Windows.ApplicationModel.Resources;
 
 namespace BSolutions.SHES.App.ComponentModels
 {
-    public class ProjectItemTreeComponentModel : ObservableValidator
+    public class ProjectItemTreeComponentModel : ObservableRecipient
     {
         private readonly ResourceLoader _resourceLoader;
         private readonly IProjectItemService _projectItemService;
@@ -71,7 +71,7 @@ namespace BSolutions.SHES.App.ComponentModels
             set
             {
                 SetProperty(ref _newProjectItemType, value);
-                ValidateProperty(value, nameof(NewProjectItemType));
+                OnPropertyChanged(nameof(this.NewProjectItemDialogHasErrors));
             }
         }
 
@@ -85,8 +85,12 @@ namespace BSolutions.SHES.App.ComponentModels
             set
             {
                 SetProperty(ref _newProjectItemName, value);
-                ValidateProperty(value, nameof(NewProjectItemName));
             }
+        }
+
+        public bool NewProjectItemDialogHasErrors
+        {
+            get => this.NewProjectItemType == null || string.IsNullOrEmpty(this.NewProjectItemName);
         }
 
         #endregion
@@ -130,7 +134,6 @@ namespace BSolutions.SHES.App.ComponentModels
         /// <param name="dialog">The dialog.</param>
         private async Task AddProjectItemDialog(ContentDialog dialog)
         {
-            ValidateAllProperties();
             await dialog.ShowAsync();
         }
 

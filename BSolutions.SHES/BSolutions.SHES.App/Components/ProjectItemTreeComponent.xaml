@@ -51,7 +51,7 @@
                        x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog"
                        DefaultButton="Primary"
                        PrimaryButtonCommand="{x:Bind ViewModel.AddProjectItemCommand}"
-                       IsPrimaryButtonEnabled="{x:Bind ViewModel.HasErrors, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}">
+                       IsPrimaryButtonEnabled="{x:Bind ViewModel.NewProjectItemDialogHasErrors, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}">
             <StackPanel>
                 <ComboBox x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type"
                           HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
