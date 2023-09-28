@@ -99,11 +99,11 @@
                                Style="{StaticResource SubtitleTextBlockStyle}" />
                     <TextBox x:Uid="Main_ProjectList_NewProjectDialog_Name"
                              HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
-                             Text="{x:Bind ViewModel.NewProject.Name, Mode=TwoWay}"
+                             Text="{x:Bind ViewModel.NewProject.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0 10 0 0" />
                     <TextBox x:Uid="Main_ProjectList_NewProjectDialog_Number"
                              HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
-                             Text="{x:Bind ViewModel.NewProject.Number, Mode=TwoWay}"
+                             Text="{x:Bind ViewModel.NewProject.Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0 10 0 0" />
 
                     <!-- BAUHERRSCHAFT -->
@@ -143,8 +143,6 @@
                     <controls:ValidationMessage Errors="{x:Bind ViewModel.NewProject.Errors, Mode=OneWay}" />
                 </StackPanel>
             </ScrollViewer>
-
-            
         </ContentDialog>
 
         <!-- DIALOG: KNX Project Import -->

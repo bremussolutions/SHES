@@ -43,6 +43,8 @@ namespace BSolutions.SHES.Models.Observables
 
             this.PropertyChanged += ObservableBase_PropertyChanged;
             this.ErrorsChanged += ObservableBase_ErrorsChanged;
+
+            this.ValidateAllProperties();
         }
 
         #endregion
