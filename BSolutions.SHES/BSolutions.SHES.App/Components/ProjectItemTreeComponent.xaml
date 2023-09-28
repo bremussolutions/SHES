@@ -5,9 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:BSolutions.SHES.App.Converters"
     xmlns:observables="using:BSolutions.SHES.Models.Observables"
-    xmlns:helper="using:BSolutions.SHES.Controls.Helpers"
     mc:Ignorable="d" Loaded="{x:Bind ViewModel.OnLoaded}" SizeChanged="UserControl_SizeChanged">
+
+    <UserControl.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </UserControl.Resources>
 
     <StackPanel>
         <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
@@ -46,17 +50,20 @@
         <ContentDialog x:Name="AddProjectItemDialog"
                        x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog"
                        DefaultButton="Primary"
-                       PrimaryButtonCommand="{x:Bind ViewModel.AddProjectItemCommand}">
+                       PrimaryButtonCommand="{x:Bind ViewModel.AddProjectItemCommand}"
+                       IsPrimaryButtonEnabled="{x:Bind ViewModel.HasErrors, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}">
             <StackPanel>
                 <ComboBox x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Type"
+                          HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
                           ItemsSource="{x:Bind ViewModel.RestrictedProjectItemInfos}"
-                          SelectedItem="{x:Bind ViewModel.NewProjectItemType, Mode=TwoWay}"
+                          SelectedItem="{x:Bind ViewModel.NewProjectItemType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           DisplayMemberPath="DisplayName"
                           Width="300"
                           Margin="0 0 0 10" />
 
                 <TextBox x:Uid="BuildingStructure_ProjectItemTree_Commands_Add_Dialog_Name"
-                         Text="{x:Bind ViewModel.NewProjectItemName, Mode=TwoWay}"
+                         HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
+                         Text="{x:Bind ViewModel.NewProjectItemName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Width="300" />
             </StackPanel>
         </ContentDialog>

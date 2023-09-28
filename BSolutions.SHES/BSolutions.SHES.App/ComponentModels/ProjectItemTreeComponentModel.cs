@@ -15,13 +15,14 @@ using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 
 namespace BSolutions.SHES.App.ComponentModels
 {
-    public class ProjectItemTreeComponentModel : ObservableRecipient
+    public class ProjectItemTreeComponentModel : ObservableValidator
     {
         private readonly ResourceLoader _resourceLoader;
         private readonly IProjectItemService _projectItemService;
@@ -62,22 +63,29 @@ namespace BSolutions.SHES.App.ComponentModels
         }
 
         private ProjectItemTypeInfo _newProjectItemType;
+
+        [Required]
         public ProjectItemTypeInfo NewProjectItemType
         {
             get => _newProjectItemType;
             set
             {
                 SetProperty(ref _newProjectItemType, value);
+                ValidateProperty(value, nameof(NewProjectItemType));
             }
         }
 
+        
         private string _newProjectItemName;
+
+        [Required]
         public string NewProjectItemName
         {
             get => _newProjectItemName;
             set
             {
                 SetProperty(ref _newProjectItemName, value);
+                ValidateProperty(value, nameof(NewProjectItemName));
             }
         }
 
@@ -122,6 +130,7 @@ namespace BSolutions.SHES.App.ComponentModels
         /// <param name="dialog">The dialog.</param>
         private async Task AddProjectItemDialog(ContentDialog dialog)
         {
+            ValidateAllProperties();
             await dialog.ShowAsync();
         }
 
