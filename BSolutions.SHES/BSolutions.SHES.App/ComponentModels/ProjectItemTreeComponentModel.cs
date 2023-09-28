@@ -140,7 +140,12 @@ namespace BSolutions.SHES.App.ComponentModels
             // Add new project item to project tree
             this.SelectedProjectItem.Children.Add(item);
 
+            // Causes the DataGrid to be reloaded with the new item
             WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(this._selectedProjectItem));
+
+            // Clear form
+            this.NewProjectItemType = null;
+            this.NewProjectItemName = string.Empty;
         }
 
         /// <summary>
