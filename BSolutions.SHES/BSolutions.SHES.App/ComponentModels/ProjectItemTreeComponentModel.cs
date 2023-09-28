@@ -53,8 +53,10 @@ namespace BSolutions.SHES.App.ComponentModels
             set
             {
                 SetProperty(ref _selectedProjectItem, value);
-                DeleteProjectItemCommand.NotifyCanExecuteChanged();
                 this.UpdateProjectItemTypes();
+
+                AddProjectItemDialogCommand.NotifyCanExecuteChanged();
+                DeleteProjectItemCommand.NotifyCanExecuteChanged();
 
                 // Set current project item
                 WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(value));
@@ -107,7 +109,7 @@ namespace BSolutions.SHES.App.ComponentModels
             this._resourceLoader = ResourceLoader.GetForViewIndependentUse();
 
             // Commands
-            AddProjectItemDialogCommand = new AsyncRelayCommand<ContentDialog>(async (dialog) => await AddProjectItemDialog(dialog));
+            AddProjectItemDialogCommand = new AsyncRelayCommand<ContentDialog>(async (dialog) => await AddProjectItemDialog(dialog), CanAddProjectItemDialog);
             AddProjectItemCommand = new AsyncRelayCommand(AddProjectItem);
             DeleteProjectItemCommand = new AsyncRelayCommand(async () => await DeleteProjectItem(), CanDeleteProjectItem);
 
@@ -135,6 +137,11 @@ namespace BSolutions.SHES.App.ComponentModels
         private async Task AddProjectItemDialog(ContentDialog dialog)
         {
             await dialog.ShowAsync();
+        }
+
+        private bool CanAddProjectItemDialog(ContentDialog dialog)
+        {
+            return this.RestrictedProjectItemInfos.Count > 0;
         }
 
         /// <summary>
