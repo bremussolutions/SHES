@@ -26,6 +26,21 @@ namespace BSolutions.SHES.Services.ProjectItems
 
         #endregion
 
+        #region --- IProjectItemService ---
+
+        public async Task<ObservableProjectItem> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                ProjectItem projectItem = await this._projectItemRepository.GetByIdAsync(id, "Parent");
+                return new ObservableProjectItem(projectItem);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task<ObservableProjectItem> AddAsync(ObservableProjectItem observableProjectItem)
         {
             try
@@ -99,5 +114,7 @@ namespace BSolutions.SHES.Services.ProjectItems
                 return false;
             }
         }
+
+        #endregion
     }
 }

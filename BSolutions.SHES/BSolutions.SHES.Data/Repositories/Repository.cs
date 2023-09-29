@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace BSolutions.SHES.Data.Repositories
 {
@@ -37,11 +38,22 @@ namespace BSolutions.SHES.Data.Repositories
         /// <summary>Gets all entities asynchronous.</summary>
         /// <param name="orderBy">The property to order by.</param>
         /// <returns>Returns a list of all entities.</returns>
-        public async Task<List<TEntity>> GetAllAsync(string orderBy = "")
+        public async Task<List<TEntity>> GetAllAsync(string includeProperties = "", string orderBy = "")
         {
             try
             {
                 var query = this._dbContext.Set<TEntity>().AsQueryable();
+
+                // Include Properties
+                if (!string.IsNullOrWhiteSpace(includeProperties))
+                {
+                    string[] includes = includeProperties.Split(';');
+
+                    foreach (string include in includes)
+                    {
+                        query = query.Include(include);
+                    }
+                }
 
                 // Order by
                 if (!string.IsNullOrWhiteSpace(orderBy))
@@ -60,12 +72,26 @@ namespace BSolutions.SHES.Data.Repositories
 
         /// <summary>Gets an entity by identifier asynchronous.</summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="includeProperties">The semicolon (;) separated included properties.</param>
         /// <returns>Returns an entity.</returns>
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id, string includeProperties = "")
         {
             try
             {
-                return await this._dbContext.Set<TEntity>().FindAsync(id);
+                var query = this._dbContext.Set<TEntity>().Where(e => e.Id == id);
+
+                // Include Properties
+                if (!string.IsNullOrWhiteSpace(includeProperties))
+                {
+                    string[] includes = includeProperties.Split(';');
+
+                    foreach (string include in includes)
+                    {
+                        query = query.Include(include);
+                    }
+                }
+
+                return await query.SingleOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -76,7 +102,7 @@ namespace BSolutions.SHES.Data.Repositories
 
         /// <summary>Gets an entity by expression asynchronous.</summary>
         /// <param name="expression">The expression.</param>
-        /// <param name="includeProperties">The include properties.</param>
+        /// <param name="includeProperties">The semicolon (;) separated included properties.</param>
         /// <param name="orderBy">The property to order by.</param>
         /// <returns>Returns an entity.</returns>
         public async Task<List<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, string includeProperties = "", string orderBy = "")
@@ -166,6 +192,7 @@ namespace BSolutions.SHES.Data.Repositories
         {
             try
             {
+                DetachEntity(entity);
                 this._dbContext.Remove(entity);
                 await this._dbContext.SaveChangesAsync();
                 this._dbContext.ChangeTracker.Clear();

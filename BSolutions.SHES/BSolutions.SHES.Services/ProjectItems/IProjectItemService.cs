@@ -1,5 +1,6 @@
 ﻿using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Observables;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace BSolutions.SHES.Services.ProjectItems
 {
     public interface IProjectItemService : IService
     {
+        Task<ObservableProjectItem> GetByIdAsync(Guid id);
         Task<ObservableProjectItem> AddAsync(ObservableProjectItem observableProjectItem);
         Task AddRangeAsync(ObservableCollection<ObservableProjectItem> observableProjectItems);
         Task<ObservableCollection<ObservableProjectItem>> GetProjectItemsAsync(ObservableProject observableProject, bool includeDevices = false);

@@ -161,11 +161,14 @@ namespace BSolutions.SHES.App.ComponentModels
             // Insert new project item
             await this._projectItemService.AddAsync(item);
 
+            // Loads the item again from the database to ensure that all properties are filled correctly
+            item = await this._projectItemService.GetByIdAsync(item.Id);
+
             // Add new project item to project tree
             this.SelectedProjectItem.Children.Add(item);
 
             // Causes the DataGrid to be reloaded with the new item
-            WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(this._selectedProjectItem));
+            WeakReferenceMessenger.Default.Send(new CurrentTreeProjectItemChangedMessage(this.SelectedProjectItem));
 
             // Clear form
             this.NewProjectItemType = null;
