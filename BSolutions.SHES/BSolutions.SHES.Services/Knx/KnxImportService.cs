@@ -19,6 +19,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Windows.UI.Core;
 
 namespace BSolutions.SHES.Services.Knx
 {
@@ -54,7 +55,7 @@ namespace BSolutions.SHES.Services.Knx
         /// <param name="resourceLoader">The resource loader.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="projectRepository">The project repository.</param>
-        public KnxImportService (ResourceLoader resourceLoader, ILogger<KnxImportService> logger, IProjectRepository projectRepository)
+        public KnxImportService(ResourceLoader resourceLoader, ILogger<KnxImportService> logger, IProjectRepository projectRepository)
             : base(resourceLoader, logger)
         {
             this._projectRepository = projectRepository;
@@ -146,7 +147,7 @@ namespace BSolutions.SHES.Services.Knx
                     // Product Catalogs
                     if (Regex.IsMatch(zipEntry.Name, @"^M-\w{4}/Hardware.xml") && zipEntry.IsFile)
                     {
-
+                        await this.ReadHardwareAsync(zipEntry, zip);
                     }
 
                     // Password protected project
@@ -209,6 +210,24 @@ namespace BSolutions.SHES.Services.Knx
         {
             var stream = zip.GetInputStream(zipEntry);
             StreamReader reader = new(stream);
+            XDocument doc = XDocument.Parse(await reader.ReadToEndAsync());
+
+            var element = doc.Descendants(XName.Get("Hardware", this._result.Data.SchemaNamespace)).FirstOrDefault();
+
+            foreach (XElement hardware in element.Elements(XName.Get("Hardware", this._result.Data.SchemaNamespace)))
+            {
+                KnxProduct product = new KnxProduct
+                {
+                    Name = hardware.Attribute(XName.Get("Name")).Value
+                };
+
+                var details = hardware.Element(XName.Get("Products", this._result.Data.SchemaNamespace))
+                    .Element(XName.Get("Product", this._result.Data.SchemaNamespace));
+
+                product.Id = details.Attribute(XName.Get("Id")).Value;
+
+                this._result.Data.Products.Add(product);
+            }
         }
 
         /// <summary>Reads the project file asynchronous.</summary>
@@ -271,10 +290,10 @@ namespace BSolutions.SHES.Services.Knx
         {
             List<ProjectItem> result = new();
 
-            foreach(XElement space in spaces)
+            foreach (XElement space in spaces)
             {
                 Assembly assembly = typeof(EntityBase).Assembly;
-                Type type = assembly.GetType($"BSolutions.SHES.Models.Entities.{ projectTypeMapping[space.Attribute("Type").Value] }");
+                Type type = assembly.GetType($"BSolutions.SHES.Models.Entities.{projectTypeMapping[space.Attribute("Type").Value]}");
                 ProjectItem entity = (ProjectItem)Activator.CreateInstance(type);
                 PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -314,9 +333,9 @@ namespace BSolutions.SHES.Services.Knx
                 string refId = deviceInstanceReference.Attribute("RefId").Value;
                 var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", this._result.Data.SchemaNamespace));
                 var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
-                
+
                 // Basic Infomation
-                if(string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value))
+                if (string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value))
                 {
                     string name = "UNKNOWN";
                 }
