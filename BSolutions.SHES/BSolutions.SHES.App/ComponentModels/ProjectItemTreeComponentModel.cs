@@ -83,6 +83,7 @@ namespace BSolutions.SHES.App.ComponentModels
             set
             {
                 SetProperty(ref _newProjectItemName, value);
+                OnPropertyChanged(nameof(this.NewProjectItemDialogHasErrors));
             }
         }
 
