@@ -53,12 +53,15 @@ namespace BSolutions.SHES.Models.Observables
         public ObservableProjectItem(ProjectItem projectItem)
             : base(projectItem)
         {
-            if (projectItem.GetType().GetCustomAttributes(typeof(ProjectItemInfoAttribute), false).FirstOrDefault() is ProjectItemInfoAttribute attribute)
+            if (projectItem != null)
             {
-                this._icon = attribute.Icon;
-            }
+                if (projectItem.GetType().GetCustomAttributes(typeof(ProjectItemInfoAttribute), false).FirstOrDefault() is ProjectItemInfoAttribute attribute)
+                {
+                    this._icon = attribute.Icon;
+                }
 
-            this.Children.AddRange(projectItem.Children.Select(pi => new ObservableProjectItem(pi)));
+                this.Children.AddRange(projectItem.Children.Select(pi => new ObservableProjectItem(pi)));
+            }
         }
 
         #endregion
