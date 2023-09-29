@@ -149,6 +149,7 @@
         <ContentDialog x:Uid="Main_ProjectList_KnxImportDialog"
                        x:Name="ImportKnxProjectDialog"
                        PrimaryButtonCommand="{x:Bind ViewModel.ImportKnxProjectCommand}"
+                       IsPrimaryButtonEnabled="{x:Bind ViewModel.ImportProjectDialogHasErrors, Mode=OneWay, Converter={StaticResource InverseBooleanConverter}}"
                        DefaultButton="Primary">
             <StackPanel Margin="0 0 20 0">
 
@@ -156,7 +157,7 @@
                 <StackPanel Visibility="{x:Bind ViewModel.IsImportProjectProtected, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                     <TextBlock TextWrapping="Wrap" x:Uid="Main_ProjectList_KnxImportDialog_PasswordProtection" />
                     <PasswordBox x:Uid="Main_ProjectList_KnxImportDialog_Password"
-                                 Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay}"
+                                 Password="{x:Bind ViewModel.ImportProjectPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  HeaderTemplate="{StaticResource RequiredHeaderTemplate}"
                                  Margin="0 10 0 0" />
                 </StackPanel>

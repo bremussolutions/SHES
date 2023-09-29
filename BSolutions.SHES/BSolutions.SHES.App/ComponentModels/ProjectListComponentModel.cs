@@ -68,6 +68,7 @@ namespace BSolutions.SHES.App.ComponentModels
             private set
             {
                 SetProperty(ref _isImportProjectProtected, value);
+                OnPropertyChanged(nameof(ImportProjectDialogHasErrors));
             }
         }
 
@@ -75,7 +76,11 @@ namespace BSolutions.SHES.App.ComponentModels
         public string ImportProjectPassword
         {
             get => _importProjectPassword;
-            set => SetProperty(ref _importProjectPassword, value);
+            set
+            {
+                SetProperty(ref _importProjectPassword, value);
+                OnPropertyChanged(nameof(ImportProjectDialogHasErrors));
+            }
         }
 
         private bool _importProjectStructure = true;
@@ -90,6 +95,11 @@ namespace BSolutions.SHES.App.ComponentModels
         {
             get => _importProjectDevices;
             set => SetProperty(ref _importProjectDevices, value);
+        }
+
+        public bool ImportProjectDialogHasErrors
+        {
+            get => this.IsImportProjectProtected && string.IsNullOrEmpty(ImportProjectPassword);
         }
 
         public IAsyncRelayCommand AddProjectDialogCommand { get; }
