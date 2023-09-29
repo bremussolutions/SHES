@@ -104,14 +104,6 @@ namespace BSolutions.SHES.App
 
                 services.AddTransient<SettingsViewModel>();
                 services.AddTransient<SettingsPage>();
-                services.AddTransient<ContentGridDetailViewModel>();
-                services.AddTransient<ContentGridDetailPage>();
-                services.AddTransient<ContentGridViewModel>();
-                services.AddTransient<ContentGridPage>();
-                services.AddTransient<ListDetailsViewModel>();
-                services.AddTransient<ListDetailsPage>();
-                services.AddTransient<DataGridViewModel>();
-                services.AddTransient<DataGridPage>();
 
                 services.AddTransient<ResourceLoader>();
 
