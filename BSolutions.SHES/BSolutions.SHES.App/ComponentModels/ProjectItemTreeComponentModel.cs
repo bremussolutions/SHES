@@ -65,8 +65,6 @@ namespace BSolutions.SHES.App.ComponentModels
         }
 
         private ProjectItemTypeInfo _newProjectItemType;
-
-        [Required]
         public ProjectItemTypeInfo NewProjectItemType
         {
             get => _newProjectItemType;
@@ -79,8 +77,6 @@ namespace BSolutions.SHES.App.ComponentModels
 
         
         private string _newProjectItemName;
-
-        [Required]
         public string NewProjectItemName
         {
             get => _newProjectItemName;
@@ -93,6 +89,13 @@ namespace BSolutions.SHES.App.ComponentModels
         public bool NewProjectItemDialogHasErrors
         {
             get => this.NewProjectItemType == null || string.IsNullOrEmpty(this.NewProjectItemName);
+        }
+
+        private bool _isTreeLoading = true;
+        public bool IsTreeLoading
+        {
+            get => _isTreeLoading;
+            set => SetProperty(ref _isTreeLoading, value);
         }
 
         #endregion
@@ -126,6 +129,7 @@ namespace BSolutions.SHES.App.ComponentModels
             var projectItems = await this._projectItemService.GetProjectItemsAsync(this.CurrentProject, true);
             this.ProjectItems.AddRange(projectItems);
             this.SelectedProjectItem = projectItems.FirstOrDefault();
+            this.IsTreeLoading = false;
         }
 
         #endregion
