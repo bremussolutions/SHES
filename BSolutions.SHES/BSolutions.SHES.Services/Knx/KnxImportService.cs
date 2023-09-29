@@ -22,8 +22,11 @@ using System.Xml.Linq;
 
 namespace BSolutions.SHES.Services.Knx
 {
+    /// <summary>Executes the import of an ETS file (KNX).</summary>
     public class KnxImportService : ServiceBase, IKnxImportService
     {
+        #region --- Fields ---
+
         private KnxImportOptions _options;
         private KnxImportResult _result;
         private Project _project = new();
@@ -31,8 +34,26 @@ namespace BSolutions.SHES.Services.Knx
 
         private readonly IProjectRepository _projectRepository;
 
+        /// <summary>The project type mapping dictionary.</summary>
+        /// <remarks>Mapping is necessary because the project types in the ETS have different names than in SHES.</remarks>
+        private static readonly Dictionary<string, string> projectTypeMapping = new()
+        {
+            { "Building", "Building" },
+            { "", "BuildingPart" },
+            { "Floor", "Floor" },
+            { "Room", "Room" },
+            { "Corridor", "Corridor" },
+            { "DistributionBoard", "Cabinet" }
+        };
+
+        #endregion
+
         #region --- Constructor ---
 
+        /// <summary>Initializes a new instance of the <see cref="KnxImportService" /> class.</summary>
+        /// <param name="resourceLoader">The resource loader.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="projectRepository">The project repository.</param>
         public KnxImportService (ResourceLoader resourceLoader, ILogger<KnxImportService> logger, IProjectRepository projectRepository)
             : base(resourceLoader, logger)
         {
@@ -70,9 +91,7 @@ namespace BSolutions.SHES.Services.Knx
         /// <param name="path">The path.</param>
         /// <param name="options">Options for the project import.</param>
         /// <param name="password">The password.</param>
-        /// <returns>
-        ///   Returns a result with project data.
-        /// </returns>
+        /// <returns>Returns a result with project data.</returns>
         public async Task<KnxImportResult> ImportProjectAsync(string path, KnxImportOptions options, string password = "")
         {
             this._options = options;
@@ -102,8 +121,6 @@ namespace BSolutions.SHES.Services.Knx
 
         #endregion
 
-        #region --- Helper ---
-
         /// <summary>Unzips files from an ETS project file and processes them</summary>
         /// <param name="file">The file to unzip.</param>
         /// <param name="password">The zip file password.</param>
@@ -123,7 +140,13 @@ namespace BSolutions.SHES.Services.Knx
                     // ETS Schema Version
                     if (zipEntry.Name == "knx_master.xml" && zipEntry.IsFile)
                     {
-                        await this.ReadEtsSchemaVersion(zipEntry, zip);
+                        await this.ReadEtsSchemaVersionAsync(zipEntry, zip);
+                    }
+
+                    // Product Catalogs
+                    if (Regex.IsMatch(zipEntry.Name, @"^M-\w{4}/Hardware.xml") && zipEntry.IsFile)
+                    {
+
                     }
 
                     // Password protected project
@@ -142,13 +165,13 @@ namespace BSolutions.SHES.Services.Knx
                     // Project XML
                     if ((Regex.IsMatch(zipEntry.Name, @"^project.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/project.xml$")) && zipEntry.IsFile)
                     {
-                        await this.ReadProjectFile(zipEntry, zip);
+                        await this.ReadProjectFileAsync(zipEntry, zip);
                     }
 
                     // Structure XML
                     if ((Regex.IsMatch(zipEntry.Name, @"^0.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/0.xml$")) && zipEntry.IsFile)
                     {
-                        await this.ReadStructureFile(zipEntry, zip);
+                        await this.ReadStructureFileAsync(zipEntry, zip);
                     }
                 }
             }
@@ -164,7 +187,11 @@ namespace BSolutions.SHES.Services.Knx
             }
         }
 
-        private async Task ReadEtsSchemaVersion(ZipEntry zipEntry, ZipFile zip)
+        /// <summary>Reads the XML schema version of the ETS project file asynchronous.</summary>
+        /// <param name="zipEntry">The zip entry.</param>
+        /// <param name="zip">The zip.</param>
+        /// <remarks>The ETS version with which the project was last processed can be derived from the version of the XML schema.</remarks>
+        private async Task ReadEtsSchemaVersionAsync(ZipEntry zipEntry, ZipFile zip)
         {
             await Task.Run(() =>
             {
@@ -174,7 +201,21 @@ namespace BSolutions.SHES.Services.Knx
             });
         }
 
-        private async Task ReadProjectFile(ZipEntry zipEntry, ZipFile zip)
+        /// <summary>Reads out all products that are used in the ETS project asynchronous.</summary>
+        /// <param name="zipEntry">The zip entry.</param>
+        /// <param name="zip">The zip.</param>
+        /// <remarks>The information is located directly in the root directory of the project file in the M-{XXXX} folders</remarks>
+        private async Task ReadHardwareAsync(ZipEntry zipEntry, ZipFile zip)
+        {
+            var stream = zip.GetInputStream(zipEntry);
+            StreamReader reader = new(stream);
+        }
+
+        /// <summary>Reads the project file asynchronous.</summary>
+        /// <param name="zipEntry">The zip entry.</param>
+        /// <param name="zip">The zip.</param>
+        /// <remarks>This is the project.xml in the project folder P-{XXXX}.</remarks>
+        private async Task ReadProjectFileAsync(ZipEntry zipEntry, ZipFile zip)
         {
             var stream = zip.GetInputStream(zipEntry);
             StreamReader reader = new(stream);
@@ -193,7 +234,11 @@ namespace BSolutions.SHES.Services.Knx
                 .Attribute(XName.Get("Name")).Value;
         }
 
-        private async Task ReadStructureFile(ZipEntry zipEntry, ZipFile zip)
+        /// <summary>Reads the structure file asynchronous.</summary>
+        /// <param name="zipEntry">The zip entry.</param>
+        /// <param name="zip">The zip.</param>
+        /// <remarks>This is the 0.xml in the project folder P-{XXXX}.</remarks>
+        private async Task ReadStructureFileAsync(ZipEntry zipEntry, ZipFile zip)
         {
             var stream = zip.GetInputStream(zipEntry);
             StreamReader reader = new(stream);
@@ -213,13 +258,16 @@ namespace BSolutions.SHES.Services.Knx
             if (this._options.ImportStructure)
             {
                 var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", this._result.Data.SchemaNamespace));
-                this._projectItems = this.LoadProjectItems(spaces);
+                this._projectItems = this.ReadProjectItems(spaces);
 
                 this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
             }
         }
 
-        private List<ProjectItem> LoadProjectItems(IEnumerable<XElement> spaces)
+        /// <summary>Reads all project items from the ETS project structure.</summary>
+        /// <param name="spaces">The spaces (containers that can contain devices).</param>
+        /// <returns>Returns a hierarchical list of all project items.<br /></returns>
+        private List<ProjectItem> ReadProjectItems(IEnumerable<XElement> spaces)
         {
             List<ProjectItem> result = new();
 
@@ -231,15 +279,19 @@ namespace BSolutions.SHES.Services.Knx
                 PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
                 // Locations
-                var projectItems = LoadProjectItems(space.Elements(XName.Get("Space", this._result.Data.SchemaNamespace)));
+                var projectItems = ReadProjectItems(space.Elements(XName.Get("Space", this._result.Data.SchemaNamespace)));
 
                 // Devices
                 if (this._options.ImportDevices)
                 {
-                    projectItems.AddRange(this.LoadDevices(space.Elements(XName.Get("DeviceInstanceRef", this._result.Data.SchemaNamespace))));
+                    projectItems.AddRange(this.ReadDevices(space.Elements(XName.Get("DeviceInstanceRef", this._result.Data.SchemaNamespace))));
                 }
 
-                propertyInfos.First(p => p.Name == "Name").SetValue(entity, space.Attribute("Name").Value);
+                // Name
+                string name = !string.IsNullOrEmpty(space.Attribute("Name").Value) ? space.Attribute("Name").Value : "UNKNOWN";
+                propertyInfos.First(p => p.Name == "Name").SetValue(entity, name);
+
+                // Children
                 propertyInfos.First(p => p.Name == "Children").SetValue(entity, projectItems);
 
                 result.Add(entity);
@@ -248,7 +300,10 @@ namespace BSolutions.SHES.Services.Knx
             return result;
         }
 
-        private List<Device> LoadDevices(IEnumerable<XElement> deviceInstanceReferences)
+        /// <summary>Reads all devices within a space (container).</summary>
+        /// <param name="deviceInstanceReferences">The device instance references.</param>
+        /// <returns>Returns a list of devices.</returns>
+        private List<Device> ReadDevices(IEnumerable<XElement> deviceInstanceReferences)
         {
             List<Device> devices = new();
 
@@ -261,7 +316,12 @@ namespace BSolutions.SHES.Services.Knx
                 var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
                 
                 // Basic Infomation
-                device.Name = deviceInstance.Attribute("Name").Value;
+                if(string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value))
+                {
+                    string name = "UNKNOWN";
+                }
+
+                device.Name = !string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value) ? deviceInstance.Attribute("Name").Value : "UNKNOWN";
                 device.Comment = deviceInstance.Attribute("Comment")?.Value;
                 device.Description = deviceInstance.Attribute("Description")?.Value;
 
@@ -285,9 +345,7 @@ namespace BSolutions.SHES.Services.Knx
 
         /// <summary>Encrypts a password, as this is required from ETS6 to unpack the project file.</summary>
         /// <param name="password">The plain text password.</param>
-        /// <returns>
-        ///   Returns the encrypted ETS project password.
-        /// </returns>
+        /// <returns>Returns the encrypted ETS project password.</returns>
         private string EncryptEtsPassword(string password)
         {
             int iterations = 65536;
@@ -299,17 +357,5 @@ namespace BSolutions.SHES.Services.Knx
                 return Convert.ToBase64String(bytes);
             }
         }
-
-        private static readonly Dictionary<string, string> projectTypeMapping = new()
-        {
-            { "Building", "Building" },
-            { "", "BuildingPart" },
-            { "Floor", "Floor" },
-            { "Room", "Room" },
-            { "Corridor", "Corridor" },
-            { "DistributionBoard", "Cabinet" }
-        };
-
-        #endregion
     }
 }
