@@ -33,6 +33,12 @@ namespace BSolutions.SHES.Services.Knx
         private Project _project = new();
         private List<ProjectItem> _projectItems;
 
+        private int _schemaVersion;
+        private XElement _projectXml;
+        private XElement _topologyXml;
+        private XElement _tradesXml;
+        private XElement _locationsXml;
+
         private readonly IProjectRepository _projectRepository;
 
         /// <summary>The project type mapping dictionary.</summary>
@@ -48,6 +54,14 @@ namespace BSolutions.SHES.Services.Knx
         };
 
         #endregion
+
+        private string SchemaNamespace
+        {
+            get
+            {
+                return $"http://knx.org/xml/project/{this._schemaVersion}";
+            }
+        }
 
         #region --- Constructor ---
 
@@ -136,24 +150,32 @@ namespace BSolutions.SHES.Services.Knx
                 using var zip = new ZipFile(ms);
                 zip.Password = password;
 
+                // ETS Schema Version
                 foreach (ZipEntry zipEntry in zip)
                 {
-                    // ETS Schema Version
                     if (zipEntry.Name == "knx_master.xml" && zipEntry.IsFile)
                     {
                         await this.ReadEtsSchemaVersionAsync(zipEntry, zip);
                     }
+                }
 
+                // Products
+                foreach (ZipEntry zipEntry in zip)
+                {
                     // Product Catalogs
                     if (Regex.IsMatch(zipEntry.Name, @"^M-\w{4}/Hardware.xml") && zipEntry.IsFile)
                     {
                         await this.ReadHardwareAsync(zipEntry, zip);
                     }
+                }
 
+                // Project
+                foreach (ZipEntry zipEntry in zip)
+                {
                     // Password protected project
                     if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$") && zipEntry.IsFile)
                     {
-                        if (this._result.Data.SchemaVersion >= 21)
+                        if (this._schemaVersion >= 21)
                         {
                             await this.UnzipAsync(zip.GetInputStream(zipEntry), this.EncryptEtsPassword(password));
                         }
@@ -166,7 +188,7 @@ namespace BSolutions.SHES.Services.Knx
                     // Project XML
                     if ((Regex.IsMatch(zipEntry.Name, @"^project.xml$") || Regex.IsMatch(zipEntry.Name, @"^P-\w{4}/project.xml$")) && zipEntry.IsFile)
                     {
-                        await this.ReadProjectFileAsync(zipEntry, zip);
+                        await this.ReadProjectAsync(zipEntry, zip);
                     }
 
                     // Structure XML
@@ -198,7 +220,7 @@ namespace BSolutions.SHES.Services.Knx
             {
                 var stream = zip.GetInputStream(zipEntry);
                 var ns = XElement.Load(stream).GetDefaultNamespace().NamespaceName;
-                this._result.Data.SchemaVersion = Convert.ToInt32(ns.Split('/').Last());
+                this._schemaVersion = Convert.ToInt32(ns.Split('/').Last());
             });
         }
 
@@ -212,44 +234,44 @@ namespace BSolutions.SHES.Services.Knx
             StreamReader reader = new(stream);
             XDocument doc = XDocument.Parse(await reader.ReadToEndAsync());
 
-            var element = doc.Descendants(XName.Get("Hardware", this._result.Data.SchemaNamespace)).FirstOrDefault();
+            var element = doc.Descendants(XName.Get("Hardware", this.SchemaNamespace)).FirstOrDefault();
 
-            foreach (XElement hardware in element.Elements(XName.Get("Hardware", this._result.Data.SchemaNamespace)))
+            foreach (XElement hardware in element.Elements(XName.Get("Hardware", this.SchemaNamespace)))
             {
                 KnxProduct product = new KnxProduct
                 {
                     Name = hardware.Attribute(XName.Get("Name")).Value
                 };
 
-                var details = hardware.Element(XName.Get("Products", this._result.Data.SchemaNamespace))
-                    .Element(XName.Get("Product", this._result.Data.SchemaNamespace));
+                var details = hardware.Element(XName.Get("Products", this.SchemaNamespace))
+                    .Element(XName.Get("Product", this.SchemaNamespace));
 
                 product.Id = details.Attribute(XName.Get("Id")).Value;
+                product.OrderNumber = details.Attribute(XName.Get("OrderNumber")).Value;
 
                 this._result.Data.Products.Add(product);
             }
         }
 
-        /// <summary>Reads the project file asynchronous.</summary>
+        /// <summary>Reads the project asynchronous.</summary>
         /// <param name="zipEntry">The zip entry.</param>
         /// <param name="zip">The zip.</param>
         /// <remarks>This is the project.xml in the project folder P-{XXXX}.</remarks>
-        private async Task ReadProjectFileAsync(ZipEntry zipEntry, ZipFile zip)
+        private async Task ReadProjectAsync(ZipEntry zipEntry, ZipFile zip)
         {
             var stream = zip.GetInputStream(zipEntry);
             StreamReader reader = new(stream);
 
-            this._result.Data.ProjectXml = XDocument.Parse(await reader.ReadToEndAsync());
+            XDocument doc = XDocument.Parse(await reader.ReadToEndAsync());
+            this._projectXml = doc.Element(XName.Get("KNX", this.SchemaNamespace));
 
-            this._project.Number = this._result.Data.ProjectXml
-                .Element(XName.Get("KNX", this._result.Data.SchemaNamespace))
-                .Element(XName.Get("Project", this._result.Data.SchemaNamespace))
+            this._project.Number = this._projectXml
+                .Element(XName.Get("Project", this.SchemaNamespace))
                 .Attribute(XName.Get("Id")).Value;
 
-            this._project.Name = this._result.Data.ProjectXml
-                .Element(XName.Get("KNX", this._result.Data.SchemaNamespace))
-                .Element(XName.Get("Project", this._result.Data.SchemaNamespace))
-                .Element(XName.Get("ProjectInformation", this._result.Data.SchemaNamespace))
+            this._project.Name = this._projectXml
+                .Element(XName.Get("Project", this.SchemaNamespace))
+                .Element(XName.Get("ProjectInformation", this.SchemaNamespace))
                 .Attribute(XName.Get("Name")).Value;
         }
 
@@ -265,18 +287,18 @@ namespace BSolutions.SHES.Services.Knx
             var xml = XDocument.Parse(await reader.ReadToEndAsync());
 
             // Topology
-            this._result.Data.TopologyXml = xml.Descendants(XName.Get("Topology", this._result.Data.SchemaNamespace)).FirstOrDefault();
+            this._topologyXml = xml.Descendants(XName.Get("Topology", this.SchemaNamespace)).FirstOrDefault();
 
             // Locations
-            this._result.Data.LocationsXml = xml.Descendants(XName.Get("Locations", this._result.Data.SchemaNamespace)).FirstOrDefault();
+            this._locationsXml = xml.Descendants(XName.Get("Locations", this.SchemaNamespace)).FirstOrDefault();
 
             // Trades
-            this._result.Data.TradesXml = xml.Descendants(XName.Get("Trades", this._result.Data.SchemaNamespace)).FirstOrDefault();
+            this._tradesXml = xml.Descendants(XName.Get("Trades", this.SchemaNamespace)).FirstOrDefault();
 
             // Project Items
             if (this._options.ImportStructure)
             {
-                var spaces = this._result.Data.LocationsXml.Elements(XName.Get("Space", this._result.Data.SchemaNamespace));
+                var spaces = this._locationsXml.Elements(XName.Get("Space", this.SchemaNamespace));
                 this._projectItems = this.ReadProjectItems(spaces);
 
                 this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
@@ -298,12 +320,12 @@ namespace BSolutions.SHES.Services.Knx
                 PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
                 // Locations
-                var projectItems = ReadProjectItems(space.Elements(XName.Get("Space", this._result.Data.SchemaNamespace)));
+                var projectItems = ReadProjectItems(space.Elements(XName.Get("Space", this.SchemaNamespace)));
 
                 // Devices
                 if (this._options.ImportDevices)
                 {
-                    projectItems.AddRange(this.ReadDevices(space.Elements(XName.Get("DeviceInstanceRef", this._result.Data.SchemaNamespace))));
+                    projectItems.AddRange(this.ReadDevices(space.Elements(XName.Get("DeviceInstanceRef", this.SchemaNamespace))));
                 }
 
                 // Name
@@ -331,16 +353,19 @@ namespace BSolutions.SHES.Services.Knx
                 Device device = new Device() { BusType = BusType.Knx };
 
                 string refId = deviceInstanceReference.Attribute("RefId").Value;
-                var deviceInstances = this._result.Data.TopologyXml.Descendants(XName.Get("DeviceInstance", this._result.Data.SchemaNamespace));
+                var deviceInstances = this._topologyXml.Descendants(XName.Get("DeviceInstance", this.SchemaNamespace));
                 var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
 
-                // Basic Infomation
+                // Name
                 if (string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value))
                 {
-                    string name = "UNKNOWN";
+                    device.Name = this._result.Data.Products.FirstOrDefault(p => p.Id == deviceInstance.Attribute("ProductRefId").Value).Name;
+                }
+                else
+                {
+                    device.Name = deviceInstance.Attribute("Name").Value;
                 }
 
-                device.Name = !string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value) ? deviceInstance.Attribute("Name").Value : "UNKNOWN";
                 device.Comment = deviceInstance.Attribute("Comment")?.Value;
                 device.Description = deviceInstance.Attribute("Description")?.Value;
 
