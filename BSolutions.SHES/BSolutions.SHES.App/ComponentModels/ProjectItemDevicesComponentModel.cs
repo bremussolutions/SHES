@@ -144,6 +144,11 @@ namespace BSolutions.SHES.App.ComponentModels
             }
         }
 
+        public async void DataGrid_CellEditEnded(object sender, DataGridCellEditEndedEventArgs e)
+        {
+            await this._deviceService.UpdateAsync(this.CurrentDevice);
+        }
+
         #endregion
 
         private void SortDevices()

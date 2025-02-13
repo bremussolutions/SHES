@@ -6,8 +6,10 @@
     xmlns:local="using:BSolutions.SHES.App.Components"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkitui="using:CommunityToolkit.WinUI.UI"
     xmlns:converters="using:BSolutions.SHES.App.Converters"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:enums="using:BSolutions.SHES.Models.Enumerations"
     SizeChanged="UserControl_SizeChanged"
     mc:Ignorable="d">
 
@@ -30,12 +32,12 @@
                 <controls:DataGrid AutoGenerateColumns="False"
                            GridLinesVisibility="Horizontal"
                            CanUserSortColumns="True"
-                           IsReadOnly="True"
                            ScrollViewer.IsDeferredScrollingEnabled="True"
                            ScrollViewer.HorizontalScrollBarVisibility="Visible"
                            Sorting="{x:Bind ViewModel.DataGrid_Sorting}"
                            ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
-                           SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}">
+                           SelectionChanged="{x:Bind ViewModel.DataGrid_SelectionChanged}"
+                           CellEditEnded="{x:Bind ViewModel.DataGrid_CellEditEnded}">
                     <controls:DataGrid.Columns>
                         <controls:DataGridTemplateColumn IsReadOnly="True" Tag="TypeIcon">
                             <controls:DataGridTemplateColumn.CellTemplate>
@@ -51,13 +53,18 @@
                         <controls:DataGridTextColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Name"
                                                      Binding="{Binding Name}"
                                                      Tag="Name" />
-                        <controls:DataGridTextColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Type"
+                        <controls:DataGridComboBoxColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Type"
+                                                         Binding="{Binding Type}"
+                                                         ItemsSource="{toolkitui:EnumValues Type=enums:DeviceType}"
+                                                         Tag="Type">
+                        </controls:DataGridComboBoxColumn>
+                        <!--<controls:DataGridTextColumn x:Uid="BuildingStructure_ProjectItemDevices_DataGrid_Col_Type"
                                                      Binding="{Binding Type, Converter={StaticResource EnumDisplayConverter}}"
-                                                     Tag="Type" />
-                        <!--<controls:DataGridTemplateColumn Header="Typ" Tag="Type">
+                                                     Tag="Type" />-->
+                        <controls:DataGridTemplateColumn Header="Typ" Tag="Type">
                                 <controls:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{ui:EnumValues Type=enums:DeviceType}">
+                                    <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{toolkitui:EnumValues Type=enums:DeviceType}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Converter={StaticResource EnumDisplayConverter}}" />
@@ -66,7 +73,7 @@
                                         </ComboBox>
                                     </DataTemplate>
                                 </controls:DataGridTemplateColumn.CellTemplate>
-                            </controls:DataGridTemplateColumn>-->
+                            </controls:DataGridTemplateColumn>
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
             </ScrollViewer>

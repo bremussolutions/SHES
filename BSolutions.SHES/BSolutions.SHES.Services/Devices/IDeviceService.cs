@@ -9,7 +9,7 @@ namespace BSolutions.SHES.Services.Devices
     public interface IDeviceService : IService
     {
         Task<List<ObservableDevice>> GetDevicesForLocationAsync(ObservableProjectItem observableProjectItem);
-        //Task<ObservableDevice> UpdateAsync(ObservableDevice observableDevice);
+        Task UpdateAsync(ObservableDevice observableDevice);
         //Task UpdateRangeAsync(ObservableCollection<ObservableDevice> observableDevices);
     }
 }

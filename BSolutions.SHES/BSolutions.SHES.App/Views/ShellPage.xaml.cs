@@ -1,9 +1,7 @@
 ﻿using BSolutions.SHES.App.Contracts.Services;
 using BSolutions.SHES.App.ViewModels;
-
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-
 using Windows.System;
 
 namespace BSolutions.SHES.App.Views

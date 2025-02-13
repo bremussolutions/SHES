@@ -47,6 +47,11 @@ namespace BSolutions.SHES.Services.Devices
             }
         }
 
+        public async Task UpdateAsync(ObservableDevice observableDevice)
+        {
+            await this._deviceRepository.UpdateAsync(observableDevice.entity as Device);
+        }
+
         #endregion
     }
 }
