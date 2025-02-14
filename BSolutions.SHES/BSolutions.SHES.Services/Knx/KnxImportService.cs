@@ -34,6 +34,7 @@ namespace BSolutions.SHES.Services.Knx
         private List<ProjectItem> _projectItems;
 
         private int _schemaVersion;
+        private string _schemaNamespace => $"http://knx.org/xml/project/{_schemaVersion}";
         private XElement _projectXml;
         private XElement _topologyXml;
         private XElement _tradesXml;
@@ -55,27 +56,12 @@ namespace BSolutions.SHES.Services.Knx
 
         #endregion
 
-        private string SchemaNamespace
-        {
-            get
-            {
-                return $"http://knx.org/xml/project/{this._schemaVersion}";
-            }
-        }
-
-        #region --- Constructor ---
-
         /// <summary>Initializes a new instance of the <see cref="KnxImportService" /> class.</summary>
         /// <param name="resourceLoader">The resource loader.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="projectRepository">The project repository.</param>
         public KnxImportService(ResourceLoader resourceLoader, ILogger<KnxImportService> logger, IProjectRepository projectRepository)
-            : base(resourceLoader, logger)
-        {
-            this._projectRepository = projectRepository;
-        }
-
-        #endregion
+            : base(resourceLoader, logger) => _projectRepository = projectRepository;
 
         #region --- IKnxImportService ---
 
@@ -84,23 +70,12 @@ namespace BSolutions.SHES.Services.Knx
         /// <returns>
         ///   Returns the result of the check.
         /// </returns>
-        public async Task<bool> ProtectionCheckAsync(string path)
+        public async Task<bool> ProtectionCheckAsync(string path) => await Task.Run(() =>
         {
-            return await Task.Run(() =>
-            {
-                using var file = File.OpenRead(path);
-                using var zip = new ZipFile(file);
-                foreach (ZipEntry zipEntry in zip)
-                {
-                    if (Regex.IsMatch(zipEntry.Name, @"P-\w{4}.zip$"))
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            });
-        }
+            using var file = File.OpenRead(path);
+            using var zip = new ZipFile(file);
+            return zip.Cast<ZipEntry>().Any(entry => Regex.IsMatch(entry.Name, @"P-\w{4}.zip$"));
+        });
 
         /// <summary>Imports the project asynchronous.</summary>
         /// <param name="path">The path.</param>
@@ -234,17 +209,17 @@ namespace BSolutions.SHES.Services.Knx
             StreamReader reader = new(stream);
             XDocument doc = XDocument.Parse(await reader.ReadToEndAsync());
 
-            var element = doc.Descendants(XName.Get("Hardware", this.SchemaNamespace)).FirstOrDefault();
+            var element = doc.Descendants(XName.Get("Hardware", _schemaNamespace)).FirstOrDefault();
 
-            foreach (XElement hardware in element.Elements(XName.Get("Hardware", this.SchemaNamespace)))
+            foreach (XElement hardware in element.Elements(XName.Get("Hardware", _schemaNamespace)))
             {
                 KnxProduct product = new KnxProduct
                 {
                     Name = hardware.Attribute(XName.Get("Name")).Value
                 };
 
-                var details = hardware.Element(XName.Get("Products", this.SchemaNamespace))
-                    .Element(XName.Get("Product", this.SchemaNamespace));
+                var details = hardware.Element(XName.Get("Products", _schemaNamespace))
+                    .Element(XName.Get("Product", _schemaNamespace));
 
                 product.Id = details.Attribute(XName.Get("Id")).Value;
                 product.OrderNumber = details.Attribute(XName.Get("OrderNumber")).Value;
@@ -259,20 +234,17 @@ namespace BSolutions.SHES.Services.Knx
         /// <remarks>This is the project.xml in the project folder P-{XXXX}.</remarks>
         private async Task ReadProjectAsync(ZipEntry zipEntry, ZipFile zip)
         {
-            var stream = zip.GetInputStream(zipEntry);
-            StreamReader reader = new(stream);
+            using var stream = zip.GetInputStream(zipEntry);
+            using var reader = new StreamReader(stream);
 
-            XDocument doc = XDocument.Parse(await reader.ReadToEndAsync());
-            this._projectXml = doc.Element(XName.Get("KNX", this.SchemaNamespace));
+            XDocument doc = XDocument.Parse(await reader.ReadToEndAsync().ConfigureAwait(false));
+            this._projectXml = doc.Element(XName.Get("KNX", _schemaNamespace));
 
-            this._project.Number = this._projectXml
-                .Element(XName.Get("Project", this.SchemaNamespace))
-                .Attribute(XName.Get("Id")).Value;
+            var projectElement = this._projectXml?.Element(XName.Get("Project", _schemaNamespace));
+            var projectInfo = projectElement?.Element(XName.Get("ProjectInformation", _schemaNamespace));
 
-            this._project.Name = this._projectXml
-                .Element(XName.Get("Project", this.SchemaNamespace))
-                .Element(XName.Get("ProjectInformation", this.SchemaNamespace))
-                .Attribute(XName.Get("Name")).Value;
+            this._project.Number = projectElement?.Attribute(XName.Get("Id"))?.Value ?? "UNKNOWN";
+            this._project.Name = projectInfo?.Attribute(XName.Get("Name"))?.Value ?? "UNKNOWN";
         }
 
         /// <summary>Reads the structure file asynchronous.</summary>
@@ -281,110 +253,96 @@ namespace BSolutions.SHES.Services.Knx
         /// <remarks>This is the 0.xml in the project folder P-{XXXX}.</remarks>
         private async Task ReadStructureFileAsync(ZipEntry zipEntry, ZipFile zip)
         {
-            var stream = zip.GetInputStream(zipEntry);
-            StreamReader reader = new(stream);
+            using var stream = zip.GetInputStream(zipEntry);
+            using var reader = new StreamReader(stream);
 
-            var xml = XDocument.Parse(await reader.ReadToEndAsync());
+            var xml = XDocument.Parse(await reader.ReadToEndAsync().ConfigureAwait(false));
 
-            // Topology
-            this._topologyXml = xml.Descendants(XName.Get("Topology", this.SchemaNamespace)).FirstOrDefault();
+            // Verwende FirstOrDefault() direkt für eindeutige Elemente
+            this._topologyXml = xml.Descendants(XName.Get("Topology", _schemaNamespace)).FirstOrDefault();
+            this._locationsXml = xml.Descendants(XName.Get("Locations", _schemaNamespace)).FirstOrDefault();
+            this._tradesXml = xml.Descendants(XName.Get("Trades", _schemaNamespace)).FirstOrDefault();
 
-            // Locations
-            this._locationsXml = xml.Descendants(XName.Get("Locations", this.SchemaNamespace)).FirstOrDefault();
-
-            // Trades
-            this._tradesXml = xml.Descendants(XName.Get("Trades", this.SchemaNamespace)).FirstOrDefault();
-
-            // Project Items
-            if (this._options.ImportStructure)
+            // Project Items nur initialisieren, wenn Import aktiviert ist
+            if (this._options.ImportStructure && this._locationsXml != null)
             {
-                var spaces = this._locationsXml.Elements(XName.Get("Space", this.SchemaNamespace));
+                var spaces = this._locationsXml.Elements(XName.Get("Space", _schemaNamespace)) ?? Enumerable.Empty<XElement>();
                 this._projectItems = this.ReadProjectItems(spaces);
 
                 this._project.Buildings.AddRange(this._projectItems.Cast<Building>());
             }
         }
 
+
+
         /// <summary>Reads all project items from the ETS project structure.</summary>
         /// <param name="spaces">The spaces (containers that can contain devices).</param>
         /// <returns>Returns a hierarchical list of all project items.<br /></returns>
         private List<ProjectItem> ReadProjectItems(IEnumerable<XElement> spaces)
         {
-            List<ProjectItem> result = new();
-
-            foreach (XElement space in spaces)
+            return spaces.Select(space =>
             {
-                Assembly assembly = typeof(EntityBase).Assembly;
-                Type type = assembly.GetType($"BSolutions.SHES.Models.Entities.{projectTypeMapping[space.Attribute("Type").Value]}");
-                ProjectItem entity = (ProjectItem)Activator.CreateInstance(type);
-                PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-                // Locations
-                var projectItems = ReadProjectItems(space.Elements(XName.Get("Space", this.SchemaNamespace)));
-
-                // Devices
-                if (this._options.ImportDevices)
+                if (!projectTypeMapping.TryGetValue(space.Attribute("Type")?.Value, out string mappedType) || string.IsNullOrEmpty(mappedType))
                 {
-                    projectItems.AddRange(this.ReadDevices(space.Elements(XName.Get("DeviceInstanceRef", this.SchemaNamespace))));
+                    return null; // Falls der Typ nicht gemappt werden kann, ignorieren
                 }
 
-                // Name
-                string name = !string.IsNullOrEmpty(space.Attribute("Name").Value) ? space.Attribute("Name").Value : "UNKNOWN";
-                propertyInfos.First(p => p.Name == "Name").SetValue(entity, name);
+                Assembly assembly = typeof(EntityBase).Assembly;
+                Type type = assembly.GetType($"BSolutions.SHES.Models.Entities.{mappedType}");
+                if (type == null)
+                {
+                    return null; // Falls der Typ nicht existiert, ignorieren
+                }
 
-                // Children
-                propertyInfos.First(p => p.Name == "Children").SetValue(entity, projectItems);
+                ProjectItem entity = (ProjectItem)Activator.CreateInstance(type);
+                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                     .ToDictionary(p => p.Name); // Dictionary für schnelleren Zugriff
 
-                result.Add(entity);
-            }
+                // Name setzen
+                properties["Name"].SetValue(entity, space.Attribute("Name")?.Value ?? "UNKNOWN");
 
-            return result;
+                // Kinder (rekursive Räume & Geräte)
+                var projectItems = ReadProjectItems(space.Elements(XName.Get("Space", _schemaNamespace)));
+                if (this._options.ImportDevices)
+                {
+                    projectItems.AddRange(ReadDevices(space.Elements(XName.Get("DeviceInstanceRef", _schemaNamespace))));
+                }
+                properties["Children"].SetValue(entity, projectItems);
+
+                return entity;
+            })
+            .Where(e => e != null)
+            .ToList();
         }
+
 
         /// <summary>Reads all devices within a space (container).</summary>
         /// <param name="deviceInstanceReferences">The device instance references.</param>
         /// <returns>Returns a list of devices.</returns>
         private List<Device> ReadDevices(IEnumerable<XElement> deviceInstanceReferences)
         {
-            List<Device> devices = new();
-
-            foreach (XElement deviceInstanceReference in deviceInstanceReferences)
+            return deviceInstanceReferences.Select(deviceInstanceReference =>
             {
-                Device device = new Device() { BusType = BusType.Knx };
+                var refId = deviceInstanceReference.Attribute("RefId")?.Value;
+                var deviceInstance = _topologyXml.Descendants(XName.Get("DeviceInstance", _schemaNamespace))
+                                                 .FirstOrDefault(e => e.Attribute("Id")?.Value == refId);
+                if (deviceInstance == null)
+                    return null;
 
-                string refId = deviceInstanceReference.Attribute("RefId").Value;
-                var deviceInstances = this._topologyXml.Descendants(XName.Get("DeviceInstance", this.SchemaNamespace));
-                var deviceInstance = deviceInstances.Where(e => e.Attribute("Id").Value == refId).First();
+                var productRefId = deviceInstance.Attribute("ProductRefId")?.Value;
+                var product = _result.Data.Products.FirstOrDefault(p => p.Id == productRefId);
 
-                // Name
-                if (string.IsNullOrEmpty(deviceInstance.Attribute("Name").Value))
+                return new Device
                 {
-                    device.Name = this._result.Data.Products.FirstOrDefault(p => p.Id == deviceInstance.Attribute("ProductRefId").Value).Name;
-                }
-                else
-                {
-                    device.Name = deviceInstance.Attribute("Name").Value;
-                }
-
-                device.Comment = deviceInstance.Attribute("Comment")?.Value;
-                device.Description = deviceInstance.Attribute("Description")?.Value;
-
-                // Topology
-                string area = deviceInstance.Parent.Parent.Parent.Attribute("Address")?.Value;
-                string line = deviceInstance.Parent.Parent.Attribute("Address")?.Value;
-                string address = deviceInstance.Attribute("Address")?.Value;
-
-                if (!string.IsNullOrEmpty(area) && !string.IsNullOrEmpty(line) && !string.IsNullOrEmpty(address))
-                {
-                    device.KnxTopologyArea = Convert.ToInt32(area);
-                    device.KnxTopologyLine = Convert.ToInt32(line);
-                    device.KnxTopologyAddress = Convert.ToInt32(address);
-                }
-
-                devices.Add(device);
-            }
-
-            return devices;
+                    BusType = BusType.Knx,
+                    Name = string.IsNullOrEmpty(deviceInstance.Attribute("Name")?.Value) ? product?.Name : deviceInstance.Attribute("Name")?.Value,
+                    Comment = deviceInstance.Attribute("Comment")?.Value,
+                    Description = deviceInstance.Attribute("Description")?.Value,
+                    KnxTopologyArea = TryParseInt(deviceInstance.Parent?.Parent?.Parent?.Attribute("Address")?.Value),
+                    KnxTopologyLine = TryParseInt(deviceInstance.Parent?.Parent?.Attribute("Address")?.Value),
+                    KnxTopologyAddress = TryParseInt(deviceInstance.Attribute("Address")?.Value)
+                };
+            }).Where(device => device != null).ToList();
         }
 
         /// <summary>Encrypts a password, as this is required from ETS6 to unpack the project file.</summary>
@@ -400,6 +358,11 @@ namespace BSolutions.SHES.Services.Knx
                 byte[] bytes = deriveBytes.GetBytes(32);
                 return Convert.ToBase64String(bytes);
             }
+        }
+
+        private int? TryParseInt(string value)
+        {
+            return int.TryParse(value, out var result) ? result : null;
         }
     }
 }
