@@ -1,5 +1,4 @@
 ﻿using BSolutions.SHES.App.Messages;
-using BSolutions.SHES.App.ViewModels;
 using BSolutions.SHES.Models;
 using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Extensions;
@@ -14,7 +13,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;

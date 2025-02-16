@@ -36,6 +36,7 @@ namespace BSolutions.SHES.App.Views
         {
             this.LocationDetailsComponent.Height = e.NewSize.Height - 50;
             this.CabinetDetailsComponent.Height = e.NewSize.Height - 50;
+            this.DeviceDetailsComponent.Height = e.NewSize.Height - 50;
         }
     }
 }

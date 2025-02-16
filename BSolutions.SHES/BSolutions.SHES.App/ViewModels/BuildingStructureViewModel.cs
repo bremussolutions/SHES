@@ -1,30 +1,20 @@
 ﻿using BSolutions.SHES.App.Messages;
-using BSolutions.SHES.Models.Entities;
 using BSolutions.SHES.Models.Enumerations;
 using BSolutions.SHES.Models.Observables;
-using BSolutions.SHES.Services.Devices;
-using BSolutions.SHES.Services.ProjectItems;
-using BSolutions.SHES.Shared.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.WinUI.UI.Controls;
-using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using Windows.UI.Core;
-using Microsoft.UI.Xaml;
 
 namespace BSolutions.SHES.App.ViewModels
 {
     public class BuildingStructureViewModel : ObservableRecipient
     {
-        private Visibility _locationTabVisibility = Visibility.Visible;
+        private Visibility _locationTabVisibility = Visibility.Collapsed;
         private Visibility _cabinetTabVisibility = Visibility.Collapsed;
+        private Visibility _deviceTabVisibility = Visibility.Collapsed;
 
         #region --- Properties ---
 
@@ -53,6 +43,7 @@ namespace BSolutions.SHES.App.ViewModels
             private set
             {
                 SetProperty(ref _locationTabVisibility, value);
+                OnPropertyChanged(nameof(LocationTabSelected));
             }
         }
 
@@ -63,6 +54,20 @@ namespace BSolutions.SHES.App.ViewModels
             {
                 SetProperty(ref _cabinetTabVisibility, value);
             }
+        }
+
+        public Visibility DeviceTabVisibility
+        {
+            get => _deviceTabVisibility;
+            private set
+            {
+                SetProperty(ref _deviceTabVisibility, value);
+            }
+        }
+
+        public bool LocationTabSelected
+        {
+            get => _locationTabVisibility == Visibility.Visible;
         }
 
         public List<DeviceType> DeviceTypes { get; set; }
@@ -92,9 +97,13 @@ namespace BSolutions.SHES.App.ViewModels
         {
             this.LocationTabVisibility = Visibility.Collapsed;
             this.CabinetTabVisibility = Visibility.Collapsed;
+            this.DeviceTabVisibility = Visibility.Collapsed;
 
             switch (locationType.Name)
             {
+                case "Device":
+                    this.DeviceTabVisibility = Visibility.Visible;
+                    break;
                 case "Cabinet":
                     this.LocationTabVisibility = Visibility.Visible;
                     this.CabinetTabVisibility = Visibility.Visible;

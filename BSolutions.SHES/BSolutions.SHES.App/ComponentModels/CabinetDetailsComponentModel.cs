@@ -1,12 +1,4 @@
-﻿using BSolutions.SHES.App.Messages;
-using BSolutions.SHES.Services.ProjectItems;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BSolutions.SHES.App.ComponentModels
 {

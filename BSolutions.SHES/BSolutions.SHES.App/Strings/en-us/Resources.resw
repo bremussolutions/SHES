@@ -300,7 +300,7 @@
   <data name="BuildingStructure_CabinetTab.Header" xml:space="preserve">
     <value>Cabinet Design</value>
   </data>
-  <data name="BuildingStructure_DevicesTab.Header" xml:space="preserve">
+  <data name="BuildingStructure_LocationTab.Header" xml:space="preserve">
     <value>Devices</value>
   </data>
   <data name="BuildingStructure_ProjectItemDevices_DataGrid_Col_Location.Header" xml:space="preserve">
@@ -362,5 +362,8 @@
   </data>
   <data name="BuildingStructure_ProjectItemTree_Commands_Delete.Label" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="BuildingStructure_DeviceTab.Header" xml:space="preserve">
+    <value>Device</value>
   </data>
 </root>

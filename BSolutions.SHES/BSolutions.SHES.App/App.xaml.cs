@@ -101,6 +101,7 @@ namespace BSolutions.SHES.App
                 services.AddTransient<ProjectItemDevicesComponentModel>();
                 services.AddTransient<ProjectItemMetadataComponentModel>();
                 services.AddTransient<CabinetDetailsComponentModel>();
+                services.AddTransient<DeviceDetailsComponentModel>();
 
                 services.AddTransient<SettingsViewModel>();
                 services.AddTransient<SettingsPage>();
