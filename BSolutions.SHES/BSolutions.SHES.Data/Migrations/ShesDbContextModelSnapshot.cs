@@ -15,7 +15,7 @@ namespace BSolutions.SHES.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.Project", b =>
                 {
@@ -140,6 +140,15 @@ namespace BSolutions.SHES.Data.Migrations
                     b.Property<int>("BusType")
                         .HasColumnType("INTEGER");
 
+                    b.Property<float>("DivisionUnits")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Identifier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRailMounted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("KnxTopologyAddress")
                         .HasColumnType("INTEGER");
 
@@ -148,6 +157,9 @@ namespace BSolutions.SHES.Data.Migrations
 
                     b.Property<int?>("KnxTopologyLine")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("OrderNumber")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
@@ -174,6 +186,81 @@ namespace BSolutions.SHES.Data.Migrations
                     b.HasBaseType("BSolutions.SHES.Models.Entities.ProjectItem");
 
                     b.ToTable("Stairs", (string)null);
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BinaryInput", b =>
+                {
+                    b.HasBaseType("BSolutions.SHES.Models.Entities.Device");
+
+                    b.Property<int>("ChannelNames")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Channels")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("BinaryInputs", (string)null);
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BlindActuator", b =>
+                {
+                    b.HasBaseType("BSolutions.SHES.Models.Entities.Device");
+
+                    b.Property<int>("ChannelNames")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Channels")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("BlindActuators", (string)null);
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BusPowerSupply", b =>
+                {
+                    b.HasBaseType("BSolutions.SHES.Models.Entities.Device");
+
+                    b.Property<ushort>("Power")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("BusPowerSupplys", (string)null);
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.DimmingActuator", b =>
+                {
+                    b.HasBaseType("BSolutions.SHES.Models.Entities.Device");
+
+                    b.Property<int>("ChannelNames")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Channels")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("DimmingActuators", (string)null);
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.HeatingActuator", b =>
+                {
+                    b.HasBaseType("BSolutions.SHES.Models.Entities.Device");
+
+                    b.Property<int>("ChannelNames")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Channels")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("HeatingActuators", (string)null);
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.SwitchingActuator", b =>
+                {
+                    b.HasBaseType("BSolutions.SHES.Models.Entities.Device");
+
+                    b.Property<int>("ChannelNames")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Channels")
+                        .HasColumnType("INTEGER");
+
+                    b.ToTable("SwitchingActuators", (string)null);
                 });
 
             modelBuilder.Entity("BSolutions.SHES.Models.Entities.ProjectItem", b =>
@@ -261,6 +348,60 @@ namespace BSolutions.SHES.Data.Migrations
                     b.HasOne("BSolutions.SHES.Models.Entities.ProjectItem", null)
                         .WithOne()
                         .HasForeignKey("BSolutions.SHES.Models.Entities.Stair", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BinaryInput", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.BinaryInput", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BlindActuator", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.BlindActuator", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.BusPowerSupply", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.BusPowerSupply", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.DimmingActuator", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.DimmingActuator", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.HeatingActuator", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.HeatingActuator", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BSolutions.SHES.Models.Entities.SwitchingActuator", b =>
+                {
+                    b.HasOne("BSolutions.SHES.Models.Entities.Device", null)
+                        .WithOne()
+                        .HasForeignKey("BSolutions.SHES.Models.Entities.SwitchingActuator", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

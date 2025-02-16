@@ -27,6 +27,18 @@ namespace BSolutions.SHES.Data
 
         public DbSet<Device> Devices { get; set; }
 
+        public DbSet<BinaryInput> BinaryInputs { get; set; }
+
+        public DbSet<BlindActuator> BlindActuators { get; set; }
+
+        public DbSet<BusPowerSupply> BusPowerSupplies { get; set; }
+
+        public DbSet<DimmingActuator> DimmingActuators { get; set; }
+
+        public DbSet<HeatingActuator> HeatingActuators { get; set; }
+
+        public DbSet<SwitchingActuator> SwitchingActuators { get; set; }
+
         /// <summary>Initializes a new instance of the <see cref="ShesDbContext" /> class.</summary>
         /// <remarks>See <a href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</a>
         /// for more information.</remarks>
@@ -122,6 +134,18 @@ namespace BSolutions.SHES.Data
             modelBuilder.Entity<Room>().ToTable("Rooms");
 
             modelBuilder.Entity<Stair>().ToTable("Stairs");
+
+            modelBuilder.Entity<BinaryInput>().ToTable("BinaryInputs");
+
+            modelBuilder.Entity<BlindActuator>().ToTable("BlindActuators");
+
+            modelBuilder.Entity<BusPowerSupply>().ToTable("BusPowerSupplys");
+
+            modelBuilder.Entity<DimmingActuator>().ToTable("DimmingActuators");
+
+            modelBuilder.Entity<HeatingActuator>().ToTable("HeatingActuators");
+
+            modelBuilder.Entity<SwitchingActuator>().ToTable("SwitchingActuators");
 
             base.OnModelCreating(modelBuilder);
         }
