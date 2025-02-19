@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BSolutions.SHES.Data.Migrations
 {
     [DbContext(typeof(ShesDbContext))]
-    [Migration("20250216171338_Initial")]
+    [Migration("20250218154512_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -159,6 +159,9 @@ namespace BSolutions.SHES.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("KnxTopologyLine")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Manufacturer")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("OrderNumber")

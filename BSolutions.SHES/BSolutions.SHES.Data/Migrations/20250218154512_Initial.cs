@@ -114,6 +114,7 @@ namespace BSolutions.SHES.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Identifier = table.Column<string>(type: "TEXT", nullable: true),
+                    Manufacturer = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", nullable: true),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     BusType = table.Column<int>(type: "INTEGER", nullable: false),

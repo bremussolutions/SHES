@@ -8,6 +8,8 @@ namespace BSolutions.SHES.Models.Entities
     {
         public string Identifier { get; set; }
 
+        public int Manufacturer { get; set; }
+
         public string OrderNumber { get; set; }
 
         public DeviceType Type { get; set; }

@@ -4,11 +4,43 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSolutions.SHES.App.Components"
+    xmlns:controls="using:BSolutions.SHES.Controls"
+    xmlns:tmp="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock>Device Details</TextBlock>
-    </Grid>
+    <!--<StackPanel Padding="10" Spacing="8">
+        <ItemsControl ItemsSource="{x:Bind ViewModel.FormFields}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="controls:FormField">
+                    <Grid ColumnDefinitions="200,*" MinHeight="32">
+                        <TextBlock Text="{x:Bind Label}" FontWeight="Bold" VerticalAlignment="Center" />
+                        <ContentPresenter Grid.Column="1"
+                             VerticalAlignment="Center"
+                             Content="{x:Bind Control}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>-->
+
+    <GridView ItemsSource="{x:Bind ViewModel.FormFields}" SelectionMode="None">
+        <GridView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2"/>
+            </ItemsPanelTemplate>
+        </GridView.ItemsPanel>
+
+        <GridView.ItemTemplate>
+            <DataTemplate x:DataType="controls:FormField">
+                <Grid ColumnDefinitions="150,250" MinHeight="50" Margin="5">
+                    <TextBlock Text="{x:Bind Label}" FontWeight="Bold" VerticalAlignment="Center" />
+                    <ContentPresenter Grid.Column="1"
+                                  VerticalAlignment="Center"
+                                  Content="{x:Bind Control}" />
+                </Grid>
+            </DataTemplate>
+        </GridView.ItemTemplate>
+    </GridView>
 </UserControl>

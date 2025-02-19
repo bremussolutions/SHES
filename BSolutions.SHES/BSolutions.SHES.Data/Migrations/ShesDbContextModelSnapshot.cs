@@ -158,6 +158,9 @@ namespace BSolutions.SHES.Data.Migrations
                     b.Property<int?>("KnxTopologyLine")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Manufacturer")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("OrderNumber")
                         .HasColumnType("TEXT");
 
