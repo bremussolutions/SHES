@@ -16,7 +16,8 @@ namespace BSolutions.SHES.App.ComponentModels
             new FormField("Hersteller", new TextBox()),
             new FormField("Bestellnummer", new TextBox()),
             new FormField("Phys. KNX-Adresse", new TextBox()),
-            new FormField("", new CheckBox { Content = "Hutschienenmontage" })
+            new FormField("", new CheckBox { Content = "Hutschienenmontage" }),
+            new FormField("Teilungseinheiten", new ComboBox())
         };
 
         #region --- Constructor ---

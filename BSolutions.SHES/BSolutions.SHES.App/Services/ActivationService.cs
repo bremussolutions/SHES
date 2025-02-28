@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using BSolutions.SHES.App.Activation;
+﻿using BSolutions.SHES.App.Activation;
 using BSolutions.SHES.App.Contracts.Services;
 using BSolutions.SHES.App.Views;
-
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BSolutions.SHES.App.Services
 {
@@ -53,7 +51,7 @@ namespace BSolutions.SHES.App.Services
         private async Task HandleActivationAsync(object activationArgs)
         {
             var activationHandler = _activationHandlers
-                                                .FirstOrDefault(h => h.CanHandle(activationArgs));
+                .FirstOrDefault(h => h.CanHandle(activationArgs));
 
             if (activationHandler != null)
             {

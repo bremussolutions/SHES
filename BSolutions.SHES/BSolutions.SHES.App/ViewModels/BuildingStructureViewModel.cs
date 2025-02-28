@@ -12,7 +12,7 @@ namespace BSolutions.SHES.App.ViewModels
 {
     public class BuildingStructureViewModel : ObservableRecipient
     {
-        private Visibility _locationTabVisibility = Visibility.Collapsed;
+        private Visibility _locationTabVisibility = Visibility.Visible;
         private Visibility _cabinetTabVisibility = Visibility.Collapsed;
         private Visibility _deviceTabVisibility = Visibility.Collapsed;
 
