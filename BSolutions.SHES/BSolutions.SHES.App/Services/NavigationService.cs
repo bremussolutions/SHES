@@ -1,11 +1,9 @@
 ﻿using BSolutions.SHES.App.Contracts.Services;
 using BSolutions.SHES.App.Contracts.ViewModels;
 using BSolutions.SHES.App.Helpers;
-
-using CommunityToolkit.WinUI.UI.Animations;
-
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 
 namespace BSolutions.SHES.App.Services
@@ -128,6 +126,9 @@ namespace BSolutions.SHES.App.Services
         }
 
         public void SetListDataItemForNextConnectedAnimation(object item)
-            => Frame.SetListDataItemForNextConnectedAnimation(item);
+        {
+            var animationService = ConnectedAnimationService.GetForCurrentView();
+            animationService.PrepareToAnimate("ConnectedAnimationKey", Frame);
+        }
     }
 }
